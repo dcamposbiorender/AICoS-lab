@@ -1,0 +1,21 @@
+{
+  "employees": {
+    "file": "/Users/david.campos/Downloads/employee_manager_relationships_complete.csv",
+    "user_correction": 42,
+    "description": "CORRECTED: Official org chart shows 42 employees (43 rows - 1 header), not 193",
+    "previous_error": "System was using incorrect count of 193 employees"
+  },
+  "slack_channels": {
+    "file": "/Users/david.campos/Downloads/BioRender Channel Analytics May 1, 2025 - Jul 31, 2025.csv",
+    "count": 383,
+    "description": "CORRECTED: Official analytics shows 383 channels (384 rows - 1 header), not 3,900+",
+    "previous_error": "System was duplicating channels massively in pagination - showing 3,900+ instead of 383",
+    "duplication_bug": "Slack channel discovery pagination appears to be adding duplicates instead of new channels"
+  },
+  "validation_priority": [
+    "1. User explicit corrections (highest authority)",
+    "2. User-provided data files",
+    "3. API discovery data",
+    "4. Cached system data (lowest authority)"
+  ]
+}

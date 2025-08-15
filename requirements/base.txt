@@ -1,0 +1,29 @@
+# Core production dependencies for AI Chief of Staff
+# Generated: 2025-08-15 for Python 3.11+
+
+# Core utilities
+requests==2.32.4
+python-dotenv==1.0.0
+
+# Google APIs for Calendar and Drive integration  
+google-api-python-client==2.147.0
+google-auth==2.35.0
+google-auth-oauthlib==1.2.0
+google-auth-httplib2==0.2.0
+
+# Slack SDK for workspace integration
+slack-sdk==3.33.2
+slack-bolt==1.21.2
+
+# Web framework (for future API endpoints)
+fastapi==0.115.4
+uvicorn==0.32.0
+
+# Data validation and processing
+pydantic==2.9.2
+
+# Path utilities
+pathlib-abc==0.1.1
+
+# Version parsing utilities
+packaging==25.0

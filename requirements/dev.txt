@@ -1,0 +1,25 @@
+# Development and testing dependencies
+
+# Testing framework and utilities
+pytest==8.4.1
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+pytest-asyncio==0.24.0
+
+# Code formatting and linting
+black==24.10.0
+isort==5.13.2
+flake8==7.1.1
+
+# Type checking
+mypy==1.13.0
+types-requests==2.32.0.20241016
+
+# Coverage reporting
+coverage==7.6.4
+
+# Code quality and pre-commit hooks
+pre-commit==4.0.1
+
+# Development utilities
+ipython==8.29.0

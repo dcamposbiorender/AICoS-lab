@@ -1,0 +1,10 @@
+email,name,title,department,manager_email
+ryan.marien@biorender.com,Ryan Marien,CEO,Executive,
+kiran.rao@biorender.com,Kiran Rao,CTO,Engineering,ryan.marien@biorender.com
+shiz.aoki@biorender.com,Shiz Aoki,President,Executive,ryan.marien@biorender.com
+charlie.gunn@biorender.com,Charlie Gunn,VP Engineering,Engineering,kiran.rao@biorender.com
+adam.shapiro@biorender.com,Adam Shapiro,VP Product,Product,shiz.aoki@biorender.com
+michael.edmonson@biorender.com,Michael Edmonson,VP Sales,Sales,ryan.marien@biorender.com
+david.campos@biorender.com,David Campos,Chief of Staff,Executive,ryan.marien@biorender.com
+jon.fan@biorender.com,Jon Fan,Senior Engineer,Engineering,charlie.gunn@biorender.com
+chris.hemberger@biorender.com,Chris Hemberger,Product Manager,Product,adam.shapiro@biorender.com
