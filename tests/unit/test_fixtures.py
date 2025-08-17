@@ -160,6 +160,177 @@ class TestMockDataValidJson:
         json.dumps(get_drive_collection_result())
 
 
+class TestSlackDMFunctionality:
+    """Test comprehensive DM (Direct Message) functionality."""
+    
+    def test_dm_channels_exist_and_valid(self):
+        """DM channels exist and have valid structure."""
+        channels = get_mock_channels()
+        
+        dm_channels = [c for c in channels if c.get('is_im', False)]
+        assert len(dm_channels) >= 3, f"Should have at least 3 DM channels for testing, got {len(dm_channels)}"
+        
+        for dm in dm_channels:
+            # DM structure validation
+            assert dm.get('is_im') is True, f"DM {dm['id']} should have is_im=True"
+            assert dm.get('is_channel') is False, f"DM {dm['id']} should have is_channel=False" 
+            assert dm.get('is_private') is True, f"DM {dm['id']} should have is_private=True"
+            assert dm['id'].startswith('D'), f"DM {dm['id']} should have ID starting with 'D'"
+            assert 'user' in dm, f"DM {dm['id']} should have 'user' field specifying other participant"
+            assert dm.get('num_members') == 2, f"DM {dm['id']} should have exactly 2 members"
+    
+    def test_dm_channels_have_different_states(self):
+        """DM channels include various states for comprehensive testing."""
+        channels = get_mock_channels()
+        dm_channels = [c for c in channels if c.get('is_im', False)]
+        
+        dm_states = {
+            'open': any(dm.get('is_open', True) for dm in dm_channels),
+            'closed': any(not dm.get('is_open', True) for dm in dm_channels),
+            'active_user': any(not dm.get('is_user_deleted', False) for dm in dm_channels),
+            'deleted_user': any(dm.get('is_user_deleted', False) for dm in dm_channels),
+            'recent': any(dm.get('priority', 0) > 0 for dm in dm_channels)
+        }
+        
+        assert all(dm_states.values()), f"Missing DM states: {[k for k, v in dm_states.items() if not v]}"
+    
+    def test_dm_messages_exist(self):
+        """DM messages exist for all DM channels."""
+        channels = get_mock_channels()
+        messages = get_mock_messages()
+        
+        dm_channels = [c for c in channels if c.get('is_im', False)]
+        dm_channel_ids = {c['id'] for c in dm_channels}
+        
+        dm_messages = [m for m in messages if m.get('channel', '').startswith('D')]
+        dm_message_channels = {m['channel'] for m in dm_messages}
+        
+        # Should have messages in at least some DM channels
+        assert len(dm_messages) >= 3, f"Should have at least 3 DM messages, got {len(dm_messages)}"
+        
+        # DM message channels should be valid DM channel IDs
+        invalid_dm_refs = dm_message_channels - dm_channel_ids
+        assert not invalid_dm_refs, f"DM messages reference invalid channels: {invalid_dm_refs}"
+    
+    def test_dm_user_references_valid(self):
+        """DM channels reference valid users."""
+        channels = get_mock_channels()
+        users = get_mock_users()
+        
+        dm_channels = [c for c in channels if c.get('is_im', False)]
+        user_ids = {u['id'] for u in users}
+        
+        for dm in dm_channels:
+            other_user = dm.get('user')
+            assert other_user, f"DM {dm['id']} missing 'user' field"
+            
+            # For deleted users, we may have user ID that's not in current users list
+            # This is expected behavior - just verify it's a valid format
+            if dm.get('is_user_deleted', False):
+                assert other_user.startswith('U'), f"Deleted user ID {other_user} should start with 'U'"
+            else:
+                assert other_user in user_ids, f"DM {dm['id']} references unknown user: {other_user}"
+    
+    def test_dm_privacy_maintained(self):
+        """DM data maintains privacy - no sensitive info exposed inappropriately."""
+        channels = get_mock_channels()
+        dm_channels = [c for c in channels if c.get('is_im', False)]
+        
+        for dm in dm_channels:
+            # DMs should not have topic/purpose (these are private 1:1 conversations)
+            topic_val = dm.get('topic', {}).get('value', '')
+            purpose_val = dm.get('purpose', {}).get('value', '')
+            
+            # Allow empty or very generic values only
+            if topic_val:
+                assert len(topic_val) < 50, f"DM {dm['id']} topic too detailed: {topic_val}"
+            if purpose_val:
+                assert len(purpose_val) < 50, f"DM {dm['id']} purpose too detailed: {purpose_val}"
+
+
+class TestSlackMPIMFunctionality:
+    """Test comprehensive MPIM (Multi-Party Instant Message) functionality."""
+    
+    def test_mpim_channels_exist_and_valid(self):
+        """MPIM channels exist and have valid structure."""
+        channels = get_mock_channels()
+        
+        mpim_channels = [c for c in channels if c.get('is_mpim', False)]
+        assert len(mpim_channels) >= 3, f"Should have at least 3 MPIM channels for testing, got {len(mpim_channels)}"
+        
+        for mpim in mpim_channels:
+            # MPIM structure validation
+            assert mpim.get('is_mpim') is True, f"MPIM {mpim['id']} should have is_mpim=True"
+            assert mpim.get('is_channel') is False, f"MPIM {mpim['id']} should have is_channel=False"
+            assert mpim.get('is_im') is False, f"MPIM {mpim['id']} should have is_im=False"
+            assert mpim.get('is_private') is True, f"MPIM {mpim['id']} should have is_private=True"
+            assert mpim['id'].startswith('G'), f"MPIM {mpim['id']} should have ID starting with 'G'"
+            assert 'members' in mpim, f"MPIM {mpim['id']} should have 'members' field"
+            assert mpim.get('num_members', 0) >= 3, f"MPIM {mpim['id']} should have 3+ members for group chat"
+    
+    def test_mpim_channels_have_different_states(self):
+        """MPIM channels include various states for comprehensive testing."""
+        channels = get_mock_channels()
+        mpim_channels = [c for c in channels if c.get('is_mpim', False)]
+        
+        mpim_states = {
+            'open': any(mpim.get('is_open', True) for mpim in mpim_channels),
+            'closed': any(not mpim.get('is_open', True) for mpim in mpim_channels),
+            'active_members': any(not mpim.get('is_user_deleted', False) for mpim in mpim_channels),
+            'deleted_member': any(mpim.get('is_user_deleted', False) for mpim in mpim_channels),
+            'with_pins': any(mpim.get('has_pins', False) for mpim in mpim_channels),
+            'high_priority': any(mpim.get('priority', 0) > 0 for mpim in mpim_channels)
+        }
+        
+        assert all(mpim_states.values()), f"Missing MPIM states: {[k for k, v in mpim_states.items() if not v]}"
+    
+    def test_mpim_messages_exist(self):
+        """MPIM messages exist for MPIM channels."""
+        channels = get_mock_channels()
+        messages = get_mock_messages()
+        
+        mpim_channels = [c for c in channels if c.get('is_mpim', False)]
+        mpim_channel_ids = {c['id'] for c in mpim_channels}
+        
+        # Find MPIM messages (G channels that are MPDMs)
+        mpim_messages = [m for m in messages if m.get('channel', '').startswith('G') and 'mpdm-' in m.get('channel', '')]
+        mpim_message_channels = {m['channel'] for m in mpim_messages}
+        
+        # Should have messages in MPIM channels
+        assert len(mpim_messages) >= 3, f"Should have at least 3 MPIM messages, got {len(mpim_messages)}"
+        
+        # MPIM message channels should be valid MPIM channel IDs
+        invalid_mpim_refs = mpim_message_channels - mpim_channel_ids
+        assert not invalid_mpim_refs, f"MPIM messages reference invalid channels: {invalid_mpim_refs}"
+    
+    def test_mpim_member_references_valid(self):
+        """MPIM channels reference valid users in members list."""
+        channels = get_mock_channels()
+        users = get_mock_users()
+        
+        mpim_channels = [c for c in channels if c.get('is_mpim', False)]
+        user_ids = {u['id'] for u in users}
+        
+        for mpim in mpim_channels:
+            members = mpim.get('members', [])
+            assert len(members) >= 3, f"MPIM {mpim['id']} should have at least 3 members"
+            
+            # Check that most members are valid user IDs (some may be deleted)
+            valid_members = [m for m in members if m in user_ids]
+            assert len(valid_members) >= 2, f"MPIM {mpim['id']} should have at least 2 valid member references"
+    
+    def test_mpim_naming_convention(self):
+        """MPIM channels follow Slack naming convention."""
+        channels = get_mock_channels()
+        mpim_channels = [c for c in channels if c.get('is_mpim', False)]
+        
+        for mpim in mpim_channels:
+            name = mpim.get('name', '')
+            # MPIMs typically have names like "mpdm-user1--user2--user3-1"
+            assert 'mpdm-' in name, f"MPIM {mpim['id']} should have 'mpdm-' in name: {name}"
+            assert '--' in name, f"MPIM {mpim['id']} should have '--' separators in name: {name}"
+
+
 class TestSlackMockDataEdgeCases:
     """Test that Slack mock data covers all required edge cases."""
     
@@ -172,6 +343,7 @@ class TestSlackMockDataEdgeCases:
             'public': any(c['is_channel'] and not c['is_private'] for c in channels),
             'private': any(c['is_channel'] and c['is_private'] for c in channels), 
             'dm': any(c['is_im'] for c in channels),
+            'mpim': any(c['is_mpim'] for c in channels),
             'group': any(c['is_group'] for c in channels),
             'archived': any(c['is_archived'] for c in channels)
         }
@@ -211,7 +383,9 @@ class TestSlackMockDataEdgeCases:
             'edited': any(m.get('subtype') == 'message_changed' for m in messages),
             'threaded': any(m.get('thread_ts') and m.get('thread_ts') != m.get('ts') for m in messages),
             'with_reactions': any(m.get('reactions') for m in messages),
-            'with_files': any(m.get('files') for m in messages)
+            'with_files': any(m.get('files') for m in messages),
+            'in_dms': any(m.get('channel', '').startswith('D') for m in messages),
+            'in_mpims': any(m.get('channel', '').startswith('G') and 'mpdm-' in m.get('channel', '') for m in messages)
         }
         
         assert all(message_types.values()), f"Missing message types: {[k for k, v in message_types.items() if not v]}"
@@ -426,7 +600,7 @@ class TestMockDataScaleAndPerformance:
         users = get_mock_users() 
         messages = get_mock_messages()
         
-        assert len(channels) >= 5, f"Should have >=5 channels, got {len(channels)}"
+        assert len(channels) >= 8, f"Should have >=8 channels (including DMs and MPIMs), got {len(channels)}"
         assert len(users) >= 7, f"Should have >=7 users, got {len(users)}"
         assert len(messages) >= 10, f"Should have >=10 messages, got {len(messages)}"
     

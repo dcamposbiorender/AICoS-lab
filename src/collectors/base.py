@@ -18,7 +18,7 @@ from typing import Dict, Any, Optional, List
 import logging
 
 # Import Stage 1a components
-from src.core.config import get_config
+# from src.core.config import get_config  # Lazy import to avoid AICOS_BASE_DIR requirement
 from src.core.state import StateManager
 from src.core.archive_writer import ArchiveWriter, ArchiveError
 
@@ -62,6 +62,8 @@ class BaseArchiveCollector(ABC):
         # Initialize Stage 1a components (allow injection for testing)
         try:
             if system_config is None:
+                # Lazy import to avoid AICOS_BASE_DIR requirement
+                from src.core.config import get_config
                 self.system_config = get_config()
             else:
                 self.system_config = system_config

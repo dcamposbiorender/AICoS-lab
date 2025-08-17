@@ -7,7 +7,7 @@ Google Drive Raw Data Ingestor
 import json
 import sys
 import io
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # Add paths for existing Google integration
@@ -26,7 +26,7 @@ class DriveIngestor:
         self.drive_dir.mkdir(exist_ok=True)
         
         # Date range (90 days)
-        self.end_date = datetime.now()
+        self.end_date = datetime.now(timezone.utc)
         self.start_date = self.end_date - timedelta(days=90)
         
         # Target mimeTypes for content extraction
@@ -43,9 +43,29 @@ class DriveIngestor:
         print(f"📅 Date Range: {self.start_date.strftime('%Y-%m-%d')} → {self.end_date.strftime('%Y-%m-%d')}")
         print(f"🎯 Target Types: {list(self.target_mimetypes.values())}")
     
+    def _parse_google_timestamp(self, timestamp_str: str) -> str:
+        """Parse Google API timestamp to ensure consistent timezone handling."""
+        if not timestamp_str:
+            return timestamp_str
+        
+        try:
+            # Parse RFC3339 timestamp from Google API
+            dt = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+            
+            # Ensure it's timezone-aware (UTC if no timezone specified)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            else:
+                dt = dt.astimezone(timezone.utc)
+            
+            return dt.isoformat()
+        except (ValueError, AttributeError):
+            # Return original if parsing fails
+            return timestamp_str
+    
     def log_event(self, message: str):
         """Simple logging"""
-        timestamp = datetime.now().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         print(f"💾 {timestamp}: {message}")
         
         # Also log to main ingestion log
@@ -169,8 +189,8 @@ class DriveIngestor:
                     'name': file_name,
                     'mimeType': mime_type,
                     'size': file_metadata.get('size'),
-                    'createdTime': file_metadata.get('createdTime'),
-                    'modifiedTime': file_metadata.get('modifiedTime'),
+                    'createdTime': self._parse_google_timestamp(file_metadata.get('createdTime')),
+                    'modifiedTime': self._parse_google_timestamp(file_metadata.get('modifiedTime')),
                     'owners': file_metadata.get('owners', []),
                     'lastModifyingUser': file_metadata.get('lastModifyingUser', {}),
                     'parents': file_metadata.get('parents', []),
@@ -190,7 +210,7 @@ class DriveIngestor:
             
             # Generate summary
             summary = {
-                "ingestion_timestamp": datetime.now().isoformat(),
+                "ingestion_timestamp": datetime.now(timezone.utc).isoformat(),
                 "date_range": {
                     "start": self.start_date.isoformat(),
                     "end": self.end_date.isoformat()

@@ -17,29 +17,62 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 from auth_manager import credential_vault
 
 class CalendarRateLimiter:
-    """Rate limiting with jitter and exponential backoff"""
+    """Rate limiting with exponential backoff for bulk calendar collection"""
     
-    def __init__(self, requests_per_second: float = 10, jitter_seconds: float = 5):
-        self.requests_per_second = requests_per_second
+    def __init__(self, base_delay: float = 3.0, jitter_seconds: float = 2):
+        # Conservative settings for bulk collection
+        self.base_delay = base_delay  # 3 seconds base delay for bulk collection
         self.jitter_seconds = jitter_seconds
         self.last_request_time = 0
         self.request_count = 0
         
+        # Exponential backoff state for rate limiting
+        self.consecutive_rate_limits = 0
+        self.current_backoff_delay = 0
+        self.backoff_levels = [60, 300, 600]  # 1min, 5min, 10min
+        
     def wait_for_rate_limit(self):
-        """Wait appropriate time for rate limiting with jitter"""
+        """Wait with exponential backoff and jitter for bulk collection"""
         current_time = time.time()
         time_since_last = current_time - self.last_request_time
-        min_interval = 1.0 / self.requests_per_second
         
-        if time_since_last < min_interval:
-            wait_time = min_interval - time_since_last
-            # Add jitter
+        # Calculate total delay with backoff
+        total_delay = self.base_delay + self.current_backoff_delay
+        
+        if time_since_last < total_delay:
+            wait_time = total_delay - time_since_last
+            
+            # Add jitter to prevent thundering herd
             jitter = random.uniform(-self.jitter_seconds/2, self.jitter_seconds/2)
             wait_time = max(0, wait_time + jitter)
+            
+            if wait_time > 60:  # Inform user of long waits
+                print(f"    ⏳ Calendar rate limit backoff: waiting {wait_time/60:.1f} minutes...")
+            
             time.sleep(wait_time)
         
         self.last_request_time = time.time()
         self.request_count += 1
+        
+    def handle_rate_limit_error(self, error):
+        """Handle Google API rate limit errors with exponential backoff"""
+        if "quota" in str(error).lower() or "rate" in str(error).lower():
+            self.consecutive_rate_limits += 1
+            
+            # Apply exponential backoff
+            if self.consecutive_rate_limits <= len(self.backoff_levels):
+                self.current_backoff_delay = self.backoff_levels[self.consecutive_rate_limits - 1]
+            else:
+                self.current_backoff_delay = self.backoff_levels[-1]  # Max 10min
+            
+            print(f"    🚫 Calendar API rate limited! Backing off for {self.current_backoff_delay/60:.1f} minutes")
+            time.sleep(self.current_backoff_delay)
+        else:
+            # Success or other error - reset backoff
+            if self.consecutive_rate_limits > 0:
+                print(f"    ✅ Calendar rate limit recovered")
+                self.consecutive_rate_limits = 0
+                self.current_backoff_delay = 0
 
 class CalendarCollector:
     """
@@ -58,10 +91,10 @@ class CalendarCollector:
         self.data_path = self.project_root / "data" / "raw" / "calendar" / today
         self.data_path.mkdir(parents=True, exist_ok=True)
         
-        # Initialize rate limiter
+        # Initialize rate limiter with bulk collection settings
         self.rate_limiter = CalendarRateLimiter(
-            requests_per_second=self.config.get('requests_per_second', 10.0),
-            jitter_seconds=self.config.get('jitter_seconds', 5.0)
+            base_delay=self.config.get('base_delay_seconds', 3.0),  # Conservative 3s for bulk collection
+            jitter_seconds=self.config.get('jitter_seconds', 2.0)
         )
         
         # Initialize Google Calendar service
@@ -87,10 +120,10 @@ class CalendarCollector:
     def _load_config(self, config_path: Optional[Path] = None) -> Dict:
         """Load collection configuration with rule-based filtering"""
         default_config = {
-            "requests_per_second": 10.0,
-            "jitter_seconds": 5.0,
-            "lookback_days": 30,
-            "lookahead_days": 30,
+            "base_delay_seconds": 3.0,  # 3 seconds between requests for bulk collection
+            "jitter_seconds": 2.0,      # 2 seconds jitter for predictable timing
+            "lookback_days": 90,        # 90-day lookback for bulk collection
+            "lookahead_days": 90,       # 90-day lookahead for future events
             "collection_rules": {
                 "collect_all_accessible": True,
                 "exclude_patterns": ["test-*", "archive-*"],
@@ -164,6 +197,7 @@ class CalendarCollector:
         """Discover all accessible calendars in Google account"""
         
         discovered_calendars = {}
+        start_time = time.time()
         
         try:
             # Rate limiting
@@ -172,7 +206,8 @@ class CalendarCollector:
             calendar_list = self.calendar_service.calendarList().list().execute()
             calendars = calendar_list.get('items', [])
             
-            print(f"🔍 Discovered {len(calendars)} total calendars")
+            elapsed = time.time() - start_time
+            print(f"🔍 Discovered {len(calendars)} total calendars ({elapsed:.1f}s elapsed)")
             
             for calendar in calendars:
                 calendar_id = calendar['id']

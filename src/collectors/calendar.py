@@ -16,12 +16,9 @@ import pytz
 # Import our base collector
 from src.collectors.base import BaseArchiveCollector
 
-# Import the existing scavenge collector
-scavenge_path = Path(__file__).parent.parent.parent / "scavenge" / "src" / "collectors"
-sys.path.insert(0, str(scavenge_path))
-
+# Import the CalendarCollector from the new location
 try:
-    from calendar import CalendarCollector
+    from .calendar_collector import CalendarCollector
 except ImportError as e:
     logging.warning(f"Could not import CalendarCollector: {e}")
     CalendarCollector = None

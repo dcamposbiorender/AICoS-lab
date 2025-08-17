@@ -126,6 +126,81 @@ def get_mock_channels() -> List[Dict[str, Any]]:
             "is_private": True,
             "is_mpim": False,
             "user": "U2222222222",
+            "is_user_deleted": False,
+            "is_open": True,
+            "priority": 0,
+            "num_members": 2
+        },
+        {
+            "id": "D2222222222",
+            "name": "",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": True,
+            "is_mpim": False,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=50)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": False,
+            "user": "U3333333333",
+            "is_user_deleted": False,
+            "is_open": True,
+            "priority": 0,
+            "num_members": 2
+        },
+        {
+            "id": "D3333333333",
+            "name": "",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": True,
+            "is_mpim": False,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=200)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": False,
+            "user": "U5555555555",
+            "is_user_deleted": True,
+            "is_open": False,
+            "priority": 0,
+            "num_members": 2
+        },
+        {
+            "id": "D4444444444",
+            "name": "",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": True,
+            "is_mpim": False,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=1)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": False,
+            "user": "U6666666666",
+            "is_user_deleted": False,
+            "is_open": True,
+            "priority": 1,
             "num_members": 2
         },
         {
@@ -158,6 +233,79 @@ def get_mock_channels() -> List[Dict[str, Any]]:
                 "last_set": int((BASE_TS - timedelta(days=90)).timestamp())
             },
             "num_members": 2
+        },
+        {
+            "id": "G1111111111",
+            "name": "mpdm-alice--bob--charlie-1",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": False,
+            "is_mpim": True,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=30)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "mpdm-alice--bob--charlie-1",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": True,
+            "members": ["U1111111111", "U2222222222", "U3333333333"],
+            "is_open": True,
+            "has_pins": False,
+            "priority": 0,
+            "num_members": 3
+        },
+        {
+            "id": "G2222222222",
+            "name": "mpdm-alice--diana--bot-1",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": False,
+            "is_mpim": True,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=7)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "mpdm-alice--diana--bot-1",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": True,
+            "members": ["U1111111111", "U4444444444", "USLACKBOT"],
+            "is_open": True,
+            "has_pins": True,
+            "priority": 1,
+            "num_members": 3
+        },
+        {
+            "id": "G3333333333",
+            "name": "mpdm-bob--charlie--deleted-1",
+            "is_channel": False,
+            "is_group": False,
+            "is_im": False,
+            "is_mpim": True,
+            "is_private": True,
+            "created": int((BASE_TS - timedelta(days=60)).timestamp()),
+            "is_archived": False,
+            "is_general": False,
+            "unlinked": 0,
+            "name_normalized": "mpdm-bob--charlie--deleted-1",
+            "is_shared": False,
+            "is_org_shared": False,
+            "is_member": True,
+            "is_private": True,
+            "is_mpim": True,
+            "members": ["U2222222222", "U3333333333", "U5555555555"],
+            "is_open": False,
+            "has_pins": False,
+            "priority": 0,
+            "is_user_deleted": True,
+            "num_members": 3
         }
     ]
 
@@ -963,6 +1111,164 @@ def get_mock_messages() -> List[Dict[str, Any]]:
             "channel": "C3456789012",  # archived-old-project
             "text": "This project is complete. Archiving this channel.",
             "permalink": "https://company.slack.com/archives/C3456789012/p1692009600000000"
+        },
+        
+        # DM messages for comprehensive testing
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 1500:.6f}",
+            "user": "U1111111111",
+            "team": "T1234567890", 
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "D2222222222",  # DM with Charlie
+            "text": "Hey Charlie, could you review the product roadmap when you get a chance?",
+            "permalink": "https://company.slack.com/archives/D2222222222/p1692097500000000"
+        },
+        
+        {
+            "type": "message", 
+            "subtype": None,
+            "ts": f"{base_timestamp + 1600:.6f}",
+            "user": "U3333333333",
+            "team": "T1234567890",
+            "user_team": "T1234567890", 
+            "source_team": "T1234567890",
+            "channel": "D2222222222",  # Reply in same DM
+            "text": "Absolutely! I'll take a look this afternoon and send you my feedback.",
+            "permalink": "https://company.slack.com/archives/D2222222222/p1692097600000000",
+            "reactions": [
+                {
+                    "name": "thumbsup",
+                    "users": ["U1111111111"],
+                    "count": 1
+                }
+            ]
+        },
+        
+        {
+            "type": "message",
+            "subtype": None, 
+            "ts": f"{base_timestamp + 2000:.6f}",
+            "user": "U6666666666",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890", 
+            "channel": "D4444444444",  # DM with new user
+            "text": "Welcome to the team! I'm excited to start working together. Let me know if you have any questions about the onboarding process.",
+            "permalink": "https://company.slack.com/archives/D4444444444/p1692098000000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 2100:.6f}",
+            "user": "U1111111111",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "D4444444444",  # Reply in same DM
+            "text": "Thanks! I do have a question about the development environment setup. Could we schedule a quick call?",
+            "permalink": "https://company.slack.com/archives/D4444444444/p1692098100000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp - 3600:.6f}",  # 1 hour ago
+            "user": "U1111111111", 
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "D3333333333",  # DM with deleted user
+            "text": "Hey, are you still working on the analytics dashboard?",
+            "permalink": "https://company.slack.com/archives/D3333333333/p1692092400000000"
+        },
+        
+        # MPIM messages for comprehensive testing
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 3000:.6f}",
+            "user": "U1111111111",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "G1111111111",  # MPIM with Alice, Bob, Charlie
+            "text": "Hey team, quick sync on the project timeline. Can we meet tomorrow at 2 PM?",
+            "permalink": "https://company.slack.com/archives/G1111111111/p1692099000000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 3100:.6f}",
+            "user": "U2222222222",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "G1111111111",  # Reply in same MPIM
+            "text": "Works for me! I'll bring the latest designs.",
+            "permalink": "https://company.slack.com/archives/G1111111111/p1692099100000000",
+            "reactions": [
+                {
+                    "name": "thumbsup",
+                    "users": ["U1111111111", "U3333333333"],
+                    "count": 2
+                }
+            ]
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 3200:.6f}",
+            "user": "U3333333333",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "G1111111111",  # Another reply in MPIM
+            "text": "Perfect! I'll prepare the roadmap updates.",
+            "permalink": "https://company.slack.com/archives/G1111111111/p1692099200000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp + 4000:.6f}",
+            "user": "U4444444444",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "G2222222222",  # MPIM with bot
+            "text": "The deployment pipeline is ready for review. Bot should run the tests automatically.",
+            "permalink": "https://company.slack.com/archives/G2222222222/p1692100000000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": "bot_message",
+            "ts": f"{base_timestamp + 4100:.6f}",
+            "bot_id": "BSLACKBOT",
+            "username": "Slackbot",
+            "team": "T1234567890",
+            "channel": "G2222222222",  # Bot reply in MPIM
+            "text": "✅ Tests completed successfully! All 47 tests passed.",
+            "permalink": "https://company.slack.com/archives/G2222222222/p1692100100000000"
+        },
+        
+        {
+            "type": "message",
+            "subtype": None,
+            "ts": f"{base_timestamp - 7200:.6f}",  # 2 hours ago
+            "user": "U2222222222",
+            "team": "T1234567890",
+            "user_team": "T1234567890",
+            "source_team": "T1234567890",
+            "channel": "G3333333333",  # MPIM with deleted user
+            "text": "Final updates before project closure. Thanks everyone for the great work!",
+            "permalink": "https://company.slack.com/archives/G3333333333/p1692088800000000"
         }
     ]
 

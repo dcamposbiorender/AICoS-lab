@@ -12,9 +12,8 @@ from typing import Dict, List, Optional, Set, Tuple
 import time
 import requests
 
-# Add auth system to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
-from auth_manager import credential_vault
+from ..core.auth_manager import credential_vault
+from ..core.jsonl_writer import create_slack_writer
 
 class SlackRateLimiter:
     """Slack-specific rate limiting with exponential backoff for bulk collection"""
@@ -125,6 +124,9 @@ class SlackCollector:
             "data_path": str(self.data_path),
             "next_cursor": None
         }
+        
+        # Initialize JSONL writer for persistence
+        self.jsonl_writer = create_slack_writer()
         
         print(f"💬 SLACK COLLECTOR INITIALIZED")
         print(f"💾 Storage: {self.data_path}")
@@ -685,11 +687,68 @@ class SlackCollector:
             'collected_data': collected_channels
         }
     
+    def _save_messages_to_jsonl(self, channels_data: Dict) -> Dict[str, int]:
+        """
+        Save Slack messages to JSONL format organized by channel
+        
+        Args:
+            channels_data: Dictionary mapping channel_id -> conversation data
+            
+        Returns:
+            Dictionary mapping channel_id -> number of messages saved
+        """
+        try:
+            # Extract messages from channels data
+            messages_by_channel = {}
+            
+            for channel_id, channel_data in channels_data.items():
+                messages = []
+                
+                # Extract regular messages
+                regular_messages = channel_data.get('messages', [])
+                messages.extend(regular_messages)
+                
+                # Extract thread messages
+                threads = channel_data.get('threads', [])
+                for thread in threads:
+                    thread_messages = thread.get('messages', [])
+                    messages.extend(thread_messages)
+                
+                # Add channel context to each message
+                enriched_messages = []
+                for message in messages:
+                    enriched_message = dict(message)  # Don't modify original
+                    enriched_message['channel_id'] = channel_id
+                    enriched_message['channel_name'] = channel_data.get('channel_info', {}).get('name', 'unknown')
+                    enriched_message['collection_timestamp'] = channel_data.get('channel_info', {}).get('collection_timestamp')
+                    enriched_messages.append(enriched_message)
+                
+                if enriched_messages:
+                    messages_by_channel[channel_id] = enriched_messages
+            
+            # Write messages to JSONL using the centralized writer
+            if messages_by_channel:
+                results = self.jsonl_writer.write_messages_by_channel(messages_by_channel)
+                total_messages = sum(results.values())
+                print(f"💾 JSONL: Saved {total_messages} messages across {len(results)} channels to archive")
+                return results
+            else:
+                print(f"💾 JSONL: No messages to save")
+                return {}
+                
+        except Exception as e:
+            print(f"❌ JSONL persistence failed: {e}")
+            # Don't fail the entire collection if JSONL persistence fails
+            return {}
+    
     def save_collection_data(self, channels_data: Dict, users_data: Dict) -> None:
-        """Save collected data to JSON files"""
+        """Save collected data to JSON files and JSONL archive"""
         timestamp = datetime.now().isoformat()
         
-        # Save channels data
+        # FIRST: Save messages to JSONL archive for persistent storage
+        jsonl_results = self._save_messages_to_jsonl(channels_data)
+        
+        # THEN: Save channels data to JSON (for immediate access)
         channels_file = self.data_path / "channels.json"
         with open(channels_file, 'w') as f:
             json.dump(channels_data, f, indent=2)
@@ -700,6 +759,9 @@ class SlackCollector:
             json.dump(users_data, f, indent=2)
         
         print(f"💾 Data saved to {self.data_path}")
+        if jsonl_results:
+            total_jsonl_messages = sum(jsonl_results.values())
+            print(f"💾 JSONL archive: {total_jsonl_messages} messages persisted permanently")
     
     def to_json(self) -> str:
         """Output collection results as JSON string"""

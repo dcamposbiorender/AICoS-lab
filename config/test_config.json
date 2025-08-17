@@ -1,0 +1,63 @@
+{
+    "slack": {
+        "base_delay_seconds": 0.5,
+        "channels_per_minute": 60,
+        "rolling_window_hours": 168,
+        "collection_rules": {
+            "include_all_channels": true,
+            "include_dms": false,
+            "include_mpims": false,
+            "exclude_patterns": ["test-*", "archive-*"],
+            "must_include": ["leadership", "product"],
+            "member_only": true,
+            "include_private": false
+        },
+        "cursor_delay_seconds": 1.0,
+        "bulk_collection_mode": false
+    },
+    "calendar": {
+        "base_delay_seconds": 3.0,
+        "jitter_seconds": 2.0,
+        "daily_quota": 10000,
+        "lookback_days": 7,
+        "lookahead_days": 7,
+        "collection_rules": {
+            "collect_all_accessible": true,
+            "collect_all_employees": true,
+            "exclude_patterns": ["test-*", "archive-*"],
+            "must_include": ["leadership", "executive"],
+            "include_shared": true,
+            "primary_only": false
+        },
+        "bulk_employee_collection": {
+            "enabled": true,
+            "weeks_backward": 26,
+            "weeks_forward": 4,
+            "chunk_size_days": 7,
+            "progress_report_interval": 10
+        },
+        "max_retries": 3,
+        "backoff_multiplier": 2.0
+    },
+    "drive": {
+        "enabled": true,
+        "collect_metadata_only": true,
+        "days_backward": 365,
+        "max_files": 100000,
+        "batch_size": 100,
+        "rate_limiting": {
+            "requests_per_100_seconds": 900,
+            "min_delay_seconds": 0.11,
+            "enable_exponential_backoff": true,
+            "max_backoff_seconds": 64,
+            "backoff_jitter": true
+        },
+        "collection_rules": {
+            "include_trashed": false,
+            "include_google_docs": true,
+            "include_shared_drives": true,
+            "metadata_only": true
+        },
+        "progress_report_interval": 10
+    }
+}

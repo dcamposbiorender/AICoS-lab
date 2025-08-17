@@ -74,3 +74,11 @@ htmlcov/
 *.crt
 config/credentials.json
 config/secrets.yaml
+
+# Test data (contains organizational information)
+documentation/test-data/
+setup_credentials.py
+
+# Encrypted credential storage
+scavenge/src/core/encrypted_keys.db
+scavenge/src/core/.master_key

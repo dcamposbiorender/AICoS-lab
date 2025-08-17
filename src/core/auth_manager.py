@@ -21,9 +21,6 @@ from typing import Dict, Optional, Any, Union
 from dataclasses import dataclass
 from enum import Enum
 
-# Add credential paths
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "data" / "credentials"))
-
 class AuthType(Enum):
     SLACK_BOT = "slack_bot"
     SLACK_USER = "slack_user" 
@@ -57,8 +54,8 @@ class CredentialVault:
     """
     
     def __init__(self):
-        # Go up from scavenge/src/core to the actual project root
-        self.project_root = Path(__file__).parent.parent.parent.parent
+        # Go up from src/core to the actual project root
+        self.project_root = Path(__file__).parent.parent.parent
         self.auth_cache = {}
         self.last_cache_update = {}
         
@@ -91,7 +88,7 @@ class CredentialVault:
     def _init_secure_config(self):
         """Initialize secure config system if available"""
         try:
-            from secure_config import secure_config
+            from .secure_config import secure_config
             print("✅ Secure encrypted config system available")
             return secure_config
         except ImportError:
@@ -142,6 +139,15 @@ class CredentialVault:
             except Exception as e:
                 print(f"⚠️ Secure config slack token failed: {e}")
         
+        # Fallback to environment variables
+        env_token = os.environ.get('SLACK_BOT_TOKEN')
+        if env_token:
+            token = env_token
+            self.auth_cache[cache_key] = token
+            self.last_cache_update[cache_key] = datetime.now()
+            print("✅ Slack bot token loaded from environment variable")
+            return token
+        
         # Fallback to file system
         config_file = self._find_credential_file('slack_config')
         if config_file:
@@ -176,6 +182,15 @@ class CredentialVault:
                     return token
             except Exception as e:
                 print(f"⚠️ Secure config slack user token failed: {e}")
+        
+        # Fallback to environment variables
+        env_token = os.environ.get('SLACK_USER_TOKEN')
+        if env_token:
+            token = env_token
+            self.auth_cache[cache_key] = token
+            self.last_cache_update[cache_key] = datetime.now()
+            print("✅ Slack user token loaded from environment variable")
+            return token
         
         # Fallback to file system
         config_file = self._find_credential_file('slack_config')

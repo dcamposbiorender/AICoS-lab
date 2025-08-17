@@ -1,52 +1,28 @@
-# tasks.md - AI Chief of Staff System tasks
+# tasks.md - AI Chief of Staff System Tasks
 
 ## ACTIVE TASK QUEUE
 
-**Current Task**: Stage 1b: Collector Wrappers Implementation  
-**Status**: IN PROGRESS (Task 1b.2 Partially Complete)
-**Owner**: Agent 2
+**Current Task**: Stage 3: Search Infrastructure  
+**Status**: READY TO BEGIN
+**Owner**: Agent Team
 
 **Completed Tasks**:
-- ✅ Stage 1a: Core Infrastructure Foundation (Agent 1) - COMPLETE
-- ✅ Task 1b.1: Test Infrastructure & Base Collector - COMPLETE
+- ✅ Stage 1a: Core Infrastructure Foundation - COMPLETE (see [completed_tasks.md](./completed_tasks.md))
+- ✅ Stage 1b: Collector Wrappers Implementation - COMPLETE (see [completed_tasks.md](./completed_tasks.md))  
+- ✅ Stage 1c: Management & Compression Tools - COMPLETE (see [completed_tasks.md](./completed_tasks.md))
 
 **In Progress**:
-- 🔄 Task 1b.2: Slack Wrapper Implementation - PARTIALLY COMPLETE (596 lines implemented)
+- None
 
 **Queued Tasks**:
-- Task 1b.3: Calendar & Employee Wrappers - Depends on 1b.2
-- Task 1b.4: Drive Wrapper (Metadata Only) - Depends on 1b.3  
-- Task 1b.5: Collection Orchestrator - Depends on 1b.2-1b.4
-- Stage 1c: Management & Compression Tools (Agent 3) - Depends on Stage 1b complete
+- Stage 3: Search Infrastructure (Multiple agents) - Ready to begin
 
 ---
 
-# Plan: Stage 1a - Core Infrastructure Foundation  
-Date: 2025-08-15
-**Owner**: Agent 1 (Core Infrastructure)
-**Duration**: Day 1 Morning (4 hours)
-**Dependencies**: None
+# Stage 3: Search Infrastructure
 
 ## Executive Summary
-Build the foundational infrastructure for archive storage: configuration management with environment variables, atomic state operations, and JSONL archive writer. This creates the base that all other collectors and tools will build upon.
-
-### Relevant Files for Stage 1a: Core Infrastructure
-
-**Read for Context:**
-- `scavenge/src/core/system_state_manager.py` - Atomic file operations pattern (lines 40-80)
-- `scavenge/src/core/auth_manager.py` - Credential validation approach (lines 15-45)
-- `scavenge/src/core/secure_config.py` - Configuration management patterns
-- `requirements.txt` - Current dependencies (needs enhancement)
-- `data/state/cursors.json` - Existing state structure
-
-**Files to Create:**
-- `src/core/config.py` - Environment-based configuration with AICOS_BASE_DIR
-- `src/core/state.py` - Enhanced atomic state management
-- `src/core/archive_writer.py` - JSONL append-only writer
-- `src/core/disk_manager.py` - Disk space validation utilities
-- `requirements/base.txt` - Core dependencies
-- `requirements/dev.txt` - Development tools
-- `.env.example` - Environment variable template
+Build comprehensive search and indexing infrastructure to enable powerful queries across all collected data from Stages 1a-1c. This includes SQLite FTS5 database, indexing pipeline, and search CLI.
 
 **Files to Modify:**
 - `requirements.txt` - Add missing dependencies (Google APIs, Slack SDK, FastAPI)
@@ -2254,3 +2230,98 @@ def test_backup_retention_policy():
 ✅ Documentation updated
 ✅ Migration from scavenge/ tested
 ✅ Ready for production deployment
+
+---
+
+# Stage 3: Search Infrastructure (Parallel Development Plans)
+Date: 2025-08-17
+**Approach**: Independent parallel development using mock data while credentials are being fixed
+**Teams**: 3 teams × 3 sub-agents = 9 parallel developers
+
+## Executive Summary
+With credential testing blocked, we can build the search infrastructure (Stage 3) independently using mock data. This creates a complete search system that can index and query JSONL archives without requiring API credentials. The three teams focus on: Database & Search (Team A), Archive Management (Team B), and Query Engine & Intelligence (Team C).
+
+---
+
+## ⚠️ IMPORTANT: Task Plans Subsegmented
+
+**The detailed Stage 3 implementation plans have been moved to separate files for better context management:**
+
+### 📁 Team-Specific Implementation Files:
+
+1. **[`tasks_A.md`](tasks_A.md)** - Team A: Database & Search Implementation
+   - SQLite FTS5 database with lab-grade optimizations
+   - Indexing pipeline with batch processing and streaming
+   - Search CLI with natural language query support
+   - **~1600 lines** of detailed tests and implementation code
+   - **Timeline**: 8 hours (3 database + 3 indexing + 2 CLI)
+
+2. **[`tasks_B.md`](tasks_B.md)** - Team B: Archive Management Systems
+   - Safe compression with atomic operations and backup protection
+   - Enhanced verification with schema validation and resume capability
+   - User-friendly management CLI with progress indicators
+   - **~1200 lines** of detailed tests and implementation code
+   - **Timeline**: 3-4 hours with critical safety features
+
+3. **`tasks_C.md`** - Team C: Query Engine & Intelligence *(Not yet defined)*
+   - Advanced query parsing and natural language processing
+   - Time-based and person-based query engines
+   - Semantic search capabilities
+   - Intelligence layer for pattern recognition
+
+### 📋 Quick Team Summary:
+
+**Team A Focus**: SQLite FTS5 search infrastructure
+- **Lab-Grade Fixes Applied**: Batch processing, corrected schema, streaming
+- **Production Ready**: 90% for lab, 70% for multi-user production
+
+**Team B Focus**: Archive management and compression
+- **Critical Safety Fixes Applied**: Atomic operations, backup protection, concurrency safety
+- **Production Ready**: 95% ready with proper operational safety measures
+
+**Team C Focus**: Advanced query engines *(Requires definition)*
+- Natural language query processing
+- Semantic search and intelligence features
+- Pattern recognition and trend analysis
+
+### 🔗 Context Management Benefits:
+
+1. **Parallel Execution**: Teams can work independently without merge conflicts
+2. **Focused Context**: Each file contains only relevant code and tests  
+3. **Memory Efficiency**: Prevents context window overflow during implementation
+4. **Clear Ownership**: Distinct responsibilities and deliverables per team
+
+### 📚 Original Reference:
+This consolidated plan (tasks.md) remains for architectural reference, but **active development should use the subsegmented files above**.
+
+---
+
+## Team Coordination & Architecture Overview
+
+### Shared Components (Cross-Team Dependencies)
+- **Archive Data Format**: JSONL with consistent schema from Stage 1a/1b
+- **Configuration System**: `src/core/config.py` for shared settings
+- **State Management**: `src/core/state.py` for persistence
+- **Test Infrastructure**: Shared fixtures and mock data
+
+### Integration Points
+1. **Team A → Team B**: Search indexes compressed archives  
+2. **Team B → Team A**: Compression preserves search metadata
+3. **Team C → Teams A&B**: Query engines use search DB and archive management
+
+### Data Flow Architecture
+```
+Archive Data (JSONL) → Team B (Compression) → Team A (Indexing) → Team C (Query Intelligence)
+                    ↓                       ↓                    ↓
+              Compressed Storage    →    Search Database   →   Smart Queries
+```
+
+### Success Criteria for Stage 3
+- ✅ Complete search infrastructure working with JSONL archives
+- ✅ Archive management tools ready for production
+- ✅ Query engines provide intelligent search capabilities
+- ✅ All systems integrate smoothly with Stage 1a/1b foundation
+- ✅ Mock data enables development without API credentials
+- ✅ Ready for real data integration when credentials are fixed
+
+**Next Steps**: Begin parallel development using the subsegmented team files.
