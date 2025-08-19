@@ -32,7 +32,7 @@ def profile_database_queries() -> Dict[str, Any]:
         ("Phrase search", "SELECT COUNT(*) FROM messages_fts WHERE messages_fts MATCH '\"all hands meeting\"'"),
         ("Date filter", "SELECT COUNT(*) FROM messages WHERE date = '2025-08-16'"),
         ("Source filter", "SELECT COUNT(*) FROM messages WHERE source = 'slack'"),
-        ("Combined filter", "SELECT COUNT(*) FROM messages m JOIN messages_fts f ON m.rowid = f.rowid WHERE f.messages_fts MATCH 'biorender' AND m.source = 'slack'"),
+        ("Combined filter", "SELECT COUNT(*) FROM messages m JOIN messages_fts f ON m.rowid = f.rowid WHERE f.messages_fts MATCH 'company' AND m.source = 'slack'"),
     ]
     
     query_profiles = []
@@ -116,7 +116,7 @@ def load_test_concurrent_users(num_users: int = 50, queries_per_user: int = 20) 
             "sprint planning", "standup", "retrospective", "blocker"
         ],
         "general_search": [
-            "biorender", "team", "meeting", "update", "announcement",
+            "company", "team", "meeting", "update", "announcement",
             "lunch", "office hours", "help", "question"
         ],
         "specific_search": [

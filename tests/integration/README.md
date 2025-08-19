@@ -50,7 +50,7 @@ python tests/integration/test_collector_harness.py --collector drive
 
 ### 🌙 Overnight Bulk Collection Testing
 
-For downloading **all of BioRender's data** overnight with conservative rate limiting:
+For downloading **all organizational data** overnight with conservative rate limiting:
 
 ```bash
 # Test full year in 90-day increments (overnight safe)
@@ -69,7 +69,7 @@ python tests/integration/test_collector_harness.py --yearly-increments --bulk-ov
 
 **Why Conservative?**
 - Prevents API exhaustion during overnight runs
-- Handles BioRender's large dataset (368 channels, many calendars)
+- Handles large organizational datasets (hundreds of channels, many calendars)
 - Automatic recovery from rate limiting with exponential backoff
 - Designed to run unattended overnight and complete successfully
 

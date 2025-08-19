@@ -84,7 +84,7 @@ def test_search_performance(record_count: int = 1000) -> Dict[str, Any]:
             "message",
             "project meeting",
             "discussion team",
-            "biorender"
+            "company"
         ]
         
         search_times = []
@@ -147,7 +147,7 @@ def test_concurrent_search_performance(num_workers: int = 10, queries_per_worker
             cursor = conn.cursor()
             
             times = []
-            queries = [f"test {worker_id}", "message", "biorender", "project", "meeting"]
+            queries = [f"test {worker_id}", "message", "company", "project", "meeting"]
             
             for i in range(queries_per_worker):
                 query = queries[i % len(queries)]

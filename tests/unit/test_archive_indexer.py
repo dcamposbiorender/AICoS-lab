@@ -111,8 +111,8 @@ class TestArchiveIndexer:
                 "id": "5ijq2jsm9mco9hr9o1ccrc7fje",
                 "status": "confirmed", 
                 "summary": "David / Anne 1:1 Meeting",
-                "creator": {"email": "anne.granger@biorender.com"},
-                "organizer": {"email": "anne.granger@biorender.com"},
+                "creator": {"email": "anne.granger@example.com"},
+                "organizer": {"email": "anne.granger@example.com"},
                 "start": {
                     "dateTime": "2025-08-11T08:30:00-07:00",
                     "timeZone": "America/New_York"
@@ -122,10 +122,10 @@ class TestArchiveIndexer:
                     "timeZone": "America/New_York"
                 },
                 "attendees": [
-                    {"email": "anne.granger@biorender.com", "organizer": True},
-                    {"email": "david.campos@biorender.com", "self": True}
+                    {"email": "anne.granger@example.com", "organizer": True},
+                    {"email": "david.campos@example.com", "self": True}
                 ],
-                "calendar_id": "david.campos@biorender.com",
+                "calendar_id": "david.campos@example.com",
                 "_collection_context": {
                     "service": "calendar",
                     "collected_at": "2025-08-16T16:01:30.684467"
@@ -138,10 +138,10 @@ class TestArchiveIndexer:
                 "start": {"dateTime": "2025-08-11T11:30:00-07:00"},
                 "end": {"dateTime": "2025-08-11T12:00:00-07:00"},
                 "attendees": [
-                    {"email": "kiran.rao@biorender.com", "organizer": True},
-                    {"email": "david.campos@biorender.com", "self": True}
+                    {"email": "kiran.rao@example.com", "organizer": True},
+                    {"email": "david.campos@example.com", "self": True}
                 ],
-                "calendar_id": "david.campos@biorender.com"
+                "calendar_id": "david.campos@example.com"
             }
         ]
         
@@ -227,7 +227,7 @@ class TestArchiveIndexer:
         assert "David / Anne" in results[0]['content']
         
         # Check attendee emails were indexed (avoid special characters in FTS5)
-        results = indexer.database.search("anne granger biorender")
+        results = indexer.database.search("anne granger example")
         assert len(results) > 0
 
     # Test 3: Memory-Safe Streaming for Large Files
@@ -451,7 +451,7 @@ class TestArchiveIndexer:
         assert "strategic" in cal_results[0]['content'].lower()
         
         # Test attendee extraction from calendar (avoid special chars in FTS5)
-        attendee_results = indexer.database.search("david campos biorender")
+        attendee_results = indexer.database.search("david campos example")
         assert len(attendee_results) > 0
 
     # Test 12: Database Integration Validation

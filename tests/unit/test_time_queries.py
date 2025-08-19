@@ -148,7 +148,8 @@ class TestTimeExpressionParsing:
     def test_invalid_expressions(self):
         """Test handling of invalid time expressions"""
         # Complete gibberish
-        with pytest.raises(ValueError, match="Invalid time expression"):
+        from src.queries.time_utils import TimeParsingError
+        with pytest.raises(TimeParsingError, match="Invalid time expression"):
             parse_time_expression("gibberish nonsense")
         
         # Empty string
@@ -160,26 +161,30 @@ class TestTimeExpressionParsing:
         assert result is None
         
         # Malformed expressions
-        with pytest.raises(ValueError):
+        with pytest.raises(TimeParsingError):
             parse_time_expression("past -5 days")
         
-        with pytest.raises(ValueError):
+        with pytest.raises(TimeParsingError):
             parse_time_expression("past 0 days")
     
     def test_edge_cases(self):
         """Test edge cases in time expression parsing"""
         # Leap year handling
-        with patch('src.queries.time_utils.date') as mock_date:
-            mock_date.today.return_value = date(2024, 2, 29)  # Leap year
+        with patch('src.queries.time_utils.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2024, 2, 29)  # Leap year
+            mock_datetime.combine = datetime.combine  # Keep original combine method
             start, end = parse_time_expression("yesterday")
             assert start.date() == date(2024, 2, 28)
         
         # Year boundary crossing
-        with patch('src.queries.time_utils.date') as mock_date:
-            mock_date.today.return_value = date(2025, 1, 1)
-            start, end = parse_time_expression("last month")
-            assert start.month == 12
-            assert start.year == 2024
+        with patch('src.queries.time_utils.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2025, 1, 1)
+            mock_datetime.combine = datetime.combine  # Keep original combine method
+            with patch('src.queries.time_utils.stdlib_calendar') as mock_calendar:
+                mock_calendar.monthrange.return_value = (6, 31)  # December has 31 days
+                start, end = parse_time_expression("last month")
+                assert start.month == 12
+                assert start.year == 2024
 
 
 class TestTimeQueryEngine:
@@ -324,7 +329,8 @@ class TestTimeQueryEngine:
     def test_malformed_query_handling(self):
         """Test handling of malformed queries"""
         # Invalid time expression
-        with pytest.raises(ValueError):
+        from src.queries.time_utils import TimeParsingError
+        with pytest.raises(TimeParsingError):
             self.engine.query_by_time("messages from gibberish")
         
         # None query

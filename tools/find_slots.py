@@ -21,8 +21,8 @@ from typing import List, Dict, Any, Optional
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.calendar.availability import AvailabilityEngine, FreeSlot
-from src.calendar.conflicts import ConflictDetector
+from src.scheduling.availability import AvailabilityEngine, FreeSlot
+from src.scheduling.conflicts import ConflictDetector
 from src.collectors.calendar_collector import CalendarCollector
 
 

@@ -24,6 +24,14 @@ When planning is finishing the user will ask for a detailed task list to execute
 7. Identify the next task and ask the user if you should proceed.
 8. Pause at logical points to ask the user for input.
 
+## GitHub Account Management
+
+**IMPORTANT**: When performing GitHub push operations, ALWAYS ask which account to use:
+- **dcamposbiorender**: Original account for main project work
+- **baecusman**: Secondary account for alternative operations
+
+Use `gh auth switch --user [account]` before any GitHub operations.
+
 ## Task Context Management
 
 When breaking down plans into sub-tasks, ALWAYS include a "Relevant Files" section for each sub-task that lists:

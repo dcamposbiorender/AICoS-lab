@@ -3,7 +3,7 @@
 Overnight Bulk Collection Test Runner
 
 This script sets up OAuth credentials and runs the full overnight test
-to validate that ALL of BioRender's data can be downloaded successfully.
+to validate that ALL organizational data can be downloaded successfully.
 
 Usage:
     python run_overnight_test.py
@@ -15,7 +15,7 @@ from pathlib import Path
 
 def main():
     """Run the complete overnight test setup and execution"""
-    print("🌙 BioRender Overnight Bulk Collection Test")
+    print("🌙 Overnight Bulk Collection Test")
     print("=" * 50)
     
     project_root = Path(__file__).parent
@@ -54,7 +54,7 @@ def main():
     
     print("\n" + "=" * 50)
     print("🚀 Starting Overnight Bulk Collection Test")
-    print("This will test downloading ALL BioRender data:")
+    print("This will test downloading ALL organizational data:")
     print("- All 368+ Slack channels")
     print("- All Google Calendars")
     print("- Drive metadata")
@@ -74,7 +74,7 @@ def main():
         print("\n" + "=" * 50)
         if result.returncode == 0:
             print("🎉 ALL TESTS PASSED!")
-            print("✅ BioRender overnight bulk collection validated")
+            print("✅ Overnight bulk collection validated")
             print("✅ Ready for production overnight data download")
         else:
             print("⚠️ Some tests failed, but collection may still be working")

@@ -81,7 +81,7 @@
       },
       {
         "name": "Combined filter",
-        "query": "SELECT COUNT(*) FROM messages m JOIN messages_fts f ON m.rowid = f.rowid WHERE f.messages_fts MATCH 'biorender' AND m.source = 'slack'",
+        "query": "SELECT COUNT(*) FROM messages m JOIN messages_fts f ON m.rowid = f.rowid WHERE f.messages_fts MATCH 'company' AND m.source = 'slack'",
         "execution_plan": [
           {
             "step": 0,

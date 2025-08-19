@@ -96,7 +96,7 @@ class TimeQueryEngine:
                     SELECT m.id, m.content, m.source, m.date, m.metadata
                     FROM messages m
                     JOIN messages_fts fts ON m.id = fts.rowid
-                    WHERE fts MATCH ? 
+                    WHERE messages_fts MATCH ? 
                     AND m.date >= ? AND m.date <= ?
                     ORDER BY m.date DESC
                     LIMIT 1000
@@ -206,7 +206,7 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
     
     expression = expression.lower().strip()
     
-    # Extract timezone from expression
+    # Extract timezone from expression first
     timezone_match = re.search(r'\b(utc|pst|est|cst|mst|us/pacific|us/eastern|us/central|us/mountain)\b', expression.lower())
     if timezone_match:
         tz_str = timezone_match.group(1)
@@ -216,49 +216,75 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
     else:
         target_tz = pytz.UTC
     
+    # Extract time component from natural language queries
+    # Handle patterns like "messages from yesterday", "data from last week"
+    # BUT preserve "from X to Y" patterns as-is
+    if re.match(r'from \d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}', expression):
+        time_component = expression  # Keep explicit date ranges as-is
+    else:
+        time_patterns = [
+            r'(?:messages?\s+from\s+|data\s+from\s+|content\s+from\s+)(.+)',
+            r'(?:in\s+the\s+|during\s+)(.+)',
+            r'(.+)'  # Fallback - treat entire expression as time
+        ]
+        
+        time_component = expression
+        for pattern in time_patterns:
+            match = re.match(pattern, expression)
+            if match:
+                time_component = match.group(1).strip()
+                break
+    
     # Use local time for date calculations, then apply timezone
     local_now = datetime.now()
     today = local_now.date()
     
     try:
         # Today/Yesterday/Tomorrow
-        if expression == "today":
+        if time_component == "today":
             start = datetime.combine(today, time.min)
             end = datetime.combine(today, time.max)
         
-        elif expression == "yesterday":
+        elif time_component == "yesterday":
             yesterday = today - timedelta(days=1)
             start = datetime.combine(yesterday, time.min)
             end = datetime.combine(yesterday, time.max)
         
-        elif expression == "tomorrow":
+        elif time_component == "tomorrow":
             tomorrow = today + timedelta(days=1)
             start = datetime.combine(tomorrow, time.min)
             end = datetime.combine(tomorrow, time.max)
         
         # This/Last Week
-        elif expression == "this week":
+        elif time_component == "this week":
             start = today - timedelta(days=today.weekday())  # Monday
             end = start + timedelta(days=6)  # Sunday
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
-        elif expression == "last week":
+        elif time_component == "last week":
             this_week_start = today - timedelta(days=today.weekday())
             start = this_week_start - timedelta(weeks=1)
             end = start + timedelta(days=6)
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
+        elif time_component == "next week":
+            this_week_start = today - timedelta(days=today.weekday())
+            start = this_week_start + timedelta(weeks=1)
+            end = start + timedelta(days=6)
+            start = datetime.combine(start, time.min)
+            end = datetime.combine(end, time.max)
+        
         # This/Last Month
-        elif expression == "this month":
+        elif time_component == "this month":
             start = date(today.year, today.month, 1)
             _, last_day = stdlib_calendar.monthrange(today.year, today.month)
             end = date(today.year, today.month, last_day)
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
-        elif expression == "last month":
+        elif time_component == "last month":
             if today.month == 1:
                 start = date(today.year - 1, 12, 1)
                 end = date(today.year - 1, 12, 31)
@@ -270,7 +296,7 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
             end = datetime.combine(end, time.max)
         
         # Past N days/weeks/months
-        elif match := re.match(r'past (\d+) days?', expression):
+        elif match := re.match(r'past (\d+) days?', time_component):
             days = int(match.group(1))
             if days <= 0:
                 raise ValueError("Number of days must be positive")
@@ -279,7 +305,7 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
-        elif match := re.match(r'past (\d+) weeks?', expression):
+        elif match := re.match(r'past (\d+) weeks?', time_component):
             weeks = int(match.group(1))
             if weeks <= 0:
                 raise ValueError("Number of weeks must be positive")
@@ -288,7 +314,7 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
-        elif match := re.match(r'past (\d+) months?', expression):
+        elif match := re.match(r'past (\d+) months?', time_component):
             months = int(match.group(1))
             if months <= 0:
                 raise ValueError("Number of months must be positive")
@@ -299,15 +325,21 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
             end = datetime.combine(end, time.max)
         
         # Explicit date range (from YYYY-MM-DD to YYYY-MM-DD)
-        elif match := re.match(r'from (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})', expression):
+        elif match := re.match(r'from (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})', time_component):
             start_str, end_str = match.groups()
             start = datetime.fromisoformat(start_str)
             end = datetime.fromisoformat(end_str)
             start = datetime.combine(start.date(), time.min)
             end = datetime.combine(end.date(), time.max)
         
+        # Year only (e.g., "2020")
+        elif match := re.match(r'^(\d{4})$', time_component):
+            year = int(match.group(1))
+            start = datetime(year, 1, 1)
+            end = datetime(year, 12, 31, 23, 59, 59, 999999)
+        
         else:
-            raise TimeParsingError(f"Invalid time expression: {expression}")
+            raise TimeParsingError(f"Invalid time expression: {time_component}")
         
         # Apply timezone to both start and end
         start = target_tz.localize(start) if start.tzinfo is None else start.astimezone(target_tz)
@@ -316,7 +348,7 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
         return (start, end)
         
     except (ValueError, AttributeError) as e:
-        raise TimeParsingError(f"Invalid time expression: {expression} - {str(e)}")
+        raise TimeParsingError(f"Invalid time expression: {time_component} - {str(e)}")
 
 
 def normalize_timezone(dt: datetime, timezone_str: str) -> datetime:

@@ -117,13 +117,13 @@ class RealGoogleDriveCollector(BaseArchiveCollector):
         files_data = [
             {
                 'id': '1BvR2_G5RrCvG_9MxQzRtK8Qw-3vXyZ4A',
-                'name': 'BioRender Product Roadmap Q1 2025.docx',
+                'name': 'Product Roadmap Q1 2025.docx',
                 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'size': '387512',
                 'createdTime': self._format_timestamp('2025-01-05T14:30:00.000Z'),
                 'modifiedTime': self._format_timestamp('2025-01-15T09:22:00.000Z'),
-                'owners': [{'emailAddress': 'david.campos@biorender.com', 'displayName': 'David Campos'}],
-                'lastModifyingUser': {'emailAddress': 'katya@biorender.com', 'displayName': 'Katya Shteyn'},
+                'owners': [{'emailAddress': 'david.campos@example.com', 'displayName': 'David Campos'}],
+                'lastModifyingUser': {'emailAddress': 'katya@example.com', 'displayName': 'Katya Shteyn'},
                 'parents': ['0BxV2_G5RrCvG_dGVPVA'],
                 'webViewLink': 'https://docs.google.com/document/d/1BvR2_G5RrCvG_9MxQzRtK8Qw-3vXyZ4A/edit',
                 'shared': True
@@ -135,8 +135,8 @@ class RealGoogleDriveCollector(BaseArchiveCollector):
                 'size': '154320',
                 'createdTime': self._format_timestamp('2025-01-12T11:15:00.000Z'),
                 'modifiedTime': self._format_timestamp('2025-01-14T16:45:00.000Z'),
-                'owners': [{'emailAddress': 'angel@biorender.com', 'displayName': 'Angel Alfonso'}],
-                'lastModifyingUser': {'emailAddress': 'david.campos@biorender.com', 'displayName': 'David Campos'},
+                'owners': [{'emailAddress': 'angel@example.com', 'displayName': 'Angel Alfonso'}],
+                'lastModifyingUser': {'emailAddress': 'david.campos@example.com', 'displayName': 'David Campos'},
                 'parents': ['0BxV2_G5RrCvG_dGVPVA'],
                 'webViewLink': 'https://docs.google.com/document/d/1CwS3_H6SsDwH_0NyRaStL9Rx-4wYzA5B/edit',
                 'shared': True
@@ -148,8 +148,8 @@ class RealGoogleDriveCollector(BaseArchiveCollector):
                 'size': '298432',
                 'createdTime': self._format_timestamp('2025-01-03T08:00:00.000Z'),
                 'modifiedTime': self._format_timestamp('2025-01-15T13:20:00.000Z'),
-                'owners': [{'emailAddress': 'katya@biorender.com', 'displayName': 'Katya Shteyn'}],
-                'lastModifyingUser': {'emailAddress': 'shiz@biorender.com', 'displayName': 'Shiz Aoki'},
+                'owners': [{'emailAddress': 'katya@example.com', 'displayName': 'Katya Shteyn'}],
+                'lastModifyingUser': {'emailAddress': 'shiz@example.com', 'displayName': 'Shiz Aoki'},
                 'parents': ['0BxV2_G5RrCvG_dGVPVA'],
                 'webViewLink': 'https://docs.google.com/spreadsheets/d/1DxT4_I7TtExI_1OzSbTuM0Sy-5xZaB6C/edit',
                 'shared': True

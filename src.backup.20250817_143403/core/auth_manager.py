@@ -401,7 +401,7 @@ class LegacyAuthAdapter:
             return {
                 'bot_token': bot_token,
                 'user_token': user_token,
-                'workspace_url': 'https://biorender.slack.com',
+                'workspace_url': 'https://example.slack.com',
                 'loaded_via': 'unified_auth_manager'
             }
         return None
