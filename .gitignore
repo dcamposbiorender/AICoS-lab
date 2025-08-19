@@ -82,3 +82,10 @@ setup_credentials.py
 # Encrypted credential storage
 scavenge/src/core/encrypted_keys.db
 scavenge/src/core/.master_key
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+search.db
+test_integration.db*

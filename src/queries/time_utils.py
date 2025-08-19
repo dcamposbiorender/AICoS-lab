@@ -96,7 +96,7 @@ class TimeQueryEngine:
                     SELECT m.id, m.content, m.source, m.date, m.metadata
                     FROM messages m
                     JOIN messages_fts fts ON m.id = fts.rowid
-                    WHERE fts MATCH ? 
+                    WHERE messages_fts MATCH ? 
                     AND m.date >= ? AND m.date <= ?
                     ORDER BY m.date DESC
                     LIMIT 1000
@@ -206,6 +206,12 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
     
     expression = expression.lower().strip()
     
+    # Extract time portion from natural language queries
+    # Handle patterns like "messages from today", "events from last week", etc.
+    time_pattern_match = re.search(r'\b(?:from|in|during)\s+(.*?)(?:\s+(?:messages|events|data|records))?$', expression)
+    if time_pattern_match:
+        expression = time_pattern_match.group(1).strip()
+    
     # Extract timezone from expression
     timezone_match = re.search(r'\b(utc|pst|est|cst|mst|us/pacific|us/eastern|us/central|us/mountain)\b', expression.lower())
     if timezone_match:
@@ -246,6 +252,13 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
         elif expression == "last week":
             this_week_start = today - timedelta(days=today.weekday())
             start = this_week_start - timedelta(weeks=1)
+            end = start + timedelta(days=6)
+            start = datetime.combine(start, time.min)
+            end = datetime.combine(end, time.max)
+        
+        elif expression == "next week":
+            this_week_start = today - timedelta(days=today.weekday())
+            start = this_week_start + timedelta(weeks=1)
             end = start + timedelta(days=6)
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
@@ -298,8 +311,8 @@ def parse_time_expression(expression: str) -> Tuple[datetime, datetime]:
             start = datetime.combine(start, time.min)
             end = datetime.combine(end, time.max)
         
-        # Explicit date range (from YYYY-MM-DD to YYYY-MM-DD)
-        elif match := re.match(r'from (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})', expression):
+        # Explicit date range (from YYYY-MM-DD to YYYY-MM-DD or YYYY-MM-DD to YYYY-MM-DD)
+        elif match := re.match(r'(?:from )?(\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})', expression):
             start_str, end_str = match.groups()
             start = datetime.fromisoformat(start_str)
             end = datetime.fromisoformat(end_str)

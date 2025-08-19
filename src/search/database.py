@@ -22,7 +22,6 @@ import weakref
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Generator
 from contextlib import contextmanager
-from queue import Queue, Empty
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -48,19 +47,15 @@ class SearchDatabase:
     
     def __init__(self, db_path: str = "search.db", pool_size: int = 3):
         """
-        Initialize search database with critical fixes applied
+        Initialize search database with lab-grade simplification
         
         Args:
             db_path: Path to SQLite database file
-            pool_size: Connection pool size (simplified for lab use)
+            pool_size: Ignored for lab use - maintaining API compatibility
         """
         self.db_path = Path(db_path)
-        self.pool_size = pool_size
-        self.pool = Queue(maxsize=pool_size)
-        self._pool_lock = threading.Lock()
-        self._thread_local = threading.local()
-        self._active_connections = set()  # Track all connections
-        self._cleanup_registered = False
+        self._connection = None  # LAB-GRADE: Single connection instead of pool
+        self._connection_lock = threading.Lock()  # Simple thread safety
         self._stats = {
             'connections_created': 0,
             'connections_reused': 0,
@@ -68,16 +63,8 @@ class SearchDatabase:
             'records_indexed': 0
         }
         
-        # Register cleanup handlers
-        self._register_cleanup()
-        
         # Initialize database and schema with fixes
         self.initialize_schema()
-        
-        # Pre-populate connection pool (simplified)
-        for _ in range(min(pool_size, 2)):  # Limit for lab use
-            conn = self._create_connection()
-            self.pool.put(conn)
     
     def initialize_schema(self):
         """Create database schema with critical fixes"""
@@ -203,46 +190,17 @@ class SearchDatabase:
             
         logger.info(f"Schema migration completed to version {self.CURRENT_SCHEMA_VERSION}")
     
-    def _register_cleanup(self):
-        """Register cleanup handlers for proper connection cleanup"""
-        if not self._cleanup_registered:
-            atexit.register(self._cleanup_all_connections)
-            self._cleanup_registered = True
-    
-    def _cleanup_all_connections(self):
-        """Clean up all active connections during shutdown"""
-        logger.info("Cleaning up all database connections...")
-        
-        # Close pooled connections
-        while not self.pool.empty():
-            try:
-                conn = self.pool.get_nowait()
-                conn.close()
-            except Empty:
-                break
-        
-        # Close any remaining active connections
-        for conn in list(self._active_connections):
-            try:
-                conn.close()
-            except Exception:
-                pass
-        
-        # Clear the connections set
-        self._active_connections.clear()
-        
-        logger.info("Database connection cleanup completed")
-    
-    def _cleanup_thread_connection(self):
-        """Clean up thread-local connection"""
-        if hasattr(self._thread_local, 'connection'):
-            try:
-                self._thread_local.connection.close()
-                logger.debug("Cleaned up thread-local connection")
-            except Exception:
-                pass
-            finally:
-                delattr(self._thread_local, 'connection')
+    def close(self):
+        """LAB-GRADE: Close the single database connection"""
+        with self._connection_lock:
+            if self._connection:
+                try:
+                    self._connection.close()
+                    logger.debug("Closed database connection")
+                except Exception:
+                    pass
+                finally:
+                    self._connection = None
     
     def _check_schema_version(self):
         """Check current database schema version"""
@@ -268,85 +226,44 @@ class SearchDatabase:
         conn.execute("PRAGMA temp_store=MEMORY")  # Temp tables in RAM
         conn.execute("PRAGMA foreign_keys=ON")  # Enable foreign keys
         
-        # Track the connection for cleanup
-        self._active_connections.add(conn)
-        
         self._stats['connections_created'] += 1
         logger.debug(f"Created new database connection (total: {self._stats['connections_created']})")
         return conn
     
     def get_connection(self, timeout: float = 5.0) -> sqlite3.Connection:
         """
-        CRITICAL FIX #7: Enhanced connection management with thread-local support
+        LAB-GRADE: Simplified connection management for single-user environment
         
-        Get connection with proper cleanup and thread safety
+        Returns the single connection with basic thread safety and retry logic
         """
-        # Check if we have a thread-local connection that's still valid
-        if hasattr(self._thread_local, 'connection'):
+        with self._connection_lock:
+            # Create connection if we don't have one
+            if self._connection is None:
+                self._connection = self._create_connection()
+                self._stats['connections_created'] += 1
+                return self._connection
+            
+            # Test if existing connection is still valid
             try:
-                conn = self._thread_local.connection
-                # Test if connection is still valid
-                conn.execute("SELECT 1")
+                self._connection.execute("SELECT 1")
                 self._stats['connections_reused'] += 1
-                return conn
+                return self._connection
             except Exception:
-                # Connection is broken, clean it up
-                self._cleanup_thread_connection()
-        
-        # Try to get from pool
-        start_time = time.time()
-        
-        while time.time() - start_time < timeout:
-            try:
-                # Try to get from pool first
-                conn = self.pool.get_nowait()
-                # Test connection validity
-                conn.execute("SELECT 1")
-                self._stats['connections_reused'] += 1
-                return conn
-            except Empty:
-                # Pool empty, create new connection if under reasonable limit
-                if self._stats['connections_created'] < self.pool_size * 2:  # Reduced overflow
-                    try:
-                        return self._create_connection()
-                    except Exception as e:
-                        logger.warning(f"Failed to create connection: {e}")
-                        time.sleep(0.05)
-                        continue
-                
-                # Wait a bit and try again
-                time.sleep(0.01)
-            except Exception:
-                # Connection from pool was invalid, try another
-                continue
-        
-        raise DatabaseError(f"No database connection available within {timeout}s")
+                # Connection is broken, create a new one
+                logger.debug("Connection broken, creating new one")
+                try:
+                    self._connection.close()
+                except:
+                    pass
+                self._connection = self._create_connection()
+                self._stats['connections_created'] += 1
+                return self._connection
     
     def return_connection(self, conn: sqlite3.Connection):
-        """Return connection to pool with proper cleanup"""
-        if not conn:
-            return
-            
-        try:
-            # Check if connection is still valid
-            conn.execute("SELECT 1")
-            # Try to return to pool
-            self.pool.put_nowait(conn)
-            logger.debug("Returned connection to pool")
-        except Empty:
-            # Pool is full, close the connection
-            conn.close()
-            self._active_connections.discard(conn)
-            logger.debug("Pool full, closed connection")
-        except Exception:
-            # Connection broken or other error, close it
-            try:
-                conn.close()
-                # Remove from active connections tracking
-                self._active_connections.discard(conn)
-            except Exception:
-                pass
-            logger.debug("Connection invalid, closed")
+        """LAB-GRADE: No-op since we use single persistent connection"""
+        # For lab use, we maintain a single connection so no return needed
+        # Keeping method for API compatibility with existing code
+        pass
     
     @contextmanager
     def connection(self):
@@ -623,10 +540,6 @@ class SearchDatabase:
         
         return stats
     
-    def close(self):
-        """Close all connections with enhanced cleanup"""
-        self._cleanup_all_connections()
-        
     def __del__(self):
         """Destructor to ensure cleanup"""
         try:

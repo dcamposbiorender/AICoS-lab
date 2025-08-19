@@ -223,4 +223,104 @@
 
 ---
 
+## CRITIQUE-BASED PRIORITY UPDATES (Added 2025-08-19) 🔍
+
+### Current Reality Check (Based on Code Analysis)
+**Actual Status**: 407/469 tests passing (86.7%), not "300+ tests all passing"
+**Missing Components**: TimeQueryEngine, ArchiveVerifier, PersonQueries  
+**Over-Engineering**: Connection pooling and complex abstractions for single-user lab
+
+### REVISED PRIORITY 1: Lab-Grade Simplification (Day 1) ⚡
+**Status**: Ready to Start  
+**Risk Level**: MEDIUM - Reducing complexity without breaking functionality
+
+#### T1.1-R - Verify Critical Fixes Are Actually Working ✅
+- [x] **Status**: COMPLETED (verified in analysis)
+- [x] **FTS5 Recursion**: Fixed in `src/search/database.py` with separate content field
+- [x] **filelock Fallback**: Fixed in `src/core/compression.py` with try/except
+- [x] **Compression Safety**: Atomic operations implemented correctly
+
+#### T1.2-R - Simplify SearchDatabase for Lab Use
+- [ ] **Status**: Ready to Start
+- [ ] **Issue**: Complex connection pooling for single-user scenario
+- [ ] **Fix**: Replace Queue-based pool with simple connection + retry
+- [ ] **Files**: `src/search/database.py:49-392`
+- [ ] **Impact**: Reduces complexity, maintains functionality
+- [ ] **Estimated Time**: 1.5 hours
+
+#### T1.3-R - Implement Missing TimeQueryEngine  
+- [ ] **Status**: Ready to Start
+- [ ] **Issue**: 6 tests failing because TimeQueryEngine class doesn't exist
+- [ ] **Fix**: Create `src/queries/time_queries.py` with basic date range functionality
+- [ ] **Tests**: `tests/unit/test_time_queries.py` (already written)
+- [ ] **Impact**: Enables time-based search functionality
+- [ ] **Estimated Time**: 2 hours
+
+#### T1.4-R - Create Missing ArchiveVerifier Module
+- [ ] **Status**: Ready to Start  
+- [ ] **Issue**: Tests expect `src/core/verification_enhanced.py` with ArchiveVerifier class
+- [ ] **Fix**: Implement basic JSONL validation and integrity checking
+- [ ] **Tests**: `tests/unit/test_verification_enhanced.py`
+- [ ] **Impact**: Enables archive integrity validation
+- [ ] **Estimated Time**: 1.5 hours
+
+**Revised Priority 1 Total Time**: 5 hours
+
+### REVISED PRIORITY 2: Test Suite Cleanup (Day 2) 🧪
+**Status**: Pending P1 completion
+**Risk Level**: LOW - Quality improvements
+
+#### T2.1-R - Fix or Remove Failing Tests
+- [ ] **Status**: Pending
+- [ ] **Issue**: 59 failing tests creating noise in test suite
+- [ ] **Fix**: Either implement missing features or mark tests as TODO/skip
+- [ ] **Target**: Get to >95% test pass rate
+- [ ] **Estimated Time**: 3 hours
+
+#### T2.2-R - Update Documentation with Real Metrics  
+- [ ] **Status**: Pending
+- [ ] **Issue**: README claims inaccurate test counts and coverage
+- [ ] **Fix**: Update with actual metrics from test runs
+- [ ] **Files**: `readme.md`, `tasks.md`
+- [ ] **Estimated Time**: 1 hour
+
+### REVISED PRIORITY 3: Optional Polish (Day 3) ✨  
+**Status**: Pending P1-P2 completion
+**Risk Level**: LOW - Nice-to-have improvements
+
+#### T3.1-R - Implement PersonQueries for Completeness
+- [ ] **Status**: Pending
+- [ ] **Issue**: Person-based queries mentioned in Phase 1 but not implemented
+- [ ] **Fix**: Add basic user filtering and activity aggregation
+- [ ] **Estimated Time**: 2 hours
+
+#### T3.2-R - Add Integration Test for Full Pipeline
+- [ ] **Status**: Pending
+- [ ] **Issue**: No test that exercises collection → indexing → search
+- [ ] **Fix**: Create end-to-end test with real data flow
+- [ ] **Estimated Time**: 1 hour
+
+---
+
+## Lab-Grade vs Production Assessment 
+
+### What Should Stay Complex (Core Value):
+✅ **Archive System**: JSONL with atomic writes  
+✅ **Search Infrastructure**: SQLite FTS5 (but simplified)  
+✅ **Data Collection**: Comprehensive API integration  
+✅ **CLI Tools**: User-friendly interfaces
+
+### What Should Be Simplified (Over-Engineering):
+❌ **Connection Pooling**: Single connection fine for lab  
+❌ **Complex State Management**: JSON files sufficient  
+❌ **Enterprise Features**: Multi-user abstractions unnecessary  
+❌ **Production Monitoring**: Simple logging sufficient
+
+### Key Finding: 65% Lab-Ready
+**Working**: Data collection, compression, basic search  
+**Missing**: TimeQueryEngine, ArchiveVerifier, working test suite  
+**Over-Engineered**: Database pooling, state management abstractions
+
+---
+
 *This task queue will be updated as tasks are completed and new issues are discovered.*

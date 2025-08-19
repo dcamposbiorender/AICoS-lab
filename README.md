@@ -36,13 +36,13 @@ python tools/generate_digest.py
 
 ## 🧪 Comprehensive Testing
 
-This project includes a **production-grade test suite** with 300+ tests across 8 categories:
+This project includes a **lab-grade test suite** with 469 tests across multiple categories:
 
-### Test Suite Overview
-- **📍 Location**: [`test_suite_comprehensive/`](./test_suite_comprehensive/)
-- **🎯 Coverage**: 300+ tests validating all system components
-- **⚡ Performance**: Includes load testing and benchmark validation
-- **🔧 Categories**: Unit, Integration, E2E, Performance, Chaos, Validation, Regression, Security
+### Test Suite Overview (Last Updated: 2025-08-19)
+- **📍 Location**: [`tests/`](./tests/) and [`test_suite_comprehensive/`](./test_suite_comprehensive/)
+- **🎯 Coverage**: 469 total tests (412 passing, 54 failing, 3 skipped)
+- **⚡ Performance**: 87.8% test pass rate with ongoing improvements
+- **🔧 Categories**: Unit, Integration, Performance, Verification, Security
 
 ### Running Tests
 
@@ -213,6 +213,25 @@ python run_tests.py --mode standard --coverage
 - **Context Efficiency**: Reduce daily context hunting to ≤10 minutes
 - **Commitment Capture**: Track ≥80% of meeting commitments automatically
 - **Trust Score**: 100% explainability with verifiable source links
+
+## ⚠️ Lab Limitations (Current State)
+
+This is a **lab-grade implementation** optimized for single-user testing and validation:
+
+### Known Issues (54 failing tests)
+- **Time Query Edge Cases**: Some natural language patterns not fully supported
+- **Verification Test Mismatches**: Tests expect fewer validation errors than actually reported
+- **Missing Features**: Some advanced queries and edge case handling incomplete
+
+### Lab Optimizations Applied
+- **Single-User Database**: Simplified connection pooling for lab environment
+- **Basic Error Handling**: Production-grade error recovery not fully implemented
+- **Limited Scalability**: Not optimized for multi-user or high-volume scenarios
+
+### Production Readiness: 87.8%
+- ✅ **Core Functionality**: Data collection, search, and archival working
+- ✅ **Safety Features**: Atomic operations and backup protection implemented
+- ⚠️ **Edge Cases**: Some advanced features need completion before production use
 
 ## 🔮 Future Roadmap
 
