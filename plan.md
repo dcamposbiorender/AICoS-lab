@@ -2,6 +2,8 @@
 
 The purpose of this file is to keep track of the overall progress and master plan of the project.
 
+> **Note**: Task plans have been split into separate files for better context management during parallel development. See subsegmentation note at the end of this document.
+
 ## Project Overview
 
 **Goal**: Build a comprehensive AI-powered personal assistant that maintains organizational context, tracks informal commitments, and coordinates action for remote leadership teams.
@@ -126,18 +128,20 @@ AICoS-Lab/
 │   ├── core/
 │   │   ├── __init__.py
 │   │   ├── config.py         # Configuration with validation
-│   │   ├── state.py          # Atomic state operations
-│   │   ├── memory.py         # Memory system (Phase 2+)
-│   │   ├── logging.py        # Structured JSON logging
+│   │   ├── state.py          # SQLite-based state management
+│   │   ├── archive_writer.py # JSONL archive writer
+│   │   ├── auth_manager.py   # Unified authentication
+│   │   ├── key_manager.py    # Credential management
 │   │   └── exceptions.py     # Custom exceptions
 │   │
-│   ├── collectors/           # Deterministic data collection (Phase 1)
+│   ├── collectors/           # Standardized data collection
 │   │   ├── __init__.py
-│   │   ├── base.py           # BaseCollector abstract class
-│   │   ├── slack.py          # SlackCollector (from scavenge/)
-│   │   ├── calendar.py       # CalendarCollector (from scavenge/)
-│   │   ├── drive.py          # DriveCollector (from scavenge/)
-│   │   └── employees.py      # EmployeeCollector (from scavenge/)
+│   │   ├── base.py           # BaseArchiveCollector mixin class
+│   │   ├── slack_collector.py # SlackCollector with BaseArchiveCollector
+│   │   ├── calendar_collector.py # CalendarCollector with BaseArchiveCollector  
+│   │   ├── drive_collector.py # DriveCollector with BaseArchiveCollector
+│   │   ├── employee_collector.py # EmployeeCollector with BaseArchiveCollector
+│   │   └── circuit_breaker.py # Circuit breaker for API resilience
 │   │
 │   ├── extractors/           # Pattern matching (Phase 1) + LLM (Phase 2+)
 │   │   ├── __init__.py
@@ -217,12 +221,8 @@ AICoS-Lab/
 │   ├── memory/             # Cascading summaries (Phase 2+)
 │   └── state/              # System operational state
 │
-├── scavenge/              # Existing sophisticated components
-│   └── [preserved existing structure]
-│
 ├── scripts/
 │   ├── setup.sh           # Initial setup
-│   ├── migrate_scavenge.sh # Migration from scavenge/
 │   └── backup_data.sh     # Backup procedures
 │
 ├── .env.example           # Environment template
@@ -237,7 +237,7 @@ AICoS-Lab/
 ### Complete Historical Preservation
 
 **Slack Archive**: Store complete message history forever
-- All channels, DMs, threads preserved in original form
+- All channels, DMs, threads preserved in original form ✅ IMPLEMENTED
 - Daily snapshots with compression for older data
 - Full-text searchable across entire history (Phase 1)
 - Semantic search capabilities (Phase 2+)
@@ -251,11 +251,16 @@ AICoS-Lab/
 - Basic availability queries (Phase 1)
 - Intelligent scheduling (Phase 2+)
 
-**Drive Changelog**: Activity log without file contents
-- Track who changed what files when
+**Drive Changelog**: Activity log without file contents (Phase 1)
+- Track who changed what files when (metadata only)
 - Record sharing and permission changes
 - File lifecycle events (create, modify, delete)
+- File type categorization and size tracking
+- SHA256 content hashing for change detection
 - Enables audit trail without storage explosion
+- **Phase 1 Scope**: Metadata and activity tracking only
+- **Phase 1.5**: Content extraction for search indexing
+- **Phase 2+**: Semantic document analysis and vector search
 
 ### Archive Benefits
 
@@ -309,6 +314,51 @@ AICoS-Lab/
 
 **Completion**: When entire data pipeline provides immediate value through unified search and basic coordination
 
+### Phase 1.5: Content Extraction Layer
+
+**Objectives**: Bridge deterministic foundation with intelligent features through local content extraction
+
+**Drive Content Extraction Strategy** (Inspired by DriveToRag analysis):
+- **Priority 1**: Google Docs & PDFs (most executive content)
+  - Google Docs API for native text extraction
+  - PyPDF2/pdfplumber for local PDF processing
+  - OCR fallback for image-based PDFs (local processing only)
+- **Priority 2**: Spreadsheets (data and reports)  
+  - gspread for Google Sheets
+  - openpyxl for Excel files
+  - CSV parsing for exported data
+- **Priority 3**: Images with OCR (screenshots, diagrams)
+  - Local OCR libraries (pytesseract) 
+  - No external API dependencies
+
+**File Type Handling** (From DriveToRag patterns):
+- MIME type routing: `application/vnd.google-apps.document` → DocsExtractor
+- Content hashing: SHA256 for change detection and deduplication
+- Incremental processing: Only extract when content hash changes
+- Format normalization: All content → clean text for Phase 1 FTS5 indexing
+
+**Architecture Integration**:
+- Maintains local-first approach (no external APIs)
+- Content stored alongside JSONL metadata for complete audit trail
+- FTS5 indexing enhanced with extracted content
+- Preserves Phase 1 deterministic principles
+
+**Deliverables**:
+- `src/extractors/drive_content.py` - Content extraction engine
+- Enhanced Drive collector with content extraction capability
+- Content-aware search across document text
+- Change detection prevents redundant processing
+- Complete local processing pipeline
+
+**Success Criteria**:
+- Extract readable text from 95% of document files
+- Change detection prevents duplicate processing
+- Search finds content within documents ("quarterly goals mentioned in docs")
+- No external service dependencies
+- Content extraction completes in <30 seconds per document
+
+**Completion**: When Drive files are searchable by content while maintaining audit trail and local-first principles
+
 ### Phase 2: Intelligence Layer
 
 **Objectives**: Add LLM-powered semantic understanding while maintaining deterministic foundation
@@ -318,7 +368,8 @@ AICoS-Lab/
 - Goal detection and status inference
 - Intelligent briefing generation
 - Sentiment analysis and urgency detection
-- Semantic search capabilities
+- Semantic search capabilities (including Drive document content from Phase 1.5)
+- Vector embeddings for document similarity and retrieval
 - Pattern recognition and anomaly detection
 - Cascading memory system for context preservation
 - Human validation workflows for low-confidence extractions
@@ -706,24 +757,30 @@ Phase 2+ additions:
 
 **Context**: This is a lab-grade implementation for single-user testing. The architecture supports future scaling, but current implementation has known limitations that are acceptable for experimental use.
 
-### Current Implementation Status (2025-08-15)
+### Current Implementation Status (2025-08-17)
 
-#### Stage 1a: Core Infrastructure ✅ MOSTLY COMPLETE
+#### Stage 1a: Core Infrastructure ✅ COMPLETE
 - **Config Management**: Working with environment-based configuration
 - **Archive Writer**: Fully functional JSONL writing with daily directories
-- **State Management**: Working for single-user (has race conditions under concurrent load)
-- **Test Coverage**: 96% pass rate (177/184 tests passing)
+- **State Management**: Upgraded to SQLite with WAL mode for proper concurrency
+- **Test Coverage**: Integration tests passing, new architecture validated
 
-#### Stage 1b: Collector Wrappers ⚠️ PARTIALLY COMPLETE
-- **Base Collector**: Abstract class implemented with retry logic and circuit breaker
-- **Simplified Collectors**: Basic implementations exist (not wrapping scavenge as planned)
-- **Missing Integration**: Collectors don't integrate with sophisticated scavenge features
-- **No Drive Wrapper**: Drive collector not implemented
+#### Stage 1b-2: Collector Architecture ✅ COMPLETE  
+- **BaseArchiveCollector**: Mixin class providing retry logic, circuit breaker, and archive integration
+- **Standardized Collectors**: All collectors (Slack, Calendar, Drive, Employee) inherit from unified base
+- **Architecture Cleanup**: Eliminated duplicate code, removed confusing wrapper layers
+- **Dependency Injection**: Collectors work with or without full framework (testing friendly)
 
-#### Not Implemented Yet
-- **Search Infrastructure**: No SQLite FTS5 implementation (can grep JSONL files for now)
-- **Query Engines**: Time-based and person-based queries not built
-- **Scavenge Integration**: Wrappers don't actually wrap existing collectors
+#### Major Architecture Changes (August 2025)
+- **scavenge/ Directory**: Completely removed - eliminated ~5500 lines of duplicate/confusing code  
+- **Wrapper Classes**: Deleted misleading wrappers that claimed to wrap scavenge but wrapped local code
+- **State Management**: Upgraded from file-based to SQLite for better concurrency and transaction support
+- **Collector Inheritance**: All collectors now properly inherit from BaseArchiveCollector with consistent interface
+
+#### Still Pending (As Planned)
+- **Search Infrastructure**: SQLite FTS5 implementation for full-text search (Stage 3)
+- **Query Engines**: Time-based and person-based queries (Stage 4)
+- **Management Tools**: Data lifecycle and compression tools (Stage 1c)
 
 ### Acceptable for Lab Use
 
@@ -784,304 +841,132 @@ Given lab-grade context:
 
 ## Current Status
 
-**Phase**: Stage 1a & 1b Implemented (Lab-Grade)
-**Next Task**: Stage 1c - Management & Compression Tools  
-**Progress**: ~75% of Phase 1 foundation complete
+**Phase**: Stages 1a & 1b-2 Complete (Lab-Grade)
+**Next Task**: Stage 1c - Management & Compression Tools (optional) OR Stage 3 - Search & Indexing  
+**Progress**: ~85% of Phase 1 foundation complete
 
 **Current State**:
-- Core infrastructure working for single-user lab use
-- Basic data collection functional
-- Archive storage system operational
-- Management tools needed for data lifecycle
+- ✅ Core infrastructure complete with SQLite state management
+- ✅ All collectors standardized with BaseArchiveCollector inheritance
+- ✅ Architecture cleanup complete (~5500 lines of duplicate code eliminated)
+- ✅ Integration tests passing, new architecture validated
+- 🔄 Ready for either management tools (Stage 1c) or search implementation (Stage 3)
 
-**Available Assets from scavenge/**:
-- Sophisticated rate limiting with jitter (for future use)
-- Comprehensive authentication system (partially integrated)
-- Working collectors for Slack, Calendar, Drive (as reference)
-- Error handling and retry patterns (extracted into new code)
-- State management infrastructure (patterns reused)
+**Completed Architecture Improvements**:
+- Unified BaseArchiveCollector providing retry logic and circuit breaker patterns
+- SQLite-based state management with proper concurrency support
+- Standardized collector interfaces across all data sources
+- Comprehensive authentication system with unified credential management
+- JSONL archive system with atomic write operations
 
 **Focus**: Complete Phase 1 with management tools, then enhance based on actual usage experience
 
-## Next Steps
-
-1. Set up development environment with existing scavenge/ code
-2. Create contract test suite for tool outputs
-3. Wrap existing collectors with JSON output methods
-4. Implement full-text search and indexing
-5. Build basic calendar coordination
-6. Create CLI tools for Phase 1 operations
-7. Test deterministic pipeline end-to-end
-8. Validate Phase 1 value with users
-9. Plan Phase 2 intelligence features based on feedback
-10. Continue progressive enhancement through all phases
-
-## Phase 1 Execution Plan (2025-08-15)
+## Stage 3: Search & Indexing Implementation Plan
 
 ### Executive Summary
-Build a deterministic data collection and search foundation by wrapping existing scavenge/ collectors, adding full-text search/indexing, implementing query engines, and creating an archive storage system. This provides immediate value through unified search across all data sources without requiring any AI/LLM capabilities.
+Implement SQLite FTS5-based search infrastructure to enable fast, deterministic full-text search across all collected data (Slack, Calendar, Drive). This provides immediate value through unified search without requiring any AI/LLM capabilities.
 
-### Architecture Overview
+### Stage 3 Sub-Stages
 
-```mermaid
-graph TB
-    subgraph "Tool Interface Layer"
-        CLI[main.py CLI]
-        TOOLS[Tool Scripts]
-    end
-    
-    subgraph "Query & Search Layer (NEW)"
-        SEARCH[Full-Text Search Engine]
-        TIMEQ[Time-Based Query Engine]
-        PERSONQ[Person-Based Query Engine]
-        EXTRACT[Structured Extractors]
-        STATS[Statistical Aggregators]
-    end
-    
-    subgraph "Collection Layer (EXISTS)"
-        SLACK[Slack Collector]
-        CAL[Calendar Collector]
-        DRIVE[Drive Collector]
-        EMP[Employee Collector]
-    end
-    
-    subgraph "Core Infrastructure (EXISTS)"
-        AUTH[Auth Manager]
-        STATE[State Manager]
-        CONFIG[Config Manager]
-    end
-    
-    subgraph "Storage Layer"
-        RAW[Raw Data Archive]
-        INDEX[Search Indices]
-        FACTS[Processed Facts]
-    end
-    
-    CLI --> TOOLS
-    TOOLS --> SEARCH
-    TOOLS --> TIMEQ
-    TOOLS --> PERSONQ
-    TOOLS --> EXTRACT
-    TOOLS --> STATS
-    
-    SEARCH --> INDEX
-    TIMEQ --> RAW
-    PERSONQ --> RAW
-    EXTRACT --> RAW
-    STATS --> FACTS
-    
-    SLACK --> RAW
-    CAL --> RAW
-    DRIVE --> RAW
-    EMP --> RAW
-    
-    SLACK --> AUTH
-    CAL --> AUTH
-    DRIVE --> AUTH
-    
-    SLACK --> STATE
-    CAL --> STATE
-    DRIVE --> STATE
-    EMP --> STATE
-```
+#### Stage 3a: Search Infrastructure Foundation (3 hours)
+**Objective**: Establish SQLite FTS5 database with schema for multi-source search
 
-### Implementation Stages
+**Task 3a.1: Database Schema & Connection Management (45 minutes)**
+- Create `src/search/database.py` with connection pooling
+- Design unified schema for Slack, Calendar, Drive data
+- Implement database initialization and migration system
+- Add proper connection cleanup and error handling
 
-#### Stage 1: Foundation & Configuration
-**Objectives:**
-- Establish environment-based configuration system
-- Set up comprehensive archive storage structure
-- Implement atomic state operations
+**Task 3a.2: FTS5 Configuration & Optimization (45 minutes)**
+- Configure FTS5 tokenizers for optimal search
+- Set up porter stemming for better matching
+- Implement ranking functions for relevance scoring
+- Add support for phrase and proximity searches
 
-**Deliverables:**
-- Config class with AICOS_BASE_DIR environment variable
-- Complete `data/` directory structure with archive paths
-- Atomic file operations using temp + rename pattern
-- Archive management with daily JSONL + gzip compression
+**Task 3a.3: Multi-Source Schema Integration (45 minutes)**
+- Create tables for each data source with appropriate columns
+- Implement virtual tables for FTS5 searching
+- Add metadata columns for filtering (date, person, source)
+- Set up indexes for common query patterns
 
-**Completion Criteria:**
-- Configuration validates all paths and credentials at startup
-- Archive structure supports 90-day hot + compressed cold storage
-- State operations are atomic and handle concurrent access
+**Task 3a.4: Search Infrastructure Testing (45 minutes)**
+- Unit tests for database operations
+- Performance tests with sample datasets
+- Verify FTS5 features (stemming, ranking, phrases)
+- Test connection pooling under load
 
-#### Stage 2: Data Collection with Pattern Reuse
-**Objectives:**
-- Build new collectors using learned patterns from scavenge/
-- Implement sophisticated rate limiting with circuit breakers
-- Create checkpoint/resume capabilities
+**Test Acceptance Criteria**:
+- Database initializes correctly with all tables
+- FTS5 searches return results in <100ms for 10K records
+- Connection pool handles concurrent queries
+- All search operators work (AND, OR, phrase, proximity)
 
-**Deliverables:**
-- `src/collectors/base.py` - Base collector with rate limiting pattern
-- `src/collectors/slack.py` - New Slack collector with rule-based filtering
-- `src/collectors/calendar.py` - Calendar collector with timezone handling
-- Circuit breaker component for API resilience
+#### Stage 3b: Indexing Engine (3 hours)
+**Objective**: Build incremental indexing system for efficient data ingestion
 
-**Completion Criteria:**
-- Collectors write to JSONL archives with proper compression
-- Rate limiting prevents API exhaustion with jitter
-- Operations can resume from checkpoints after failures
+**Task 3b.1: Base Indexer Implementation (45 minutes)**
+- Create `src/search/indexer.py` with BaseIndexer class
+- Implement batch processing for JSONL archives
+- Add transaction management for atomic updates
+- Create progress tracking and resumability
 
-#### Stage 3: Search & Indexing with SQLite FTS5
-**Objectives:**
-- Implement SQLite FTS5 for full-text search across all data sources
-- Create incremental indexing to handle updates efficiently
-- Build relevance scoring for query results
+**Task 3b.2: Source-Specific Indexers (45 minutes)**
+- SlackIndexer: Extract searchable fields from messages
+- CalendarIndexer: Index event titles, descriptions, attendees
+- DriveIndexer: Index file names, paths, change metadata
+- Handle source-specific data transformations
 
-**Deliverables:**
-- `src/queries/search.py` - SQLite FTS5 search implementation
-- `src/queries/indexer.py` - Incremental index builder
-- `tools/search_data.py` - CLI tool for searching
+**Task 3b.3: Incremental Indexing Logic (45 minutes)**
+- Implement change detection using checksums
+- Create incremental update strategy
+- Add deduplication logic
+- Implement deletion and update handling
 
-**Completion Criteria:**
-- Search works across Slack messages, calendar events, Drive metadata
-- Incremental indexing handles new data without full rebuilds
-- Results include source references and relevance scores
+**Task 3b.4: Indexing Pipeline Testing (45 minutes)**
+- Test indexing with real JSONL samples
+- Verify incremental updates work correctly
+- Test error recovery and resumability
+- Measure indexing performance (records/second)
 
-#### Stage 4: Query Engines & Extractors
-**Objectives:**
-- Implement time-based retrieval ("yesterday", "last week")
-- Build person-based queries across all data sources
-- Create regex-based extractors for structured data
+**Test Acceptance Criteria**:
+- Indexes 1000 records/second minimum
+- Incremental updates only process changed data
+- Deduplication prevents duplicate entries
+- Pipeline resumes correctly after failures
 
-**Deliverables:**
-- `src/queries/time_queries.py` - Temporal query engine
-- `src/queries/person_queries.py` - Person-based retrieval
-- `src/extractors/structured.py` - Regex extractors for @mentions, dates, TODOs
-- `tools/query_facts.py` - Unified query interface
+#### Stage 3c: Search Query Engine & CLI (2 hours)
+**Objective**: Create powerful search interface with natural query support
 
-**Completion Criteria:**
-- Time queries handle natural language ranges accurately
-- Person queries aggregate data across Slack, Calendar, Drive
-- Extractors identify TODO/DEADLINE patterns reliably
+**Task 3c.1: Query Parser & Builder (30 minutes)**
+- Create `src/search/query_engine.py` 
+- Parse natural language queries into SQL
+- Support filters (date ranges, people, sources)
+- Handle complex boolean queries
 
-#### Stage 5: Calendar Coordination & Aggregation
-**Objectives:**
-- Build calendar slot finder with timezone handling
-- Create statistical aggregators for basic insights
-- Implement coverage reporting
+**Task 3c.2: Search Result Processing (30 minutes)**
+- Implement result ranking and scoring
+- Add snippet extraction with highlighting
+- Create result aggregation across sources
+- Format results with source attribution
 
-**Deliverables:**
-- `src/coordinators/calendar_slots.py` - Multi-calendar slot finding
-- `src/aggregators/basic_stats.py` - Statistical summaries
-- `tools/find_slots.py` - Calendar coordination tool
-- `tools/daily_summary.py` - Non-AI daily digest
+**Task 3c.3: Search CLI Tool (30 minutes)**
+- Create `tools/search_data.py` CLI
+- Support interactive and batch modes
+- Add output formatting (JSON, table, markdown)
+- Include filter and sort options
 
-**Completion Criteria:**
-- Finds common slots across multiple calendars with timezone awareness
-- Statistical summaries provide actionable insights without AI
-- Coverage reporting identifies data collection gaps
+**Task 3c.4: End-to-End Testing (30 minutes)**
+- Integration tests with sample data
+- Test various query patterns
+- Verify result accuracy and relevance
+- Performance testing with large datasets
 
-#### Stage 6: Integration, Testing & Error Recovery
-**Objectives:**
-- Integrate all components with comprehensive error handling
-- Implement mock-based testing with API fixtures
-- Add graceful degradation and recovery patterns
+**Test Acceptance Criteria**:
+- CLI searches return relevant results
+- Complex queries parse correctly
+- Results include proper source attribution
+- Search completes in <2 seconds for any query
 
-**Deliverables:**
-- Mock-based test suite covering all collectors and queries
-- Error recovery with checkpoint resume capabilities
-- Health check tools for system monitoring
-- Setup scripts with environment validation
+---
 
-**Completion Criteria:**
-- Complete pipeline runs end-to-end with mock data
-- System gracefully handles partial failures and resumes
-- All tools produce valid JSON with proper error handling
-
-### Key Implementation Details
-
-#### Architecture Approach: Start Clean with Pattern Reuse
-- **Collectors**: Build new implementations using learned rate limiting patterns
-- **Authentication**: Single credential source with validation, inspired by vault concept
-- **State Management**: New atomic operations using temp file + rename pattern
-- **Rate Limiting**: Extract SlackRateLimiter logic into reusable component
-- **Configuration**: Environment-based with startup validation
-
-#### Concrete Component Specifications
-1. **Search Engine**: SQLite FTS5 with incremental indexing for portability
-2. **Query Parsers**: Natural date parsing, person resolution across sources
-3. **Archive Manager**: Daily JSONL with gzip, 90-day hot + compressed cold storage
-4. **Extractors**: Regex patterns for @mentions, TODO/DEADLINE, dates
-5. **Aggregators**: Statistical summaries (counts, frequencies, coverage)
-6. **Circuit Breaker**: API failure protection with auto-recovery
-7. **Checkpoint System**: Resume long operations from failures
-
-#### Data Flow
-1. Collectors → Raw JSONL archives (append-only)
-2. Archives → Search indices (rebuilt periodically)
-3. Archives → Query engines (real-time retrieval)
-4. Query results → JSON output for orchestrator
-5. Aggregators → Processed facts storage
-
-### Testing Strategy
-
-#### Unit Tests
-- Test each extractor pattern individually
-- Verify query parsers handle edge cases
-- Test aggregation calculations
-
-#### Integration Tests
-- End-to-end collection → archive → search flow
-- Cross-source person queries
-- Calendar coordination scenarios
-
-#### User Acceptance Criteria
-- Can find any Slack message by keyword
-- Can retrieve all activity for a person
-- Can find meeting slots in <10 seconds
-- Daily summaries accurately reflect activity
-
-### Risk Mitigation
-- **Search Performance**: Use incremental indexing, not full rebuilds
-- **Storage Growth**: Implement compression and rotation early
-- **Query Complexity**: Start simple, enhance incrementally
-- **Calendar Edge Cases**: Handle timezones defensively
-
-### Success Metrics
-- Search response time <2 seconds
-- Query accuracy >95%
-- Zero data loss incidents
-- Collection completeness 100%
-- All operations work without LLM
-
-## Critical Architecture Decisions
-
-### Code Reuse Strategy: Start Clean with Pattern Extraction
-**Decision**: Build new implementations rather than wrap existing scavenge/ code
-**Rationale**: Existing codebase has architectural inconsistencies and tight coupling
-**Approach**: Extract valuable patterns (rate limiting, atomic writes, collection rules) into new clean implementations
-
-### Path Management: Environment-Based Configuration
-**Decision**: Use AICOS_BASE_DIR environment variable for portable base paths
-**Rationale**: Eliminates hardcoded path dependencies that break across machines
-**Implementation**: Single Config class validates all paths and credentials at startup
-
-### Search Technology: SQLite FTS5
-**Decision**: Use SQLite FTS5 instead of Elasticsearch or Whoosh
-**Rationale**: Provides full-text search without operational complexity, highly portable
-**Trade-offs**: Less advanced features than Elasticsearch, but sufficient for Phase 1
-
-### Archive Strategy: Daily JSONL with Compression
-**Decision**: Daily JSONL files with gzip compression, 90-day hot storage
-**Rationale**: Balance between queryability and storage efficiency
-**Benefits**: Append-only writes, easy backup/restore, compressed cold storage
-
-### Error Recovery: Checkpoint System
-**Decision**: Implement checkpoint/resume for all long-running operations
-**Rationale**: Large data collections need resilience against partial failures
-**Pattern**: Save progress at regular intervals, resume from last checkpoint
-
-### API Resilience: Circuit Breaker Pattern
-**Decision**: Add circuit breakers to all external API calls
-**Rationale**: Prevent cascade failures when APIs become unavailable
-**Implementation**: Track failure rates, open circuit after threshold, auto-recovery
-
-### Testing Strategy: Mock-Based with Fixtures
-**Decision**: Mock all external APIs, use fixture data for testing
-**Rationale**: Avoid API quota consumption and flaky tests from external dependencies
-**Approach**: Comprehensive fixture data covering edge cases and error scenarios
-
-### Bounded Context Architecture
-**Decision**: Isolate complex operations in bounded contexts
-**Rationale**: Allows incremental migration and prevents architectural coupling
-**Benefit**: Can evolve different parts of system independently
+*For detailed implementation specifications, technical decisions, and OAuth simplification plans, see [archive_context/plan_implementation_details.md](archive_context/plan_implementation_details.md)*

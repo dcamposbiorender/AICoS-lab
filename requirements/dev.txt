@@ -23,3 +23,6 @@ pre-commit==4.0.1
 
 # Development utilities
 ipython==8.29.0
+
+# FastAPI testing
+httpx==0.28.1

@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+collecting ... collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+______________ ERROR collecting unit/test_core_infrastructure.py _______________
+ImportError while importing test module '/Users/david.campos/VibeCode/AICoS-Lab/test_suite_comprehensive/unit/test_core_infrastructure.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.11/3.11.13/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+unit/test_core_infrastructure.py:28: in <module>
+    from src.core.config import Config, ConfigurationError
+E   ModuleNotFoundError: No module named 'src'
+=========================== short test summary info ============================
+ERROR unit/test_core_infrastructure.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.05s ===============================

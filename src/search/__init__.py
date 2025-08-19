@@ -1,0 +1,1 @@
+# Search module for FTS5 database and indexing

@@ -27,3 +27,9 @@ pathlib-abc==0.1.1
 
 # Version parsing utilities
 packaging==25.0
+
+# System monitoring for memory usage tracking
+psutil==6.1.0
+
+# CLI framework for command-line tools
+click==8.1.7
