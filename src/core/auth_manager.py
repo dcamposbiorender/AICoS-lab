@@ -20,6 +20,10 @@ from pathlib import Path
 from typing import Dict, Optional, Any, Union
 from dataclasses import dataclass
 from enum import Enum
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 class AuthType(Enum):
     SLACK_BOT = "slack_bot"
@@ -47,6 +51,77 @@ class AuthCredentials:
         """Check if credentials are valid and not expired"""
         return bool(self.token) and not self.is_expired()
 
+class SecureCache:
+    """Secure encrypted cache for sensitive credentials"""
+    
+    def __init__(self):
+        self._cipher_suite = None
+        self._cache_salt = None
+        self._encrypted_cache = {}
+        self.last_cache_update = {}
+        
+    def _get_cache_cipher(self) -> Fernet:
+        """Get cipher suite for cache encryption"""
+        if self._cipher_suite is None:
+            # Generate cache encryption key from environment
+            cache_key_material = os.environ.get('AICOS_CACHE_KEY', 'dev_cache_key_not_secure')
+            
+            # Generate salt if not exists
+            if self._cache_salt is None:
+                self._cache_salt = os.urandom(16)
+            
+            kdf = PBKDF2HMAC(
+                algorithm=hashes.SHA256(),
+                length=32,
+                salt=self._cache_salt,
+                iterations=100000,
+            )
+            
+            key = base64.urlsafe_b64encode(kdf.derive(cache_key_material.encode()))
+            self._cipher_suite = Fernet(key)
+            
+        return self._cipher_suite
+    
+    def set(self, key: str, value: str) -> None:
+        """Store encrypted credential in cache"""
+        try:
+            cipher = self._get_cache_cipher()
+            encrypted_value = cipher.encrypt(value.encode())
+            self._encrypted_cache[key] = encrypted_value
+            self.last_cache_update[key] = datetime.now()
+        except Exception as e:
+            print(f"⚠️ Failed to encrypt cache entry {key}: {e}")
+            # Fallback: don't cache if encryption fails
+            pass
+    
+    def get(self, key: str) -> Optional[str]:
+        """Retrieve and decrypt credential from cache"""
+        try:
+            if key not in self._encrypted_cache:
+                return None
+                
+            cipher = self._get_cache_cipher()
+            encrypted_value = self._encrypted_cache[key]
+            decrypted_value = cipher.decrypt(encrypted_value)
+            return decrypted_value.decode()
+        except Exception as e:
+            print(f"⚠️ Failed to decrypt cache entry {key}: {e}")
+            # Remove corrupted entry
+            self._encrypted_cache.pop(key, None)
+            self.last_cache_update.pop(key, None)
+            return None
+    
+    def clear(self) -> None:
+        """Clear all cached credentials"""
+        self._encrypted_cache.clear()
+        self.last_cache_update.clear()
+    
+    def remove(self, key: str) -> None:
+        """Remove specific cached credential"""
+        self._encrypted_cache.pop(key, None)
+        self.last_cache_update.pop(key, None)
+
+
 class CredentialVault:
     """
     Unified credential vault that provides single interface for all authentication needs.
@@ -56,8 +131,8 @@ class CredentialVault:
     def __init__(self):
         # Go up from src/core to the actual project root
         self.project_root = Path(__file__).parent.parent.parent
-        self.auth_cache = {}
-        self.last_cache_update = {}
+        self.auth_cache = SecureCache()
+        self.last_cache_update = self.auth_cache.last_cache_update  # Backward compatibility
         
         # Credential file paths (prioritized order)
         self.credential_paths = {
@@ -113,18 +188,19 @@ class CredentialVault:
     
     def _cache_key_age(self, key: str) -> float:
         """Get age of cached credential in minutes"""
-        if key not in self.last_cache_update:
+        if key not in self.auth_cache.last_cache_update:
             return float('inf')
-        delta = datetime.now() - self.last_cache_update[key]
+        delta = datetime.now() - self.auth_cache.last_cache_update[key]
         return delta.total_seconds() / 60
     
     def get_slack_bot_token(self) -> Optional[str]:
-        """Get Slack bot token with caching and fallback"""
+        """Get Slack bot token with encrypted caching and fallback"""
         cache_key = 'slack_bot_token'
         
         # Return cached if fresh (< 30 minutes)
-        if cache_key in self.auth_cache and self._cache_key_age(cache_key) < 30:
-            return self.auth_cache[cache_key]
+        cached_token = self.auth_cache.get(cache_key)
+        if cached_token and self._cache_key_age(cache_key) < 30:
+            return cached_token
         
         # Try secure config first
         if self.secure_config:
@@ -132,8 +208,7 @@ class CredentialVault:
                 slack_config = self.secure_config.get_slack_config()
                 if slack_config and slack_config.get('bot_token'):
                     token = slack_config['bot_token']
-                    self.auth_cache[cache_key] = token
-                    self.last_cache_update[cache_key] = datetime.now()
+                    self.auth_cache.set(cache_key, token)
                     print("✅ Slack bot token loaded from secure config")
                     return token
             except Exception as e:
@@ -143,8 +218,7 @@ class CredentialVault:
         env_token = os.environ.get('SLACK_BOT_TOKEN')
         if env_token:
             token = env_token
-            self.auth_cache[cache_key] = token
-            self.last_cache_update[cache_key] = datetime.now()
+            self.auth_cache.set(cache_key, token)
             print("✅ Slack bot token loaded from environment variable")
             return token
         
@@ -154,8 +228,7 @@ class CredentialVault:
             config = self._load_json_config(config_file)
             if config and config.get('bot_token'):
                 token = config['bot_token']
-                self.auth_cache[cache_key] = token
-                self.last_cache_update[cache_key] = datetime.now()
+                self.auth_cache.set(cache_key, token)
                 print(f"✅ Slack bot token loaded from {config_file}")
                 return token
         
@@ -163,12 +236,13 @@ class CredentialVault:
         return None
     
     def get_slack_user_token(self) -> Optional[str]:
-        """Get Slack user token with caching and fallback"""
+        """Get Slack user token with encrypted caching and fallback"""
         cache_key = 'slack_user_token'
         
         # Return cached if fresh
-        if cache_key in self.auth_cache and self._cache_key_age(cache_key) < 30:
-            return self.auth_cache[cache_key]
+        cached_token = self.auth_cache.get(cache_key)
+        if cached_token and self._cache_key_age(cache_key) < 30:
+            return cached_token
         
         # Try secure config first
         if self.secure_config:
@@ -176,8 +250,7 @@ class CredentialVault:
                 slack_config = self.secure_config.get_slack_config()
                 if slack_config and slack_config.get('user_token'):
                     token = slack_config['user_token']
-                    self.auth_cache[cache_key] = token
-                    self.last_cache_update[cache_key] = datetime.now()
+                    self.auth_cache.set(cache_key, token)
                     print("✅ Slack user token loaded from secure config")
                     return token
             except Exception as e:
@@ -187,8 +260,7 @@ class CredentialVault:
         env_token = os.environ.get('SLACK_USER_TOKEN')
         if env_token:
             token = env_token
-            self.auth_cache[cache_key] = token
-            self.last_cache_update[cache_key] = datetime.now()
+            self.auth_cache.set(cache_key, token)
             print("✅ Slack user token loaded from environment variable")
             return token
         
@@ -198,8 +270,7 @@ class CredentialVault:
             config = self._load_json_config(config_file)
             if config and config.get('user_token'):
                 token = config['user_token']
-                self.auth_cache[cache_key] = token
-                self.last_cache_update[cache_key] = datetime.now()
+                self.auth_cache.set(cache_key, token)
                 print(f"✅ Slack user token loaded from {config_file}")
                 return token
         
@@ -210,12 +281,15 @@ class CredentialVault:
         """Get Google OAuth credentials with automatic refresh"""
         cache_key = 'google_oauth_creds'
         
-        # Return cached if fresh and valid
-        if (cache_key in self.auth_cache and 
+        # Note: Google OAuth credentials are complex objects that can't be easily encrypted
+        # For security, we store them temporarily in memory without persistent cache
+        # This maintains security while preserving functionality
+        cached_creds = getattr(self, '_temp_google_creds', None)
+        if (cached_creds and 
             self._cache_key_age(cache_key) < 10 and 
-            hasattr(self.auth_cache[cache_key], 'valid') and
-            self.auth_cache[cache_key].valid):
-            return self.auth_cache[cache_key]
+            hasattr(cached_creds, 'valid') and
+            cached_creds.valid):
+            return cached_creds
         
         # Try secure config first
         if self.secure_config:
@@ -262,8 +336,9 @@ class CredentialVault:
             
             if credentials and credentials.valid:
                 cache_key = 'google_oauth_creds'
-                self.auth_cache[cache_key] = credentials
-                self.last_cache_update[cache_key] = datetime.now()
+                # Store complex objects in temporary cache for security
+                self._temp_google_creds = credentials
+                self.auth_cache.last_cache_update[cache_key] = datetime.now()
                 print(f"✅ Google OAuth credentials loaded from {token_path}")
                 return credentials
             else:
@@ -278,17 +353,17 @@ class CredentialVault:
         """Get Google API configuration (client ID, secret, etc.)"""
         cache_key = 'google_config'
         
-        # Return cached if fresh
-        if cache_key in self.auth_cache and self._cache_key_age(cache_key) < 60:
-            return self.auth_cache[cache_key]
+        # Return cached if fresh - config data is safe to cache encrypted
+        cached_config = self.auth_cache.get(cache_key)
+        if cached_config and self._cache_key_age(cache_key) < 60:
+            return json.loads(cached_config)
         
         # Try secure config first
         if self.secure_config:
             try:
                 config = self.secure_config.get_google_apis_config()
                 if config:
-                    self.auth_cache[cache_key] = config
-                    self.last_cache_update[cache_key] = datetime.now()
+                    self.auth_cache.set(cache_key, json.dumps(config))
                     print("✅ Google config loaded from secure config")
                     return config
             except Exception as e:
@@ -299,8 +374,7 @@ class CredentialVault:
         if config_file:
             config = self._load_json_config(config_file)
             if config:
-                self.auth_cache[cache_key] = config
-                self.last_cache_update[cache_key] = datetime.now()
+                self.auth_cache.set(cache_key, json.dumps(config))
                 print(f"✅ Google config loaded from {config_file}")
                 return config
         
@@ -358,10 +432,12 @@ class CredentialVault:
     def clear_cache(self):
         """Clear authentication cache for security"""
         self.auth_cache.clear()
-        self.last_cache_update.clear()
+        # Clear temporary Google credentials
+        if hasattr(self, '_temp_google_creds'):
+            delattr(self, '_temp_google_creds')
         if self.secure_config:
             self.secure_config.clear_cache()
-        print("🧹 Authentication cache cleared")
+        print("🧹 Authentication cache cleared securely")
 
 # Global instance for easy import
 credential_vault = CredentialVault()

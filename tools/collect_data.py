@@ -25,17 +25,17 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 # Import all collectors
-from src.collectors.slack_wrapper import SlackArchiveWrapper
-from src.collectors.calendar import CalendarArchiveWrapper  
-from src.collectors.employee import EmployeeArchiveWrapper
-from src.collectors.drive import DriveArchiveWrapper
+from src.collectors.slack_collector import SlackCollector
+from src.collectors.calendar_collector import CalendarCollector  
+from src.collectors.employee_collector import EmployeeCollector
+from src.collectors.drive_collector import DriveCollector
 
 # Available collectors mapping
 COLLECTORS = {
-    'slack': SlackArchiveWrapper,
-    'calendar': CalendarArchiveWrapper,
-    'employee': EmployeeArchiveWrapper,
-    'drive': DriveArchiveWrapper
+    'slack': SlackCollector,
+    'calendar': CalendarCollector,
+    'employee': EmployeeCollector,
+    'drive': DriveCollector
 }
 
 

@@ -56,19 +56,30 @@ class Config:
     - All settings before allowing system startup
     """
     
-    def __init__(self):
-        """Initialize configuration with full validation"""
+    def __init__(self, test_mode: bool = None):
+        """Initialize configuration with full validation
+        
+        Args:
+            test_mode: If True, skips credential validation. If None, checks AICOS_TEST_MODE env var
+        """
+        # Determine test mode
+        if test_mode is None:
+            test_mode = os.getenv('AICOS_TEST_MODE', 'false').lower() == 'true'
+        self.test_mode = test_mode
+        
         # Load and validate base directory
         self.base_dir = self._load_base_directory()
         
         # Set up directory structure
         self._setup_directory_structure()
         
-        # Validate disk space requirements
-        self._validate_disk_space()
+        # Validate disk space requirements (skip in test mode for CI environments)
+        if not self.test_mode:
+            self._validate_disk_space()
         
-        # Load and validate API credentials
-        self._validate_credentials()
+        # Load and validate API credentials (skip in test mode)
+        if not self.test_mode:
+            self._validate_credentials()
         
         # Set configuration properties
         self._setup_configuration()
@@ -239,9 +250,13 @@ class Config:
 # This ensures configuration is validated immediately when the module is imported
 _config: Optional[Config] = None
 
-def get_config() -> Config:
-    """Get global configuration instance (singleton pattern)"""
+def get_config(test_mode: bool = None) -> Config:
+    """Get global configuration instance (singleton pattern)
+    
+    Args:
+        test_mode: If True, creates config in test mode. If None, uses environment setting
+    """
     global _config
     if _config is None:
-        _config = Config()
+        _config = Config(test_mode=test_mode)
     return _config

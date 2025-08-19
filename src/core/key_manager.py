@@ -16,6 +16,12 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import base64
 
+try:
+    from .file_security import file_security
+except ImportError:
+    # Fallback if file_security not available
+    file_security = None
+
 class EncryptedKeyManager:
     def __init__(self, storage_path: str = None):
         self.storage_path = storage_path or os.path.join(
@@ -25,7 +31,41 @@ class EncryptedKeyManager:
             os.path.dirname(__file__), '.master_key'
         )
         self._cipher_suite = None
+        
+        # Validate or create secure file structure
+        self._ensure_secure_setup()
         self._initialize_database()
+        
+    def _ensure_secure_setup(self):
+        """Ensure secure file permissions and directory structure"""
+        if file_security:
+            # Validate storage directory security
+            storage_dir = os.path.dirname(self.storage_path)
+            if not os.path.exists(storage_dir):
+                print("🔒 Creating secure storage directory...")
+                dir_result = file_security.create_secure_file(storage_dir, 'data_directory')
+                if not dir_result['success']:
+                    print(f"⚠️ Storage directory security warning: {dir_result.get('error')}")
+            else:
+                # Validate existing directory
+                dir_validation = file_security.validate_file_security(storage_dir, 'data_directory')
+                if not dir_validation['valid']:
+                    print(f"⚠️ Storage directory security issues:")
+                    for issue in dir_validation.get('issues', []):
+                        print(f"   • {issue}")
+            
+            # Validate encrypted database file if it exists
+            if os.path.exists(self.storage_path):
+                db_validation = file_security.validate_file_security(self.storage_path, 'encrypted_db')
+                if not db_validation['valid']:
+                    print(f"🔧 Fixing database permissions...")
+                    fix_result = file_security.fix_file_permissions(self.storage_path, 'encrypted_db')
+                    if fix_result['success']:
+                        print("✅ Database permissions fixed")
+                    else:
+                        print(f"⚠️ Failed to fix database permissions: {fix_result.get('error')}")
+        else:
+            print("⚠️ File security validation not available - using basic permissions")
     
     def _initialize_database(self):
         """Initialize the encrypted key database"""
@@ -36,12 +76,19 @@ class EncryptedKeyManager:
             CREATE TABLE IF NOT EXISTS encrypted_keys (
                 key_id TEXT PRIMARY KEY,
                 encrypted_data BLOB NOT NULL,
+                salt BLOB NOT NULL,
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL,
                 key_type TEXT NOT NULL,
                 metadata TEXT
             )
         ''')
+        
+        # Add salt column if it doesn't exist (backward compatibility)
+        cursor.execute("PRAGMA table_info(encrypted_keys)")
+        columns = [row[1] for row in cursor.fetchall()]
+        if 'salt' not in columns:
+            cursor.execute("ALTER TABLE encrypted_keys ADD COLUMN salt BLOB")
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS access_log (
@@ -57,10 +104,24 @@ class EncryptedKeyManager:
         conn.close()
     
     def _get_master_password(self) -> str:
-        """Get or create master password for encryption"""
+        """Get or create master password for encryption with secure file handling"""
         if os.path.exists(self.master_key_path):
-            # In production, this should be entered by user each session
-            # For development, we'll store a hashed version
+            # Validate existing master key security
+            if file_security:
+                validation = file_security.validate_file_security(self.master_key_path, 'master_key')
+                if not validation['valid']:
+                    print("🔧 Master key file has security issues:")
+                    for issue in validation.get('issues', []):
+                        print(f"   • {issue}")
+                    
+                    # Attempt to fix permissions
+                    fix_result = file_security.fix_file_permissions(self.master_key_path, 'master_key')
+                    if fix_result['success']:
+                        print("✅ Master key permissions fixed")
+                    else:
+                        print(f"⚠️ Cannot fix master key permissions: {fix_result.get('error')}")
+            
+            # Read existing master key
             with open(self.master_key_path, 'r') as f:
                 return f.read().strip()
         else:
@@ -77,38 +138,56 @@ class EncryptedKeyManager:
             # Store hash of password (not the password itself)
             password_hash = hashlib.sha256(dev_password.encode()).hexdigest()
             
-            with open(self.master_key_path, 'w') as f:
-                f.write(password_hash)
-            
-            # Set restrictive permissions
-            os.chmod(self.master_key_path, 0o600)
+            # Create master key file securely
+            if file_security:
+                create_result = file_security.create_secure_file(
+                    self.master_key_path, 
+                    'master_key',
+                    password_hash
+                )
+                if not create_result['success']:
+                    print(f"⚠️ Could not create secure master key file: {create_result.get('error')}")
+                    # Fallback to basic creation
+                    with open(self.master_key_path, 'w') as f:
+                        f.write(password_hash)
+                    os.chmod(self.master_key_path, 0o600)
+                else:
+                    print("✅ Master key file created securely")
+            else:
+                # Fallback to basic secure creation
+                with open(self.master_key_path, 'w') as f:
+                    f.write(password_hash)
+                os.chmod(self.master_key_path, 0o600)
             
             print("✅ Generated secure master key for development")
             print("💡 In production, this should be user-provided password")
             return password_hash
     
-    def _get_cipher_suite(self) -> Fernet:
-        """Get or create cipher suite for encryption/decryption"""
-        if self._cipher_suite is None:
-            master_password = self._get_master_password()
-            
-            # Derive key from master password
-            kdf = PBKDF2HMAC(
-                algorithm=hashes.SHA256(),
-                length=32,
-                salt=b'ai_chief_of_staff_salt',  # In production, use random salt per key
-                iterations=100000,
-            )
-            
-            key = base64.urlsafe_b64encode(kdf.derive(master_password.encode()))
-            self._cipher_suite = Fernet(key)
+    def _get_cipher_suite(self, salt: bytes = None) -> Fernet:
+        """Get or create cipher suite for encryption/decryption with per-key salt"""
+        # Always create new cipher suite with provided salt for per-key encryption
+        if salt is None:
+            # Generate a new random salt for new keys
+            salt = os.urandom(32)
         
-        return self._cipher_suite
+        master_password = self._get_master_password()
+        
+        # Derive key from master password using the provided salt
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+        )
+        
+        key = base64.urlsafe_b64encode(kdf.derive(master_password.encode()))
+        return Fernet(key), salt
     
     def store_key(self, key_id: str, data: Dict[str, Any], key_type: str = "api_key", metadata: Optional[Dict] = None) -> bool:
-        """Store encrypted credentials"""
+        """Store encrypted credentials with per-key random salt"""
         try:
-            cipher_suite = self._get_cipher_suite()
+            # Generate new cipher suite with random salt for this key
+            cipher_suite, salt = self._get_cipher_suite()
             
             # Encrypt the data
             json_data = json.dumps(data)
@@ -123,9 +202,9 @@ class EncryptedKeyManager:
             
             cursor.execute('''
                 INSERT OR REPLACE INTO encrypted_keys 
-                (key_id, encrypted_data, created_at, updated_at, key_type, metadata)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (key_id, encrypted_data, timestamp, timestamp, key_type, metadata_json))
+                (key_id, encrypted_data, salt, created_at, updated_at, key_type, metadata)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (key_id, encrypted_data, salt, timestamp, timestamp, key_type, metadata_json))
             
             # Log the access
             cursor.execute('''
@@ -136,7 +215,7 @@ class EncryptedKeyManager:
             conn.commit()
             conn.close()
             
-            print(f"✅ Encrypted credentials stored: {key_id}")
+            print(f"✅ Encrypted credentials stored with unique salt: {key_id}")
             return True
             
         except Exception as e:
@@ -144,13 +223,13 @@ class EncryptedKeyManager:
             return False
     
     def retrieve_key(self, key_id: str) -> Optional[Dict[str, Any]]:
-        """Retrieve and decrypt credentials"""
+        """Retrieve and decrypt credentials using stored salt"""
         try:
             conn = sqlite3.connect(self.storage_path)
             cursor = conn.cursor()
             
             cursor.execute('''
-                SELECT encrypted_data FROM encrypted_keys WHERE key_id = ?
+                SELECT encrypted_data, salt FROM encrypted_keys WHERE key_id = ?
             ''', (key_id,))
             
             result = cursor.fetchone()
@@ -158,9 +237,20 @@ class EncryptedKeyManager:
                 print(f"❌ Key not found: {key_id}")
                 return None
             
+            encrypted_data, stored_salt = result
+            
+            # Handle backward compatibility for keys without salt
+            if stored_salt is None:
+                print(f"⚠️ Key {key_id} uses legacy encryption (no salt) - consider re-storing for security")
+                # Use old hardcoded salt for backward compatibility
+                legacy_salt = b'ai_chief_of_staff_salt'
+                cipher_suite, _ = self._get_cipher_suite(legacy_salt)
+            else:
+                # Use stored salt
+                cipher_suite, _ = self._get_cipher_suite(stored_salt)
+            
             # Decrypt the data
-            cipher_suite = self._get_cipher_suite()
-            decrypted_data = cipher_suite.decrypt(result[0])
+            decrypted_data = cipher_suite.decrypt(encrypted_data)
             data = json.loads(decrypted_data.decode())
             
             # Log the access
@@ -186,7 +276,7 @@ class EncryptedKeyManager:
             cursor = conn.cursor()
             
             cursor.execute('''
-                SELECT key_id, key_type, created_at, updated_at, metadata 
+                SELECT key_id, key_type, created_at, updated_at, metadata, salt 
                 FROM encrypted_keys
                 ORDER BY updated_at DESC
             ''')
@@ -196,12 +286,14 @@ class EncryptedKeyManager:
             
             keys = []
             for row in results:
+                salt_status = 'secure' if row[5] is not None else 'legacy'
                 keys.append({
                     'key_id': row[0],
                     'key_type': row[1],
                     'created_at': row[2],
                     'updated_at': row[3],
-                    'metadata': json.loads(row[4]) if row[4] else None
+                    'metadata': json.loads(row[4]) if row[4] else None,
+                    'salt_status': salt_status
                 })
             
             return keys

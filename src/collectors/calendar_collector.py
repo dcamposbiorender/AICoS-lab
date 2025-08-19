@@ -15,6 +15,7 @@ import time
 from ..core.auth_manager import credential_vault
 from ..core.jsonl_writer import create_calendar_writer
 from .employee_collector import EmployeeCollector
+from .base import BaseArchiveCollector
 
 class CalendarRateLimiter:
     """Rate limiting with exponential backoff for bulk calendar collection"""
@@ -97,13 +98,14 @@ class CalendarRateLimiter:
                 self.consecutive_rate_limits = 0
                 self.current_backoff_delay = 0
 
-class CalendarCollector:
+class CalendarCollector(BaseArchiveCollector):
     """
     Dynamic discovery-based Google Calendar collector with rule-based filtering
     Discovers all calendars and users, then applies collection rules
     """
     
     def __init__(self, config_path: Optional[Path] = None):
+        super().__init__("calendar")
         self.project_root = Path(__file__).parent.parent.parent
         
         # Load configuration

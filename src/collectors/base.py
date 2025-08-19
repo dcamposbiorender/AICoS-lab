@@ -13,7 +13,6 @@ References:
 
 import time
 import threading
-from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, List
 import logging
 
@@ -28,7 +27,7 @@ from src.collectors.circuit_breaker import CircuitBreaker
 logger = logging.getLogger(__name__)
 
 
-class BaseArchiveCollector(ABC):
+class BaseArchiveCollector:
     """
     Abstract base class for all archive collectors.
     
@@ -117,7 +116,6 @@ class BaseArchiveCollector(ABC):
                 if self.config[setting] <= 0:
                     raise ValueError(f"Invalid configuration: {setting} must be positive")
     
-    @abstractmethod
     def collect(self) -> Dict[str, Any]:
         """
         Collect data from the source system.
@@ -125,20 +123,11 @@ class BaseArchiveCollector(ABC):
         Returns:
             Dictionary containing collected data and metadata
             
-        Must implement:
-        {
-            'data': [...],  # Raw collected data
-            'metadata': {
-                'collector_type': str,
-                'collection_timestamp': str,
-                'version': str,
-                'state': dict
-            }
-        }
+        Default implementation raises NotImplementedError.
+        Subclasses should either implement this method or use their own collection methods.
         """
-        pass
+        raise NotImplementedError(f"{self.__class__.__name__} should implement collect() method or use its own collection interface")
     
-    @abstractmethod
     def get_state(self) -> Dict[str, Any]:
         """
         Get current collector state.
@@ -146,9 +135,9 @@ class BaseArchiveCollector(ABC):
         Returns:
             Dictionary containing cursor, timestamps, and other state data
         """
-        pass
+        with self._state_lock:
+            return self._state.copy()
     
-    @abstractmethod
     def set_state(self, state: Dict[str, Any]) -> None:
         """
         Update collector state.
@@ -156,7 +145,8 @@ class BaseArchiveCollector(ABC):
         Args:
             state: New state dictionary to merge with current state
         """
-        pass
+        with self._state_lock:
+            self._state.update(state)
     
     def collect_with_retry(self, max_attempts: Optional[int] = None) -> Dict[str, Any]:
         """
@@ -223,45 +213,54 @@ class BaseArchiveCollector(ABC):
         """Record a success for circuit breaker tracking.""" 
         self.circuit_breaker.record_success()
     
-    def write_to_archive(self, data: Dict[str, Any]) -> None:
+    def write_to_archive(self, data: any) -> None:
         """
         Write collected data to JSONL archive using Stage 1a ArchiveWriter.
         
         Args:
-            data: Collection result to archive
+            data: Collection result to archive - can be dict, list, or any serializable data
         """
         try:
-            # Transform data to list of records for ArchiveWriter
-            if 'data' in data:
-                # Handle structured collection result
-                records = []
-                collection_data = data['data']
-                
-                if isinstance(collection_data, list):
-                    records = collection_data
-                elif isinstance(collection_data, dict):
-                    records = [collection_data]
+            # Normalize data to list of records for ArchiveWriter
+            records = []
+            
+            if isinstance(data, list):
+                # Already a list - use directly
+                records = data
+            elif isinstance(data, dict):
+                if 'data' in data:
+                    # Structured collection result with 'data' field
+                    collection_data = data['data']
+                    if isinstance(collection_data, list):
+                        records = collection_data
+                    else:
+                        records = [collection_data]
                 else:
-                    records = [{'raw_data': collection_data}]
+                    # Plain dictionary - treat as single record
+                    records = [data]
             else:
-                # Handle direct data
-                records = [data]
+                # Other data types - wrap in record
+                records = [{'raw_data': data}]
             
             # Add metadata to each record
+            processed_records = []
             for record in records:
                 if not isinstance(record, dict):
-                    record = {'raw_data': record}
+                    processed_record = {'raw_data': record}
+                else:
+                    processed_record = record.copy()
                 
-                record['archive_metadata'] = {
+                processed_record['archive_metadata'] = {
                     'collector_type': self.collector_type,
                     'archived_at': time.time(),
                     'archive_version': '1.0'
                 }
+                processed_records.append(processed_record)
             
             # Use Stage 1a ArchiveWriter for atomic JSONL writing
-            self.archive_writer.write_records(records)
+            self.archive_writer.write_records(processed_records)
             
-            logger.info(f"Archived {len(records)} records using Stage 1a ArchiveWriter")
+            logger.info(f"Archived {len(processed_records)} records using Stage 1a ArchiveWriter")
             
         except ArchiveError as e:
             logger.error(f"Archive write failed: {e}")
@@ -270,13 +269,21 @@ class BaseArchiveCollector(ABC):
             logger.error(f"Unexpected error during archive write: {e}")
             raise
     
-    def save_state(self) -> None:
-        """Save current state using Stage 1a StateManager."""
+    def save_state(self, state: Optional[Dict[str, Any]] = None) -> None:
+        """Save current state using Stage 1a StateManager.
+        
+        Args:
+            state: Optional state to save. If None, saves current internal state.
+        """
         try:
+            if state is not None:
+                # Update internal state first if state provided
+                self.set_state(state)
+            
             current_state = self.get_state()
             state_key = f"{self.collector_type}_state"
             
-            self.state_manager.write_state(state_key, current_state)
+            self.state_manager.set_state(state_key, current_state)
             logger.debug(f"Saved state using Stage 1a StateManager: {state_key}")
             
         except Exception as e:

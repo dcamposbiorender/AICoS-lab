@@ -265,7 +265,7 @@ class DriveCollector(BaseArchiveCollector):
         self.project_root = Path(__file__).parent.parent.parent
         
         try:
-            super().__init__("drive", config_path)
+            super().__init__("drive")
         except:
             # Fallback for standalone mode
             self.collector_type = "drive"

@@ -1,0 +1,129 @@
+{
+  "timestamp": "2025-08-18 23:25:17",
+  "system_info": {
+    "python_version": "3.11.13 (main, Jun  3 2025, 18:38:25) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "platform": "Darwin",
+    "cpu_count": 14,
+    "total_memory_gb": 36.0
+  },
+  "database_validation": {
+    "exists": true,
+    "details": {
+      "file_size_mb": 1196.609375,
+      "tables": [
+        "schema_migrations",
+        "migration_state",
+        "messages",
+        "sqlite_sequence",
+        "messages_fts",
+        "messages_fts_data",
+        "messages_fts_idx",
+        "messages_fts_docsize",
+        "messages_fts_config",
+        "archives",
+        "search_metadata",
+        "sqlite_stat1"
+      ],
+      "record_counts": {
+        "schema_migrations": 2,
+        "migration_state": 3,
+        "messages": 326089,
+        "messages_fts_data": 50516,
+        "messages_fts_idx": 13584,
+        "messages_fts_docsize": 326089,
+        "messages_fts_config": 1,
+        "archives": 0,
+        "search_metadata": 0
+      },
+      "total_records": 716284
+    }
+  },
+  "search_performance": {
+    "average_search_time": 0.005219175003003329,
+    "max_search_time": 0.013802708010189235,
+    "search_times": [
+      0.0010260420094709843,
+      0.009991124999942258,
+      0.0005644159973599017,
+      0.000711583998054266,
+      0.013802708010189235
+    ],
+    "results_counts": [
+      1714,
+      148974,
+      153,
+      405,
+      214510
+    ],
+    "performance_target_met": true,
+    "queries_tested": 5
+  },
+  "concurrent_search_performance": {
+    "total_searches": 50,
+    "total_time": 0.06756458297604695,
+    "average_search_time": 0.01284118088078685,
+    "max_search_time": 0.03771079200669192,
+    "min_search_time": 0.00015787500888109207,
+    "searches_per_second": 740.0326886902571,
+    "concurrent_performance_target_met": true
+  },
+  "indexing_performance": {
+    "test_records": 5000,
+    "indexing_time": 0.013791667006444186,
+    "indexing_rate_per_second": 362537.7554188148,
+    "indexing_target_met": true,
+    "existing_jsonl_files": 219,
+    "total_existing_records": 800497,
+    "jsonl_file_details": [
+      {
+        "file": "data/archive/integration_test/2025-08-18/data.jsonl",
+        "lines": 4,
+        "size_mb": 0.00043487548828125
+      },
+      {
+        "file": "data/archive/calendar/2025-08-16/data.jsonl",
+        "lines": 539,
+        "size_mb": 0.8574771881103516
+      },
+      {
+        "file": "data/archive/test/2025-08-17/data.jsonl",
+        "lines": 4,
+        "size_mb": 0.0004425048828125
+      },
+      {
+        "file": "data/archive/test/2025-08-18/data.jsonl",
+        "lines": 3,
+        "size_mb": 0.00043010711669921875
+      },
+      {
+        "file": "data/archive/slack/2025-08-16/data.jsonl",
+        "lines": 339820,
+        "size_mb": 676.4564304351807
+      }
+    ]
+  },
+  "memory_usage": {
+    "current_memory_mb": 49.6875,
+    "memory_target_met": true,
+    "system_total_memory_gb": 36.0,
+    "system_available_memory_gb": 8.881149291992188,
+    "memory_percent_of_system": 0.13478597005208331
+  },
+  "compression_performance": {
+    "test_file": "data/archive/slack/2025-08-16/data.jsonl",
+    "original_size_bytes": 709315978,
+    "compressed_size_bytes": 47448535,
+    "compression_ratio_percent": 93.31066316399827,
+    "compression_target_met": true,
+    "compression_time": 4.441235625010449,
+    "decompression_time": 0.4269951250171289,
+    "data_integrity": true,
+    "compression_rate_mb_per_sec": 152.3126642112327
+  },
+  "summary": {
+    "claims_tested": 6,
+    "claims_validated": 6,
+    "validation_rate": 1.0,
+    "overall_status": "validated"
+  }
+}

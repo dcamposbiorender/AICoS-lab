@@ -14,6 +14,7 @@ import requests
 
 from ..core.auth_manager import credential_vault
 from ..core.jsonl_writer import create_slack_writer
+from .base import BaseArchiveCollector
 
 class SlackRateLimiter:
     """Slack-specific rate limiting with exponential backoff for bulk collection"""
@@ -84,13 +85,14 @@ class SlackRateLimiter:
         self.last_channel_time = time.time()
         self.channel_count += 1
 
-class SlackCollector:
+class SlackCollector(BaseArchiveCollector):
     """
     Dynamic discovery-based Slack collector with rule-based filtering
     Discovers all channels and users, then applies collection rules
     """
     
     def __init__(self, config_path: Optional[Path] = None):
+        super().__init__("slack")
         self.project_root = Path(__file__).parent.parent.parent
         
         # Load configuration
@@ -217,6 +219,14 @@ class SlackCollector:
         else:
             return pattern in name
     
+    def _make_api_request(self, url: str, headers: Optional[Dict] = None, params: Optional[Dict] = None) -> Dict:
+        """Make API request to Slack (mockable for testing)"""
+        response = requests.get(url, headers=headers, params=params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"ok": False, "error": f"HTTP {response.status_code}"}
+    
     def setup_slack_authentication(self) -> bool:
         """Setup Slack authentication"""
         try:
@@ -229,11 +239,11 @@ class SlackCollector:
             self.bot_token = credential_vault.get_slack_bot_token()
             self.user_token = credential_vault.get_slack_user_token()  # Optional for user endpoints
             
-            # Test bot token
+            # Test bot token using mockable API request method
             test_headers = {"Authorization": f"Bearer {self.bot_token}"}
-            test_response = requests.get("https://slack.com/api/auth.test", headers=test_headers)
+            test_response = self._make_api_request("https://slack.com/api/auth.test", headers=test_headers)
             
-            if test_response.status_code == 200 and test_response.json().get('ok'):
+            if test_response.get('ok'):
                 print("✅ Slack authentication ready")
                 return True
             else:
