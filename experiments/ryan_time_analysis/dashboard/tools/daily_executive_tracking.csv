@@ -1,0 +1,9 @@
+Date,Total_Meeting_Hours,Total_Slack_Messages,Strategic_Work_Hours,Operational_Work_Hours,Context_Switches,After_Hours_Communications,Executive_Hours_Protected,Busy_Trap_Score_Self_Assessment,Top_3_Strategic_Accomplishments,Biggest_Time_Waste,Tomorrow_Strategic_Priority,Energy_Level_End_Day,Notes
+2025-08-20,8.5,12,4.0,4.5,6,2,Yes,2.1,Strategic planning for Q4; Team delegation framework; Investor presentation prep,Unnecessary status meeting (30 min),Finalize product roadmap,8/10,Good day - stayed focused
+2025-08-21,6.0,8,5.0,3.0,4,0,Yes,1.8,Product strategy review; Budget allocation decisions; Leadership team alignment,Email responses during meetings,Market analysis deep dive,9/10,Excellent strategic focus
+INSTRUCTIONS:,,,,,,,,,,,,,
+Meeting_Hours: Total time in meetings,,,,,,,,,,,,,
+Strategic_Hours: Time on strategic thinking/planning,,,,,,,,,,,,,
+Context_Switches: Number of different activities/tools switched between,,,,,,,,,,,,,
+"Busy_Trap_Score: 1=Sustainable, 2=Manageable, 3=High, 4=Crisis",,,,,,,,,,,,,
+Executive_Hours: Did you protect your 9-11 AM strategic block? Yes/No,,,,,,,,,,,,,

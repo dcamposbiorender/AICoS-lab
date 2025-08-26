@@ -1,0 +1,573 @@
+{
+  "core_kpis": {
+    "analysis_period": {
+      "start_date": "2024-08-20T08:15:00-07:00",
+      "end_date": "2025-02-07T09:00:00-08:00",
+      "total_days": 171,
+      "active_days": 172
+    },
+    "meeting_volume": {
+      "total_meetings": 1037,
+      "meetings_per_day": 6.0,
+      "total_hours": 820.4,
+      "avg_hours_per_day": 4.8
+    },
+    "deep_work_metrics": {
+      "total_blocks": 156,
+      "deep_work_hours": 414.3,
+      "deep_work_ratio_pct": 33.6,
+      "target_ratio_pct": 40.0,
+      "meets_target": false
+    },
+    "buffer_management": {
+      "total_transitions": 795,
+      "adequately_buffered": 795,
+      "buffer_coverage_pct": 100.0,
+      "avg_buffer_minutes": 64.2,
+      "target_coverage_pct": 80.0,
+      "meets_target": true
+    },
+    "productivity_score": {
+      "overall_score": 69.7,
+      "score_out_of_100": 69.7,
+      "performance_rating": "fair"
+    }
+  },
+  "topic_analysis": {
+    "topic_distribution": [
+      {
+        "topic_category": "blocked_time",
+        "meeting_count": 482,
+        "total_minutes": 66450.0,
+        "avg_duration": 137.9,
+        "total_hours": 1107.5,
+        "time_share_pct": 37.06,
+        "avg_attendees": 0.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "general_meeting",
+        "meeting_count": 772,
+        "total_minutes": 46920.0,
+        "avg_duration": 60.8,
+        "total_hours": 782.0,
+        "time_share_pct": 26.16,
+        "avg_attendees": 2.8,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "personal_time",
+        "meeting_count": 443,
+        "total_minutes": 31885.0,
+        "avg_duration": 72.0,
+        "total_hours": 531.4,
+        "time_share_pct": 17.78,
+        "avg_attendees": 1.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "strategy",
+        "meeting_count": 33,
+        "total_minutes": 10845.0,
+        "avg_duration": 328.6,
+        "total_hours": 180.8,
+        "time_share_pct": 6.05,
+        "avg_attendees": 9.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "performance",
+        "meeting_count": 177,
+        "total_minutes": 6925.0,
+        "avg_duration": 39.1,
+        "total_hours": 115.4,
+        "time_share_pct": 3.86,
+        "avg_attendees": 2.3,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "social",
+        "meeting_count": 128,
+        "total_minutes": 6310.0,
+        "avg_duration": 49.3,
+        "total_hours": 105.2,
+        "time_share_pct": 3.52,
+        "avg_attendees": 0.6,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "executive",
+        "meeting_count": 59,
+        "total_minutes": 3375.0,
+        "avg_duration": 57.2,
+        "total_hours": 56.3,
+        "time_share_pct": 1.88,
+        "avg_attendees": 5.9,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "sync",
+        "meeting_count": 80,
+        "total_minutes": 2700.0,
+        "avg_duration": 33.8,
+        "total_hours": 45.0,
+        "time_share_pct": 1.51,
+        "avg_attendees": 4.7,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "hiring",
+        "meeting_count": 32,
+        "total_minutes": 1440.0,
+        "avg_duration": 45.0,
+        "total_hours": 24.0,
+        "time_share_pct": 0.8,
+        "avg_attendees": 3.4,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "one_on_one",
+        "meeting_count": 53,
+        "total_minutes": 1405.0,
+        "avg_duration": 26.5,
+        "total_hours": 23.4,
+        "time_share_pct": 0.78,
+        "avg_attendees": 2.4,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "technical",
+        "meeting_count": 2,
+        "total_minutes": 480.0,
+        "avg_duration": 240.0,
+        "total_hours": 8.0,
+        "time_share_pct": 0.27,
+        "avg_attendees": 1.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "operations",
+        "meeting_count": 14,
+        "total_minutes": 395.0,
+        "avg_duration": 28.2,
+        "total_hours": 6.6,
+        "time_share_pct": 0.22,
+        "avg_attendees": 3.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "demo",
+        "meeting_count": 2,
+        "total_minutes": 120.0,
+        "avg_duration": 60.0,
+        "total_hours": 2.0,
+        "time_share_pct": 0.07,
+        "avg_attendees": 1.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "partnerships",
+        "meeting_count": 1,
+        "total_minutes": 30.0,
+        "avg_duration": 30.0,
+        "total_hours": 0.5,
+        "time_share_pct": 0.02,
+        "avg_attendees": 1.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "sales",
+        "meeting_count": 1,
+        "total_minutes": 30.0,
+        "avg_duration": 30.0,
+        "total_hours": 0.5,
+        "time_share_pct": 0.02,
+        "avg_attendees": 6.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      },
+      {
+        "topic_category": "product",
+        "meeting_count": 1,
+        "total_minutes": 15.0,
+        "avg_duration": 15.0,
+        "total_hours": 0.3,
+        "time_share_pct": 0.01,
+        "avg_attendees": 5.0,
+        "urgent_minutes": 0.0,
+        "decision_minutes": 0.0
+      }
+    ],
+    "diversity_metrics": {
+      "total_topics": 16,
+      "total_minutes": 179325.0,
+      "shannon_entropy": 2.44,
+      "max_possible_entropy": 4.0,
+      "normalized_entropy": 0.61,
+      "diversity_level": "moderate_diversity"
+    },
+    "top_3_topics": [
+      {
+        "topic": "blocked_time",
+        "time_share_pct": 37.06,
+        "total_hours": 1107.5
+      },
+      {
+        "topic": "general_meeting",
+        "time_share_pct": 26.16,
+        "total_hours": 782.0
+      },
+      {
+        "topic": "personal_time",
+        "time_share_pct": 17.78,
+        "total_hours": 531.4
+      }
+    ]
+  },
+  "collaboration_analysis": {
+    "concentration_metrics": {
+      "total_domains": 73,
+      "total_collaboration_minutes": 205735.0,
+      "hhi_score": 7237.4,
+      "concentration_level": "highly_concentrated",
+      "interpretation": "Highly concentrated collaboration - may indicate over-dependence on few partners"
+    },
+    "collaboration_distribution": {
+      "total_collaborators": 366,
+      "internal_collaborators": 160,
+      "external_collaborators": 206,
+      "internal_collaboration_pct": 84.8,
+      "external_collaboration_pct": 15.2
+    },
+    "top_collaborators": [
+      {
+        "participant_email": "ryan@biorender.com",
+        "domain": "biorender.com",
+        "total_minutes": 49225.0,
+        "meetings_count": 1037,
+        "is_internal": 1
+      },
+      {
+        "participant_email": "shiz@biorender.com",
+        "domain": "biorender.com",
+        "total_minutes": 28040.0,
+        "meetings_count": 472,
+        "is_internal": 1
+      },
+      {
+        "participant_email": "natalie@biorender.com",
+        "domain": "biorender.com",
+        "total_minutes": 10800.0,
+        "meetings_count": 207,
+        "is_internal": 1
+      },
+      {
+        "participant_email": "meghana.reddy@biorender.com",
+        "domain": "biorender.com",
+        "total_minutes": 9085.0,
+        "meetings_count": 178,
+        "is_internal": 1
+      },
+      {
+        "participant_email": "katya@biorender.com",
+        "domain": "biorender.com",
+        "total_minutes": 7440.0,
+        "meetings_count": 99,
+        "is_internal": 1
+      }
+    ],
+    "network_insights": {
+      "most_frequent_collaborator": "ryan@biorender.com",
+      "highest_time_investment_hours": 820.4,
+      "collaboration_breadth": 10
+    }
+  },
+  "efficiency_analysis": {
+    "back_to_back_meetings": {
+      "total_transitions": 795,
+      "b2b_count": 17,
+      "overlapping_count": 0,
+      "b2b_rate_pct": 2.1,
+      "avg_buffer_minutes": 64.2,
+      "adequate_buffer_rate": 100.0
+    },
+    "meeting_duration_efficiency": {
+      "total_meetings": 1037,
+      "avg_duration_minutes": 47.5,
+      "short_meeting_pct": 11.4,
+      "extended_meeting_pct": 7.8,
+      "high_cost_meetings": 29
+    },
+    "off_hours_impact": {
+      "total_offhours_meetings": 864,
+      "total_offhours_hours": 1819.7,
+      "avg_offhours_duration": 126.4
+    },
+    "context_switching": {
+      "total_topic_transitions": 31,
+      "avg_switch_time_minutes": 64.4,
+      "rapid_switches": 0,
+      "rapid_switch_rate_pct": 0
+    }
+  },
+  "goal_attention_analysis": {
+    "goal_distribution": [
+      {
+        "business_goal": "general_business",
+        "meeting_count": 1509,
+        "total_minutes": 123375.0,
+        "weighted_minutes": 133783.5,
+        "total_hours": 2056.3,
+        "time_share_pct": 68.8,
+        "weighted_share_pct": 67.66,
+        "avg_meeting_duration": 81.8,
+        "avg_attendees_per_meeting": 2.0
+      },
+      {
+        "business_goal": "personal_development",
+        "meeting_count": 573,
+        "total_minutes": 38075.0,
+        "weighted_minutes": 41848.0,
+        "total_hours": 634.6,
+        "time_share_pct": 21.23,
+        "weighted_share_pct": 21.16,
+        "avg_meeting_duration": 66.4,
+        "avg_attendees_per_meeting": 0.9
+      },
+      {
+        "business_goal": "strategic_planning",
+        "meeting_count": 70,
+        "total_minutes": 13395.0,
+        "weighted_minutes": 16731.0,
+        "total_hours": 223.3,
+        "time_share_pct": 7.47,
+        "weighted_share_pct": 8.46,
+        "avg_meeting_duration": 191.4,
+        "avg_attendees_per_meeting": 7.6
+      },
+      {
+        "business_goal": "team_development",
+        "meeting_count": 72,
+        "total_minutes": 2455.0,
+        "weighted_minutes": 3180.0,
+        "total_hours": 40.9,
+        "time_share_pct": 1.37,
+        "weighted_share_pct": 1.61,
+        "avg_meeting_duration": 34.1,
+        "avg_attendees_per_meeting": 3.7
+      },
+      {
+        "business_goal": "revenue_growth",
+        "meeting_count": 16,
+        "total_minutes": 755.0,
+        "weighted_minutes": 788.0,
+        "total_hours": 12.6,
+        "time_share_pct": 0.42,
+        "weighted_share_pct": 0.4,
+        "avg_meeting_duration": 47.2,
+        "avg_attendees_per_meeting": 1.4
+      },
+      {
+        "business_goal": "product_development",
+        "meeting_count": 22,
+        "total_minutes": 750.0,
+        "weighted_minutes": 772.5,
+        "total_hours": 12.5,
+        "time_share_pct": 0.42,
+        "weighted_share_pct": 0.39,
+        "avg_meeting_duration": 34.1,
+        "avg_attendees_per_meeting": 1.3
+      },
+      {
+        "business_goal": "operational_excellence",
+        "meeting_count": 17,
+        "total_minutes": 490.0,
+        "weighted_minutes": 592.0,
+        "total_hours": 8.2,
+        "time_share_pct": 0.27,
+        "weighted_share_pct": 0.3,
+        "avg_meeting_duration": 28.8,
+        "avg_attendees_per_meeting": 2.9
+      },
+      {
+        "business_goal": "partnerships",
+        "meeting_count": 1,
+        "total_minutes": 30.0,
+        "weighted_minutes": 30.0,
+        "total_hours": 0.5,
+        "time_share_pct": 0.02,
+        "weighted_share_pct": 0.02,
+        "avg_meeting_duration": 30.0,
+        "avg_attendees_per_meeting": 1.0
+      }
+    ],
+    "strategic_focus": {
+      "strategic_time_pct": 8.9,
+      "operational_time_pct": 1.9,
+      "strategic_vs_operational_ratio": 4.65
+    },
+    "top_3_goals": [
+      {
+        "business_goal": "general_business",
+        "meeting_count": 1509,
+        "total_minutes": 123375.0,
+        "weighted_minutes": 133783.5,
+        "total_hours": 2056.3,
+        "time_share_pct": 68.8,
+        "weighted_share_pct": 67.66,
+        "avg_meeting_duration": 81.8,
+        "avg_attendees_per_meeting": 2.0
+      },
+      {
+        "business_goal": "personal_development",
+        "meeting_count": 573,
+        "total_minutes": 38075.0,
+        "weighted_minutes": 41848.0,
+        "total_hours": 634.6,
+        "time_share_pct": 21.23,
+        "weighted_share_pct": 21.16,
+        "avg_meeting_duration": 66.4,
+        "avg_attendees_per_meeting": 0.9
+      },
+      {
+        "business_goal": "strategic_planning",
+        "meeting_count": 70,
+        "total_minutes": 13395.0,
+        "weighted_minutes": 16731.0,
+        "total_hours": 223.3,
+        "time_share_pct": 7.47,
+        "weighted_share_pct": 8.46,
+        "avg_meeting_duration": 191.4,
+        "avg_attendees_per_meeting": 7.6
+      }
+    ],
+    "attention_insights": {
+      "primary_focus": "general_business",
+      "primary_focus_pct": 67.66,
+      "focus_concentration": "high"
+    }
+  },
+  "delegation_analysis": {
+    "overall_delegation_ratio": 81.5,
+    "delegation_breakdown": [
+      {
+        "organizer_self": true,
+        "meeting_type": "large_meeting",
+        "meeting_count": 85.0,
+        "total_minutes": 3050.0,
+        "avg_duration": 35.9,
+        "avg_attendees": 6.6,
+        "time_share_pct": 6.2
+      },
+      {
+        "organizer_self": true,
+        "meeting_type": "one_on_one",
+        "meeting_count": 23.0,
+        "total_minutes": 670.0,
+        "avg_duration": 29.1,
+        "avg_attendees": 2.1,
+        "time_share_pct": 1.36
+      },
+      {
+        "organizer_self": true,
+        "meeting_type": "small_meeting",
+        "meeting_count": 394.0,
+        "total_minutes": 14465.0,
+        "avg_duration": 36.7,
+        "avg_attendees": 2.4,
+        "time_share_pct": 29.39
+      },
+      {
+        "organizer_self": false,
+        "meeting_type": "large_meeting",
+        "meeting_count": 125.0,
+        "total_minutes": 9730.0,
+        "avg_duration": 77.8,
+        "avg_attendees": 9.1,
+        "time_share_pct": 19.77
+      },
+      {
+        "organizer_self": false,
+        "meeting_type": "one_on_one",
+        "meeting_count": 18.0,
+        "total_minutes": 525.0,
+        "avg_duration": 29.2,
+        "avg_attendees": 4.1,
+        "time_share_pct": 1.07
+      },
+      {
+        "organizer_self": false,
+        "meeting_type": "small_meeting",
+        "meeting_count": 392.0,
+        "total_minutes": 20785.0,
+        "avg_duration": 53.0,
+        "avg_attendees": 2.2,
+        "time_share_pct": 42.22
+      },
+      {
+        "organizer_self": null,
+        "meeting_type": "SUMMARY",
+        "meeting_count": 1037.0,
+        "total_minutes": 49225.0,
+        "avg_duration": 0.0,
+        "avg_attendees": 0.0,
+        "time_share_pct": 63.06
+      }
+    ],
+    "delegation_insights": {
+      "self_organized_pct": 18.5,
+      "delegation_level": "high_delegation",
+      "control_vs_delegation_balance": "may_lack_control"
+    }
+  },
+  "busy_trap_analysis": {
+    "overall_score": 73.1,
+    "score_interpretation": "moderate_risk - some areas for improvement in calendar management",
+    "component_scores": {
+      "meeting_overload": {
+        "weight": 0.25,
+        "score": 40.0
+      },
+      "back_to_back_stress": {
+        "weight": 0.2,
+        "score": 97.9
+      },
+      "deep_work_deficit": {
+        "weight": 0.25,
+        "score": 84.00000000000001
+      },
+      "context_switching": {
+        "weight": 0.15,
+        "score": 100
+      },
+      "off_hours_burden": {
+        "weight": 0.15,
+        "score": 50
+      }
+    },
+    "recommendations": [
+      "Reduce total meeting hours - aim for <6 hours/day",
+      "Limit off-hours meetings to reduce work-life balance impact"
+    ]
+  },
+  "metadata": {
+    "extraction_timestamp": "2025-08-19T20:45:35.295464",
+    "database_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/data/processed/duckdb/calendar_analytics.db",
+    "total_events_analyzed": 1037,
+    "analysis_period_days": 171
+  }
+}

@@ -42,6 +42,7 @@ import time
 import json
 from pathlib import Path
 from typing import Optional, List, Dict, Any
+from contextlib import nullcontext
 
 import click
 
@@ -145,8 +146,11 @@ def cli(ctx, interactive, output_format, verbose, config_file):
               help='Maximum number of results (default: 10)')
 @click.option('--include-metadata', is_flag=True,
               help='Include detailed metadata in results')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def time(ctx, time_expression, source, limit, include_metadata):
+def time(ctx, time_expression, source, limit, include_metadata, output_format):
     """
     Query data by time expressions
     
@@ -166,7 +170,11 @@ def time(ctx, time_expression, source, limit, include_metadata):
         query_facts.py time "today" --include-metadata
     """
     try:
-        with StatusIndicator("Executing time-based query"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator("Executing time-based query") if show_status else nullcontext():
             query_engine = get_query_engine()
             
             # Validate time expression
@@ -186,9 +194,11 @@ def time(ctx, time_expression, source, limit, include_metadata):
             )
             
             # Format and display results
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
             formatted_output = format_query_results(
                 result, 
-                ctx.obj['output_format'],
+                format_to_use,
                 verbose=ctx.obj['verbose'] or include_metadata,
                 query=time_expression
             )
@@ -215,8 +225,11 @@ def time(ctx, time_expression, source, limit, include_metadata):
               help='Include aggregated activity summary')
 @click.option('--include-interactions', is_flag=True,
               help='Include interaction details')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def person(ctx, person_id, time_range, activity_summary, include_interactions):
+def person(ctx, person_id, time_range, activity_summary, include_interactions, output_format):
     """
     Query activity for a specific person
     
@@ -233,7 +246,11 @@ def person(ctx, person_id, time_range, activity_summary, include_interactions):
         query_facts.py person "charlie@team.com" --include-interactions --format json
     """
     try:
-        with StatusIndicator(f"Querying activity for {person_id}"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator(f"Querying activity for {person_id}") if show_status else nullcontext():
             person_engine = get_person_engine()
             
             # Execute person query
@@ -245,17 +262,20 @@ def person(ctx, person_id, time_range, activity_summary, include_interactions):
             )
             
             # Format and display results
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
             formatted_output = format_query_results(
                 result,
-                ctx.obj['output_format'],
+                format_to_use,
                 verbose=ctx.obj['verbose'],
                 query=person_id
             )
             
             click.echo(formatted_output)
             
-            # Show activity summary if requested and available
-            if activity_summary and hasattr(result, 'metadata') and 'activity_summary' in result.metadata:
+            # Show activity summary if requested and available (only in non-JSON modes)
+            if (activity_summary and hasattr(result, 'metadata') and 'activity_summary' in result.metadata 
+                and format_to_use != 'json'):
                 summary = result.metadata['activity_summary']
                 click.echo(f"\n📈 {click.style('Activity Summary:', fg='blue', bold=True)}")
                 click.echo(f"  Messages: {summary.get('message_count', 0)}")
@@ -278,8 +298,11 @@ def person(ctx, person_id, time_range, activity_summary, include_interactions):
 @click.option('--person', help='Filter patterns by person')
 @click.option('--limit', type=int, default=20,
               help='Maximum number of patterns to extract (default: 20)')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def patterns(ctx, pattern_type, time_range, person, limit):
+def patterns(ctx, pattern_type, time_range, person, limit, output_format):
     """
     Extract structured patterns from conversations
     
@@ -298,7 +321,11 @@ def patterns(ctx, pattern_type, time_range, person, limit):
         query_facts.py patterns --pattern-type deadlines --format json
     """
     try:
-        with StatusIndicator(f"Extracting {pattern_type} patterns"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator(f"Extracting {pattern_type} patterns") if show_status else nullcontext():
             extractor = get_pattern_extractor()
             
             # Execute pattern extraction
@@ -310,9 +337,11 @@ def patterns(ctx, pattern_type, time_range, person, limit):
             )
             
             # Format and display results
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
             formatted_output = format_query_results(
                 result,
-                ctx.obj['output_format'],
+                format_to_use,
                 verbose=ctx.obj['verbose'],
                 query=f"{pattern_type} patterns"
             )
@@ -364,8 +393,11 @@ def calendar(ctx):
               help='Meeting duration in minutes (default: 60)')
 @click.option('--date', help='Specific date to search (YYYY-MM-DD)')
 @click.option('--date-range', help='Date range to search (YYYY-MM-DD,YYYY-MM-DD)')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def find_slots(ctx, attendees, duration, date, date_range):
+def find_slots(ctx, attendees, duration, date, date_range, output_format):
     """
     Find free time slots for meeting with specified attendees
     
@@ -387,7 +419,11 @@ def find_slots(ctx, attendees, duration, date, date_range):
             start_date, _ = validate_date_range(date, None)
             search_range = (start_date, start_date)
         
-        with StatusIndicator(f"Finding {duration}-minute slots for {len(attendee_list)} attendees"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator(f"Finding {duration}-minute slots for {len(attendee_list)} attendees") if show_status else nullcontext():
             availability_engine = get_availability_engine()
             
             result = availability_engine.find_free_slots(
@@ -397,7 +433,9 @@ def find_slots(ctx, attendees, duration, date, date_range):
             )
             
             # Format and display results
-            formatted_output = format_calendar_slots(result, ctx.obj['output_format'])
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
+            formatted_output = format_calendar_slots(result, format_to_use)
             click.echo(formatted_output)
             
             # Show summary in verbose mode
@@ -417,8 +455,11 @@ def find_slots(ctx, attendees, duration, date, date_range):
               help='Proposed meeting start time (ISO format or YYYY-MM-DD HH:MM)')
 @click.option('--duration', type=int, default=60,
               help='Meeting duration in minutes (default: 60)')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def check_conflicts(ctx, attendees, start_time, duration):
+def check_conflicts(ctx, attendees, start_time, duration, output_format):
     """
     Check for scheduling conflicts at proposed meeting time
     
@@ -432,7 +473,11 @@ def check_conflicts(ctx, attendees, start_time, duration):
     try:
         attendee_list = [email.strip() for email in attendees.split(',')]
         
-        with StatusIndicator("Checking for scheduling conflicts"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator("Checking for scheduling conflicts") if show_status else nullcontext():
             availability_engine = get_availability_engine()
             
             result = availability_engine.check_conflicts(
@@ -442,7 +487,9 @@ def check_conflicts(ctx, attendees, start_time, duration):
             )
             
             # Display conflict results
-            if ctx.obj['output_format'] == 'json':
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
+            if format_to_use == 'json':
                 click.echo(json.dumps(result, indent=2, default=str))
             else:
                 conflicts_found = result.get('conflicts_found', False)
@@ -472,8 +519,11 @@ def check_conflicts(ctx, attendees, start_time, duration):
 @click.option('--person', required=True, help='Person email or ID')
 @click.option('--date', help='Specific date (YYYY-MM-DD)')
 @click.option('--week', help='Week starting date (YYYY-MM-DD)')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def availability(ctx, person, date, week):
+def availability(ctx, person, date, week, output_format):
     """
     Show availability for a person or team
     
@@ -511,8 +561,11 @@ def availability(ctx, person, date, week):
               help='Show person activity rankings')
 @click.option('--include-trends', is_flag=True,
               help='Include trend analysis')
+@click.option('--format', 'output_format',
+              type=click.Choice(['json', 'csv', 'table', 'markdown']),
+              help='Output format override (overrides global --format)')
 @click.pass_context
-def stats(ctx, time_range, breakdown, person_ranking, include_trends):
+def stats(ctx, time_range, breakdown, person_ranking, include_trends, output_format):
     """
     Generate activity statistics and aggregations
     
@@ -523,7 +576,11 @@ def stats(ctx, time_range, breakdown, person_ranking, include_trends):
         query_facts.py stats --time-range "past 30 days" --include-trends --format json
     """
     try:
-        with StatusIndicator(f"Generating statistics for {time_range}"):
+        # Use quiet status indicator in JSON mode to avoid contaminating output
+        format_to_use = output_format or ctx.obj.get('output_format', 'table')
+        show_status = format_to_use != 'json' and not cli_context.get('test_mode', False)
+        
+        with StatusIndicator(f"Generating statistics for {time_range}") if show_status else nullcontext():
             activity_analyzer = get_activity_analyzer()
             
             result = activity_analyzer.get_statistics(
@@ -534,9 +591,11 @@ def stats(ctx, time_range, breakdown, person_ranking, include_trends):
             )
             
             # Format and display statistics
+            # Use local format if provided, otherwise use global format
+            format_to_use = output_format or ctx.obj.get('output_format', 'table')
             formatted_output = format_statistics(
                 result,
-                ctx.obj['output_format'],
+                format_to_use,
                 detailed=ctx.obj['verbose']
             )
             

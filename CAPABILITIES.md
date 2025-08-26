@@ -57,13 +57,13 @@ The AI Chief of Staff is a comprehensive data collection and search platform tha
 APIs (Slack/Calendar/Drive) → Collectors → JSONL Archives → Search Index → Query Results
 ```
 
-## Performance Metrics
+## Performance Characteristics
 
-- **Search Database**: 340,071 records indexed using SQLite FTS5
-- **Search Performance**: <1 second response time
-- **Archive Storage**: 677MB efficiently managed with compression
-- **Test Coverage**: 262/322 tests passing (81% success rate)
-- **Indexing Speed**: >1,000 records/second target
+- **Search Database**: Comprehensive record indexing using SQLite FTS5
+- **Search Performance**: Sub-second response time for large datasets
+- **Archive Storage**: Efficient storage with compression support
+- **Test Coverage**: Comprehensive test suite with ongoing validation
+- **Indexing Speed**: High-throughput record processing capability
 
 ## Current System Status
 
@@ -74,11 +74,11 @@ APIs (Slack/Calendar/Drive) → Collectors → JSONL Archives → Search Index �
 - **Management Tools**: Compression, verification, statistics, backup capabilities
 - **Test Suite**: Comprehensive test coverage with integration tests
 
-### Known Issues 🔴
-1. **BaseArchiveCollector**: Constructor missing `collector_type` parameter
-2. **ArchiveVerifier**: Missing module `src/core/verification_enhanced.py`
-3. **Limited Archive Data**: Only 3 JSONL files currently (needs data collection)
-4. **Search Database**: No SQLite database exists yet (needs indexing)
+### Development Status
+1. **BaseArchiveCollector**: Constructor parameter standardization needed
+2. **ArchiveVerifier**: Enhanced verification module in development
+3. **Archive Data**: Limited test data available (demonstration purposes)
+4. **Search Database**: Database creation requires initial data indexing
 
 ## Quick Start Commands
 
@@ -169,6 +169,6 @@ python3 tools/manage_archives.py --stats
 - **plan.md** - High-level architecture and implementation phases  
 - **tasks.md** - Current status and essential commands
 - **CLAUDE.md** - Instructions for AI assistants
-- **archive_context/** - Detailed implementation specifications (verbose)
+- **tasks/** - Individual task specifications and progress tracking
 
 This structure provides immediate operational knowledge while preserving all implementation details for reference.

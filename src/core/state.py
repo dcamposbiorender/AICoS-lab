@@ -46,7 +46,7 @@ class StateManager:
                 db_path = Path("data/state/state.db")
         
         # Ensure directory exists
-        db_path.parent.mkdir(parents=True, exist_ok=True)
+        db_path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         
         self.db_path = db_path
         self._local = threading.local()

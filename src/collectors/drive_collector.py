@@ -23,6 +23,7 @@ Usage:
 """
 
 import json
+import os
 import sys
 import io
 import time
@@ -30,7 +31,7 @@ import pickle
 import random
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Iterator
+from typing import Dict, List, Optional, Tuple, Iterator, Any
 from dataclasses import dataclass
 
 # Import existing system components
@@ -40,6 +41,7 @@ try:
     from ..core.archive_writer import ArchiveWriter
     from .base import BaseArchiveCollector, CollectorError
     from .circuit_breaker import CircuitBreaker
+    from ..extractors.docx_extractor import DocxContentExtractor, ExtractedDocument
 except ImportError:
     # Fallback for direct execution
     print("Warning: Could not import core components. Running in standalone mode.")
@@ -50,6 +52,14 @@ except ImportError:
             
     class CollectorError(Exception):
         pass
+        
+    class DocxContentExtractor:
+        def __init__(self):
+            pass
+        def extract_content(self, path):
+            return None
+        def detect_meeting_notes_docx(self, directory):
+            return []
 
 
 # =============================================================================
@@ -274,6 +284,21 @@ class DriveCollector(BaseArchiveCollector):
         self.drive_service = None
         self.rate_limiter = DriveRateLimiter()
         self.change_token = None
+        
+        # Initialize DOCX content extractor for meeting notes
+        try:
+            from ..extractors.docx_extractor import DocxContentExtractor as RealDocxExtractor
+            self.docx_extractor = RealDocxExtractor()
+        except ImportError:
+            # Try local import if relative import fails
+            try:
+                import sys
+                import os
+                sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+                from extractors.docx_extractor import DocxContentExtractor as RealDocxExtractor
+                self.docx_extractor = RealDocxExtractor()
+            except:
+                self.docx_extractor = None
         
         # Collection statistics
         self.collection_stats = {
@@ -777,6 +802,111 @@ class DriveCollector(BaseArchiveCollector):
                 api_requests_made=self.rate_limiter.request_count,
                 rate_limit_hits=self.rate_limiter.consecutive_rate_limits
             )
+    
+    def collect_local_docx_files(self, directory: str) -> Dict[str, Any]:
+        """
+        Enhanced Drive collector method to process local DOCX meeting notes
+        
+        This method processes Google Docs meeting notes that have been downloaded
+        as .docx files to a local directory (e.g., Downloads).
+        
+        Args:
+            directory: Directory path containing .docx meeting notes files
+            
+        Returns:
+            Collection results with extracted content and statistics
+        """
+        if not self.docx_extractor:
+            raise DriveCollectorError("DOCX extractor not available")
+        
+        results = {
+            'success': True,
+            'directory': directory,
+            'files_found': 0,
+            'files_processed': 0,
+            'successful_extractions': 0,
+            'failed_extractions': 0,
+            'extracted_documents': [],
+            'processing_time': 0,
+            'statistics': {}
+        }
+        
+        start_time = time.time()
+        
+        try:
+            # Detect meeting notes DOCX files
+            docx_files = self.docx_extractor.detect_meeting_notes_docx(directory)
+            results['files_found'] = len(docx_files)
+            
+            if not docx_files:
+                print(f"📁 No meeting notes .docx files found in {directory}")
+                return results
+            
+            print(f"📄 Found {len(docx_files)} Google Docs meeting notes files")
+            
+            # Process each DOCX file
+            for file_path in docx_files:
+                results['files_processed'] += 1
+                
+                try:
+                    # Extract content using DOCX extractor
+                    extracted_doc = self.docx_extractor.extract_content(file_path)
+                    
+                    # Create archive record in JSONL format
+                    archive_record = {
+                        'type': 'google_docs_meeting_notes',
+                        'source_file': file_path,
+                        'filename': extracted_doc.filename,
+                        'title': extracted_doc.title,
+                        'meeting_metadata': extracted_doc.meeting_metadata,
+                        'content': extracted_doc.content,
+                        'structured_content': extracted_doc.structured_content,
+                        'confidence_score': extracted_doc.confidence_score,
+                        'extraction_stats': extracted_doc.extraction_stats,
+                        'collected_at': datetime.now(timezone.utc).isoformat(),
+                        'collector_type': 'drive_local_docx'
+                    }
+                    
+                    # Add to results
+                    results['extracted_documents'].append(archive_record)
+                    results['successful_extractions'] += 1
+                    
+                    # Archive the record (if archive writer available)
+                    if hasattr(self, 'archive_writer') and self.archive_writer:
+                        self.archive_writer.write_record(archive_record)
+                    
+                    print(f"✅ Processed: {extracted_doc.title or os.path.basename(file_path)}")
+                    
+                except Exception as e:
+                    results['failed_extractions'] += 1
+                    error_record = {
+                        'type': 'extraction_error',
+                        'source_file': file_path,
+                        'error': str(e),
+                        'collected_at': datetime.now(timezone.utc).isoformat()
+                    }
+                    results['extracted_documents'].append(error_record)
+                    print(f"❌ Failed to process {os.path.basename(file_path)}: {e}")
+            
+            # Calculate processing time and statistics
+            results['processing_time'] = time.time() - start_time
+            results['statistics'] = {
+                'success_rate': results['successful_extractions'] / results['files_processed'] if results['files_processed'] > 0 else 0,
+                'average_processing_time': results['processing_time'] / results['files_processed'] if results['files_processed'] > 0 else 0,
+                'total_content_characters': sum(len(doc.get('content', '')) for doc in results['extracted_documents'] if doc.get('content')),
+                'extractor_stats': self.docx_extractor.get_processing_stats()
+            }
+            
+            print(f"📊 Local DOCX processing complete: {results['successful_extractions']}/{results['files_processed']} successful")
+            
+            return results
+            
+        except Exception as e:
+            results['success'] = False
+            results['error'] = str(e)
+            results['processing_time'] = time.time() - start_time
+            print(f"❌ Local DOCX collection failed: {e}")
+            return results
 
 
 # =============================================================================

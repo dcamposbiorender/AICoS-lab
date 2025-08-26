@@ -1,0 +1,103 @@
+{
+  "week_ending": "2025-08-25",
+  "week_number": 1,
+  "phase": "Week 1 - Emergency Workload Reduction",
+  "key_metrics": {
+    "average_daily_collaboration_hours": {
+      "value": null,
+      "target": 8.0,
+      "baseline": 17.7,
+      "status": "tracking",
+      "notes": "Enter average from daily tracking"
+    },
+    "strategic_allocation_percentage": {
+      "value": null,
+      "target": 60.0,
+      "interim_target_week_1": 20.0,
+      "baseline": 17.0,
+      "status": "tracking",
+      "notes": "Calculate: Strategic_Hours / Total_Work_Hours * 100"
+    },
+    "executive_hours_protection": {
+      "days_protected": null,
+      "target": 7,
+      "percentage": null,
+      "status": "tracking",
+      "notes": "Count days with successful 9-11 AM protection"
+    },
+    "context_switches_per_day": {
+      "value": null,
+      "target": 6,
+      "baseline": 10.3,
+      "status": "tracking",
+      "notes": "Average from daily tracking"
+    },
+    "after_hours_communications": {
+      "total_count": null,
+      "target": 0,
+      "baseline": "33.2% of work",
+      "status": "tracking",
+      "notes": "Count non-emergency after-hours items"
+    }
+  },
+  "week_1_specific_goals": {
+    "recurring_meetings_cancelled": {
+      "target": "Cancel/delegate 50%",
+      "accomplished": null,
+      "meetings_cancelled": [],
+      "meetings_delegated": [],
+      "status": "pending"
+    },
+    "strategic_block_establishment": {
+      "target": "9-11 AM daily protection",
+      "days_successful": null,
+      "obstacles_encountered": [],
+      "status": "pending"
+    },
+    "communication_boundaries": {
+      "target": "No Slack after 7 PM",
+      "violations": null,
+      "emergency_exceptions": [],
+      "status": "pending"
+    },
+    "top_collaborator_communication": {
+      "target": "Notify top 20 of new patterns",
+      "completed": null,
+      "people_notified": [],
+      "status": "pending"
+    }
+  },
+  "accomplishments": [
+    "List key strategic accomplishments this week",
+    "Include any breakthrough insights or decisions",
+    "Note improvements in focus or efficiency"
+  ],
+  "challenges": [
+    "What obstacles prevented optimal performance?",
+    "Which old patterns were hardest to break?",
+    "What external factors interfered with goals?"
+  ],
+  "optimizations_identified": [
+    "What additional improvements became apparent?",
+    "Which meetings could be further optimized?",
+    "What delegation opportunities emerged?"
+  ],
+  "next_week_focus": [
+    "Top 3 strategic priorities for next week",
+    "Specific operational changes to implement",
+    "Key relationships/communications to optimize"
+  ],
+  "energy_and_wellbeing": {
+    "average_energy_level": null,
+    "sleep_quality": null,
+    "stress_level": null,
+    "work_life_balance_score": null,
+    "notes": "1-10 scale for each metric"
+  },
+  "ea_chief_of_staff_notes": {
+    "observations": [],
+    "recommendations": [],
+    "support_needed": [],
+    "escalations": []
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "correlation_views_created": 43,
+  "creation_timestamp": "2025-08-19",
+  "views": [
+    {
+      "name": "v_after_hours_slack",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_after_hours_slack does not exist!\nDid you mean \"slack_db.v_after_hours_slack\"?\n\nLINE 1: SELECT COUNT(*) FROM v_after_hours_slack\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_b2b",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_b2b does not exist!\nDid you mean \"calendar_db.v_b2b\"?\n\nLINE 1: SELECT COUNT(*) FROM v_b2b\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_bypass_rate",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_bypass_rate does not exist!\nDid you mean \"calendar_db.v_bypass_rate\"?\n\nLINE 1: SELECT COUNT(*) FROM v_bypass_rate\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_calendar_kpis",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_calendar_kpis does not exist!\nDid you mean \"calendar_db.v_calendar_kpis\"?\n\nLINE 1: SELECT COUNT(*) FROM v_calendar_kpis\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_channel_activity",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_channel_activity does not exist!\nDid you mean \"slack_db.v_channel_activity\"?\n\nLINE 1: SELECT COUNT(*) FROM v_channel_activity\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_collab_hhi",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_collab_hhi does not exist!\nDid you mean \"calendar_db.v_collab_hhi\"?\n\nLINE 1: SELECT COUNT(*) FROM v_collab_hhi\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_collab_minutes",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_collab_minutes does not exist!\nDid you mean \"calendar_db.v_collab_minutes\"?\n\nLINE 1: SELECT COUNT(*) FROM v_collab_minutes\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_collaboration_frequency",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_collaboration_frequency does not exist!\nDid you mean \"slack_db.v_collaboration_frequency\"?\n\nLINE 1: SELECT COUNT(*) FROM v_collaboration_frequency\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_collaboration_network_unified",
+      "type": "VIEW",
+      "row_count": 435,
+      "has_data": true
+    },
+    {
+      "name": "v_communication_gaps",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_communication_intensity",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_communication_intensity does not exist!\nDid you mean \"slack_db.v_communication_intensity\"?\n\nLINE 1: SELECT COUNT(*) FROM v_communication_intensity\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_context_switching_combined",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_daily_alignment",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_daily_workload",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_day_load",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_day_load does not exist!\nDid you mean \"calendar_db.v_day_load\"?\n\nLINE 1: SELECT COUNT(*) FROM v_day_load\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_deep_work_blocks",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_deep_work_blocks does not exist!\nDid you mean \"calendar_db.v_deep_work_blocks\"?\n\nLINE 1: SELECT COUNT(*) FROM v_deep_work_blocks\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_delegation_index",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_delegation_index does not exist!\nDid you mean \"calendar_db.v_delegation_index\"?\n\nLINE 1: SELECT COUNT(*) FROM v_delegation_index\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_dm_vs_channel_ratio",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_dm_vs_channel_ratio does not exist!\nDid you mean \"slack_db.v_dm_vs_channel_ratio\"?\n\nLINE 1: SELECT COUNT(*) FROM v_dm_vs_channel_ratio\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_efficiency_correlation",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_events_norm",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_events_norm does not exist!\nDid you mean \"calendar_db.v_events_norm\"?\n\nLINE 1: SELECT COUNT(*) FROM v_events_norm\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_followup_efficiency",
+      "type": "VIEW",
+      "row_count": 1984,
+      "has_data": true
+    },
+    {
+      "name": "v_goal_attention_share",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_goal_attention_share does not exist!\nDid you mean \"calendar_db.v_goal_attention_share\"?\n\nLINE 1: SELECT COUNT(*) FROM v_goal_attention_share\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_hourly_correlation",
+      "type": "VIEW",
+      "row_count": 1799,
+      "has_data": true
+    },
+    {
+      "name": "v_meeting_slack_overlap",
+      "type": "VIEW",
+      "row_count": 2280,
+      "has_data": true
+    },
+    {
+      "name": "v_message_volume",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_message_volume does not exist!\nDid you mean \"slack_db.v_message_volume\"?\n\nLINE 1: SELECT COUNT(*) FROM v_message_volume\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_offhours",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_offhours does not exist!\nDid you mean \"calendar_db.v_offhours\"?\n\nLINE 1: SELECT COUNT(*) FROM v_offhours\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_peak_communication_hours",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_peak_communication_hours does not exist!\nDid you mean \"slack_db.v_peak_communication_hours\"?\n\nLINE 1: SELECT COUNT(*) FROM v_peak_communication_hours\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_post_meeting_followup",
+      "type": "VIEW",
+      "row_count": 1984,
+      "has_data": true
+    },
+    {
+      "name": "v_pre_meeting_activity",
+      "type": "VIEW",
+      "row_count": 1984,
+      "has_data": true
+    },
+    {
+      "name": "v_preparation_patterns",
+      "type": "VIEW",
+      "row_count": 897,
+      "has_data": true
+    },
+    {
+      "name": "v_reactive_vs_proactive",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_series_audit",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_series_audit does not exist!\nDid you mean \"calendar_db.v_series_audit\"?\n\nLINE 1: SELECT COUNT(*) FROM v_series_audit\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_short_meetings",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_short_meetings does not exist!\nDid you mean \"calendar_db.v_short_meetings\"?\n\nLINE 1: SELECT COUNT(*) FROM v_short_meetings\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_slack_load_heatmap",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_slack_load_heatmap does not exist!\nDid you mean \"slack_db.v_slack_load_heatmap\"?\n\nLINE 1: SELECT COUNT(*) FROM v_slack_load_heatmap\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_strategic_time_allocation",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_strategic_vs_operational",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_strategic_vs_operational does not exist!\nDid you mean \"slack_db.v_strategic_vs_operational\"?\n\nLINE 1: SELECT COUNT(*) FROM v_strategic_vs_operational\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_temporal_alignment",
+      "type": "VIEW",
+      "row_count": 1799,
+      "has_data": true
+    },
+    {
+      "name": "v_thread_participation",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_thread_participation does not exist!\nDid you mean \"slack_db.v_thread_participation\"?\n\nLINE 1: SELECT COUNT(*) FROM v_thread_participation\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_topic_entropy",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_topic_entropy does not exist!\nDid you mean \"calendar_db.v_topic_entropy\"?\n\nLINE 1: SELECT COUNT(*) FROM v_topic_entropy\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_topic_minutes",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_topic_minutes does not exist!\nDid you mean \"calendar_db.v_topic_minutes\"?\n\nLINE 1: SELECT COUNT(*) FROM v_topic_minutes\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_total_collaboration_time",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    },
+    {
+      "name": "v_transition_map",
+      "type": "VIEW",
+      "row_count": 0,
+      "error": "Catalog Error: Table with name v_transition_map does not exist!\nDid you mean \"calendar_db.v_transition_map\"?\n\nLINE 1: SELECT COUNT(*) FROM v_transition_map\n                             ^",
+      "has_data": false
+    },
+    {
+      "name": "v_workload_intensity",
+      "type": "VIEW",
+      "row_count": 172,
+      "has_data": true
+    }
+  ]
+}

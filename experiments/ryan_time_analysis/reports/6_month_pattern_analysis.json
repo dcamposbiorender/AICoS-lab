@@ -1,0 +1,735 @@
+{
+  "time_trends": {
+    "analysis_type": "6_month_trends",
+    "period": "2024-08 to 2025-02",
+    "monthly_trends": {
+      "2024-08": {
+        "total_meetings": 160,
+        "total_minutes": 13090,
+        "avg_duration": 81.8125,
+        "short_meetings": 21,
+        "long_meetings": 28,
+        "back_to_back": 120,
+        "unique_attendees": 68,
+        "meeting_types": {
+          "deep_work": 16,
+          "other": 134,
+          "1:1": 7,
+          "all_hands": 3
+        }
+      },
+      "2024-09": {
+        "total_meetings": 434,
+        "total_minutes": 22875,
+        "avg_duration": 52.7073732718894,
+        "short_meetings": 64,
+        "long_meetings": 53,
+        "back_to_back": 342,
+        "unique_attendees": 124,
+        "meeting_types": {
+          "other": 371,
+          "deep_work": 49,
+          "1:1": 11,
+          "all_hands": 3
+        }
+      },
+      "2024-10": {
+        "total_meetings": 491,
+        "total_minutes": 25370,
+        "avg_duration": 51.670061099796335,
+        "short_meetings": 90,
+        "long_meetings": 58,
+        "back_to_back": 380,
+        "unique_attendees": 150,
+        "meeting_types": {
+          "other": 433,
+          "1:1": 8,
+          "deep_work": 49,
+          "all_hands": 1
+        }
+      },
+      "2024-11": {
+        "total_meetings": 395,
+        "total_minutes": 32495,
+        "avg_duration": 82.26582278481013,
+        "short_meetings": 34,
+        "long_meetings": 61,
+        "back_to_back": 297,
+        "unique_attendees": 160,
+        "meeting_types": {
+          "other": 347,
+          "deep_work": 41,
+          "all_hands": 3,
+          "1:1": 4
+        }
+      },
+      "2024-12": {
+        "total_meetings": 397,
+        "total_minutes": 38940,
+        "avg_duration": 98.08564231738035,
+        "short_meetings": 49,
+        "long_meetings": 58,
+        "back_to_back": 295,
+        "unique_attendees": 135,
+        "meeting_types": {
+          "other": 338,
+          "deep_work": 47,
+          "all_hands": 8,
+          "1:1": 4
+        }
+      },
+      "2025-01": {
+        "total_meetings": 401,
+        "total_minutes": 36860,
+        "avg_duration": 91.92019950124688,
+        "short_meetings": 45,
+        "long_meetings": 63,
+        "back_to_back": 302,
+        "unique_attendees": 136,
+        "meeting_types": {
+          "other": 341,
+          "deep_work": 42,
+          "1:1": 14,
+          "all_hands": 4
+        }
+      },
+      "2025-02": {
+        "total_meetings": 80,
+        "total_minutes": 11725,
+        "avg_duration": 146.5625,
+        "short_meetings": 5,
+        "long_meetings": 13,
+        "back_to_back": 60,
+        "unique_attendees": 56,
+        "meeting_types": {
+          "other": 64,
+          "deep_work": 11,
+          "1:1": 5
+        }
+      }
+    },
+    "summary": {
+      "total_months": 7,
+      "peak_meeting_month": "2024-10",
+      "peak_meeting_count": 491,
+      "avg_monthly_meetings": 336.85714285714283,
+      "avg_monthly_hours": 431.7976190476191
+    }
+  },
+  "context_switching": {
+    "analysis_type": "context_switching_evolution",
+    "period": "2024-08 to 2025-02",
+    "monthly_patterns": {
+      "2024-08": {
+        "total_meetings": 160,
+        "short_gaps": 1,
+        "no_gaps": 120,
+        "fragmentation_score": 141.14583333333334,
+        "daily_switches": [
+          8,
+          7,
+          6,
+          12,
+          1,
+          1,
+          11,
+          16,
+          23,
+          25,
+          13,
+          1
+        ],
+        "avg_meeting_duration": 81.8125,
+        "total_minutes": 13090,
+        "avg_daily_switches": 10.333333333333334
+      },
+      "2024-09": {
+        "total_meetings": 434,
+        "short_gaps": 3,
+        "no_gaps": 340,
+        "fragmentation_score": 158.51612903225805,
+        "daily_switches": [
+          1,
+          3,
+          19,
+          20,
+          12,
+          22,
+          1,
+          1,
+          14,
+          17,
+          18,
+          23,
+          18,
+          1,
+          1,
+          16,
+          21,
+          17,
+          6,
+          22,
+          1,
+          1,
+          19,
+          18,
+          14,
+          20,
+          21,
+          1,
+          1,
+          8
+        ],
+        "avg_meeting_duration": 52.7073732718894,
+        "total_minutes": 22875,
+        "avg_daily_switches": 11.9
+      },
+      "2024-10": {
+        "total_meetings": 491,
+        "short_gaps": 8,
+        "no_gaps": 375,
+        "fragmentation_score": 169.3246173050391,
+        "daily_switches": [
+          19,
+          17,
+          21,
+          24,
+          1,
+          1,
+          21,
+          14,
+          20,
+          21,
+          29,
+          1,
+          1,
+          5,
+          20,
+          20,
+          14,
+          20,
+          1,
+          1,
+          25,
+          17,
+          18,
+          23,
+          14,
+          1,
+          1,
+          6,
+          7,
+          4,
+          17
+        ],
+        "avg_meeting_duration": 51.670061099796335,
+        "total_minutes": 25370,
+        "avg_daily_switches": 13.03225806451613
+      },
+      "2024-11": {
+        "total_meetings": 395,
+        "short_gaps": 2,
+        "no_gaps": 296,
+        "fragmentation_score": 141.0548523206751,
+        "daily_switches": [
+          18,
+          1,
+          1,
+          18,
+          17,
+          13,
+          20,
+          15,
+          1,
+          1,
+          20,
+          13,
+          11,
+          19,
+          13,
+          1,
+          2,
+          5,
+          21,
+          17,
+          21,
+          7,
+          1,
+          1,
+          14,
+          14,
+          13,
+          5,
+          6,
+          1
+        ],
+        "avg_meeting_duration": 82.26582278481013,
+        "total_minutes": 32495,
+        "avg_daily_switches": 10.333333333333334
+      },
+      "2024-12": {
+        "total_meetings": 397,
+        "short_gaps": 10,
+        "no_gaps": 286,
+        "fragmentation_score": 137.27959697732996,
+        "daily_switches": [
+          1,
+          15,
+          9,
+          16,
+          9,
+          11,
+          1,
+          1,
+          15,
+          20,
+          18,
+          23,
+          20,
+          1,
+          1,
+          19,
+          23,
+          23,
+          23,
+          18,
+          1,
+          1,
+          6,
+          6,
+          4,
+          5,
+          7,
+          1,
+          1,
+          5,
+          6
+        ],
+        "avg_meeting_duration": 98.08564231738035,
+        "total_minutes": 38940,
+        "avg_daily_switches": 10.0
+      },
+      "2025-01": {
+        "total_meetings": 401,
+        "short_gaps": 8,
+        "no_gaps": 294,
+        "fragmentation_score": 140.2365055104175,
+        "daily_switches": [
+          4,
+          6,
+          5,
+          1,
+          1,
+          16,
+          20,
+          23,
+          5,
+          6,
+          1,
+          1,
+          24,
+          26,
+          18,
+          5,
+          7,
+          1,
+          1,
+          14,
+          16,
+          5,
+          8,
+          20,
+          1,
+          1,
+          17,
+          18,
+          21,
+          18,
+          8
+        ],
+        "avg_meeting_duration": 91.92019950124688,
+        "total_minutes": 36860,
+        "avg_daily_switches": 10.258064516129032
+      },
+      "2025-02": {
+        "total_meetings": 80,
+        "short_gaps": 2,
+        "no_gaps": 58,
+        "fragmentation_score": 123.21428571428571,
+        "daily_switches": [
+          1,
+          1,
+          7,
+          6,
+          17,
+          21,
+          7
+        ],
+        "avg_meeting_duration": 146.5625,
+        "total_minutes": 11725,
+        "avg_daily_switches": 8.571428571428571
+      }
+    },
+    "evolution_summary": {
+      "highest_fragmentation_month": "2024-10",
+      "lowest_fragmentation_month": "2025-02",
+      "fragmentation_trend": "calculated_separately"
+    }
+  },
+  "collaboration_network": {
+    "analysis_type": "collaboration_network_evolution",
+    "period": "2024-08 to 2025-02",
+    "monthly_collaboration": {
+      "2024-08": {
+        "unique_collaborator_count": 68,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            36
+          ],
+          [
+            "natalie@biorender.com",
+            12
+          ],
+          [
+            "tommy.fink@biorender.com",
+            9
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            9
+          ],
+          [
+            "mark@biorender.com",
+            7
+          ],
+          [
+            "kristin.schultz@biorender.com",
+            7
+          ],
+          [
+            "francesca@biorender.com",
+            6
+          ],
+          [
+            "philip@biorender.com",
+            4
+          ],
+          [
+            "linda.zeng@biorender.com",
+            4
+          ],
+          [
+            "jesika.whittle@biorender.com",
+            3
+          ]
+        ],
+        "external_meetings": 39,
+        "internal_meetings": 133,
+        "large_meetings": 6,
+        "small_meetings": 154
+      },
+      "2024-09": {
+        "unique_collaborator_count": 124,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            111
+          ],
+          [
+            "natalie@biorender.com",
+            50
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            40
+          ],
+          [
+            "katya@biorender.com",
+            28
+          ],
+          [
+            "mark@biorender.com",
+            20
+          ],
+          [
+            "tommy.fink@biorender.com",
+            19
+          ],
+          [
+            "kristin.schultz@biorender.com",
+            13
+          ],
+          [
+            "omri@biorender.com",
+            12
+          ],
+          [
+            "jon.fan@biorender.com",
+            12
+          ],
+          [
+            "philip@biorender.com",
+            11
+          ]
+        ],
+        "external_meetings": 97,
+        "internal_meetings": 473,
+        "large_meetings": 20,
+        "small_meetings": 414
+      },
+      "2024-10": {
+        "unique_collaborator_count": 150,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            116
+          ],
+          [
+            "natalie@biorender.com",
+            45
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            41
+          ],
+          [
+            "katya@biorender.com",
+            17
+          ],
+          [
+            "mark@biorender.com",
+            15
+          ],
+          [
+            "jon.fan@biorender.com",
+            14
+          ],
+          [
+            "francesca@biorender.com",
+            13
+          ],
+          [
+            "kristin.schultz@biorender.com",
+            13
+          ],
+          [
+            "philip@biorender.com",
+            13
+          ],
+          [
+            "tommy.fink@biorender.com",
+            13
+          ]
+        ],
+        "external_meetings": 131,
+        "internal_meetings": 450,
+        "large_meetings": 21,
+        "small_meetings": 470
+      },
+      "2024-11": {
+        "unique_collaborator_count": 160,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            127
+          ],
+          [
+            "natalie@biorender.com",
+            35
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            33
+          ],
+          [
+            "katya@biorender.com",
+            30
+          ],
+          [
+            "jon.fan@biorender.com",
+            14
+          ],
+          [
+            "tommy.fink@biorender.com",
+            10
+          ],
+          [
+            "francesca@biorender.com",
+            9
+          ],
+          [
+            "mark@biorender.com",
+            9
+          ],
+          [
+            "omri@biorender.com",
+            9
+          ],
+          [
+            "jen.aceituno@biorender.com",
+            7
+          ]
+        ],
+        "external_meetings": 116,
+        "internal_meetings": 412,
+        "large_meetings": 20,
+        "small_meetings": 375
+      },
+      "2024-12": {
+        "unique_collaborator_count": 135,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            131
+          ],
+          [
+            "natalie@biorender.com",
+            47
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            31
+          ],
+          [
+            "katya@biorender.com",
+            21
+          ],
+          [
+            "tommy.fink@biorender.com",
+            13
+          ],
+          [
+            "mark@biorender.com",
+            11
+          ],
+          [
+            "notes@metaview.ai",
+            11
+          ],
+          [
+            "francesca@biorender.com",
+            10
+          ],
+          [
+            "team-exec@biorender.com",
+            10
+          ],
+          [
+            "founders@biorender.com",
+            6
+          ]
+        ],
+        "external_meetings": 93,
+        "internal_meetings": 408,
+        "large_meetings": 18,
+        "small_meetings": 379
+      },
+      "2025-01": {
+        "unique_collaborator_count": 136,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            118
+          ],
+          [
+            "natalie@biorender.com",
+            45
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            25
+          ],
+          [
+            "michael.edmonson@biorender.com",
+            20
+          ],
+          [
+            "mark@biorender.com",
+            19
+          ],
+          [
+            "team-exec@biorender.com",
+            15
+          ],
+          [
+            "katya@biorender.com",
+            12
+          ],
+          [
+            "francesca@biorender.com",
+            10
+          ],
+          [
+            "katy@biorender.com",
+            10
+          ],
+          [
+            "philip@biorender.com",
+            9
+          ]
+        ],
+        "external_meetings": 86,
+        "internal_meetings": 414,
+        "large_meetings": 17,
+        "small_meetings": 384
+      },
+      "2025-02": {
+        "unique_collaborator_count": 56,
+        "top_collaborators": [
+          [
+            "shiz@biorender.com",
+            21
+          ],
+          [
+            "natalie@biorender.com",
+            10
+          ],
+          [
+            "francesca@biorender.com",
+            5
+          ],
+          [
+            "mark@biorender.com",
+            5
+          ],
+          [
+            "meghana.reddy@biorender.com",
+            5
+          ],
+          [
+            "jon.fan@biorender.com",
+            4
+          ],
+          [
+            "michael.edmonson@biorender.com",
+            4
+          ],
+          [
+            "lucas@biorender.com",
+            3
+          ],
+          [
+            "simrat.reen@biorender.com",
+            3
+          ],
+          [
+            "charlie@biorender.com",
+            3
+          ]
+        ],
+        "external_meetings": 14,
+        "internal_meetings": 110,
+        "large_meetings": 5,
+        "small_meetings": 75
+      }
+    },
+    "network_insights": {
+      "peak_collaboration_month": "2024-11",
+      "avg_monthly_collaborators": 118.42857142857143
+    }
+  },
+  "analysis_timestamp": "2025-08-19T14:56:15.585523",
+  "data_period": "2024-08-20 to 2025-02-07",
+  "total_events_analyzed": 2358
+}

@@ -1,0 +1,337 @@
+{
+  "calculation_timestamp": "2025-08-19T22:32:22.595894",
+  "total_workload_metrics": {
+    "analysis_period_days": 172,
+    "average_daily_collaboration_hours": 17.67,
+    "max_daily_collaboration_hours": 290.5,
+    "min_daily_collaboration_hours": 2.5,
+    "collaboration_hours_volatility": 27.24,
+    "meeting_vs_slack_split": {
+      "average_meeting_percentage": 98.2,
+      "average_slack_percentage": 1.8
+    },
+    "business_vs_after_hours": {
+      "total_business_hours": 1328.9,
+      "total_after_hours": 1709.5,
+      "average_after_hours_percentage": 33.2
+    },
+    "intensity_distribution": {
+      "very_high_intensity_days": 112,
+      "high_intensity_days": 6,
+      "moderate_intensity_days": 7,
+      "low_intensity_days": 47
+    },
+    "context_switching": {
+      "average_daily_switches": 10.3,
+      "max_daily_switches": 25,
+      "average_channel_switches": 7.1,
+      "average_meeting_switches": 3.2,
+      "switching_intensity_distribution": {
+        "very_high_days": 119,
+        "high_days": 5,
+        "moderate_days": 0,
+        "low_days": 48
+      }
+    },
+    "collaboration_network": {
+      "total_collaboration_partners": 435,
+      "total_collaboration_hours_with_partners": 3469.7,
+      "average_hours_per_partner": 7.98,
+      "relationship_distribution": {
+        "primary_collaborators": 41,
+        "frequent_collaborators": 33,
+        "regular_collaborators": 62
+      },
+      "communication_preference_distribution": {
+        "meeting_focused": 429,
+        "slack_focused": 6,
+        "balanced": 0
+      }
+    }
+  },
+  "correlation_coefficients": {
+    "total_collaboration_hours_vs_busy_trap_score": {
+      "description": "Total Collaboration vs Busy Trap",
+      "sample_size": 172,
+      "pearson_correlation": 0.3073,
+      "pearson_p_value_approx": 1,
+      "strength_interpretation": "weak",
+      "significance": "likely_not_significant"
+    },
+    "total_collaboration_hours_vs_total_context_switches": {
+      "description": "Total Collaboration vs Context Switching",
+      "sample_size": 172,
+      "pearson_correlation": 0.1986,
+      "pearson_p_value_approx": 1,
+      "strength_interpretation": "negligible",
+      "significance": "likely_not_significant"
+    },
+    "total_collaboration_hours_vs_strategic_allocation_pct": {
+      "description": "Total Collaboration vs Strategic Allocation",
+      "sample_size": 172,
+      "pearson_correlation": 0.174,
+      "pearson_p_value_approx": 1,
+      "strength_interpretation": "negligible",
+      "significance": "likely_not_significant"
+    },
+    "meeting_collaboration_pct_vs_slack_collaboration_pct": {
+      "description": "Meeting vs Slack Collaboration %",
+      "sample_size": 172,
+      "pearson_correlation": -1.0,
+      "pearson_p_value_approx": 0,
+      "strength_interpretation": "strong",
+      "significance": "likely_significant"
+    },
+    "total_context_switches_vs_channels_used": {
+      "description": "Context Switches vs Channels Used",
+      "sample_size": 172,
+      "pearson_correlation": 0.8659,
+      "pearson_p_value_approx": 0,
+      "strength_interpretation": "strong",
+      "significance": "likely_significant"
+    },
+    "daily_meetings_vs_daily_messages": {
+      "description": "Daily Meetings vs Daily Messages",
+      "sample_size": 172,
+      "pearson_correlation": 0.7468,
+      "pearson_p_value_approx": 0,
+      "strength_interpretation": "strong",
+      "significance": "likely_significant"
+    },
+    "busy_trap_score_vs_workload_assessment_numeric": {
+      "description": "Busy Trap vs Workload Assessment",
+      "sample_size": 172,
+      "pearson_correlation": 0.9755,
+      "pearson_p_value_approx": 0,
+      "strength_interpretation": "strong",
+      "significance": "likely_significant"
+    },
+    "after_hours_collaboration_pct_vs_busy_trap_score": {
+      "description": "After Hours % vs Busy Trap",
+      "sample_size": 172,
+      "pearson_correlation": 0.7117,
+      "pearson_p_value_approx": 0,
+      "strength_interpretation": "strong",
+      "significance": "likely_significant"
+    },
+    "strategic_allocation_pct_vs_workload_assessment_numeric": {
+      "description": "Strategic Allocation vs Workload",
+      "sample_size": 172,
+      "pearson_correlation": 0.5936,
+      "pearson_p_value_approx": 0.5333,
+      "strength_interpretation": "moderate",
+      "significance": "likely_not_significant"
+    },
+    "high_intensity_hours_vs_total_context_switches": {
+      "description": "High Intensity Hours vs Context Switches",
+      "sample_size": 172,
+      "pearson_correlation": 0.4688,
+      "pearson_p_value_approx": 0.9446,
+      "strength_interpretation": "weak",
+      "significance": "likely_not_significant"
+    },
+    "summary": {
+      "total_correlations_analyzed": 10,
+      "strong_correlations_count": 5,
+      "moderate_correlations_count": 1,
+      "strongest_positive_correlation": [
+        "busy_trap_score_vs_workload_assessment_numeric",
+        {
+          "description": "Busy Trap vs Workload Assessment",
+          "sample_size": 172,
+          "pearson_correlation": 0.9755,
+          "pearson_p_value_approx": 0,
+          "strength_interpretation": "strong",
+          "significance": "likely_significant"
+        }
+      ],
+      "strongest_negative_correlation": [
+        "meeting_collaboration_pct_vs_slack_collaboration_pct",
+        {
+          "description": "Meeting vs Slack Collaboration %",
+          "sample_size": 172,
+          "pearson_correlation": -1.0,
+          "pearson_p_value_approx": 0,
+          "strength_interpretation": "strong",
+          "significance": "likely_significant"
+        }
+      ]
+    }
+  },
+  "efficiency_integration": {
+    "overall_efficiency_distribution": {
+      "moderate_overall_efficiency": {
+        "days_count": 48,
+        "average_meetings": 2.3,
+        "average_messages": 0,
+        "average_channels": 0,
+        "percentage_of_days": 27.9
+      },
+      "low_overall_efficiency": {
+        "days_count": 124,
+        "average_meetings": 17.5,
+        "average_messages": 12.0,
+        "average_channels": 4.0,
+        "percentage_of_days": 72.1
+      }
+    },
+    "total_analysis_days": 172,
+    "busy_trap_analysis": {
+      "average_score": 2.62,
+      "score_volatility": 1.69,
+      "risk_distribution": {
+        "sustainable_days": 45,
+        "mild_risk_days": 4,
+        "moderate_risk_days": 8,
+        "high_risk_days": 29,
+        "severe_risk_days": 86
+      },
+      "indicator_frequency": {
+        "meeting_overload_percentage": 65.1,
+        "multitasking_percentage": 65.1,
+        "switching_overload_percentage": 69.2,
+        "after_hours_percentage": 62.8
+      }
+    },
+    "strategic_allocation": {
+      "average_strategic_percentage": 17.0,
+      "days_meeting_target_60pct": 5,
+      "total_days_with_strategic_data": 172,
+      "target_achievement_rate": 2.9,
+      "daily_time_allocation": {
+        "strategic_hours": 2.2,
+        "coaching_hours": 0.2,
+        "operational_hours": 10.5
+      }
+    }
+  },
+  "pattern_insights": {
+    "meeting_communication_patterns": {
+      "total_meetings_analyzed": 1984,
+      "average_preparation_messages": 0.7,
+      "average_followup_messages": 0.8,
+      "preparation_distribution": {
+        "high_prep_meetings": 0,
+        "moderate_prep_meetings": 10,
+        "light_prep_meetings": 845,
+        "no_prep_meetings": 1129
+      },
+      "followup_distribution": {
+        "high_followup_meetings": 0,
+        "moderate_followup_meetings": 13,
+        "light_followup_meetings": 900,
+        "no_followup_meetings": 1071
+      }
+    },
+    "multitasking_during_meetings": {
+      "total_meetings_analyzed": 2280,
+      "average_messages_per_meeting": 0.9,
+      "multitasking_distribution": {
+        "high_multitasking": 63,
+        "moderate_multitasking": 315,
+        "light_multitasking": 482,
+        "focused_meetings": 1420
+      },
+      "multitasking_rate_per_hour": 0.8
+    },
+    "communication_coverage": {
+      "average_business_hours_coverage_pct": 100.0,
+      "average_daily_gaps_hours": 0,
+      "gap_pattern_distribution": {
+        "frequent_gaps_days": 0,
+        "moderate_gaps_days": 0,
+        "few_gaps_days": 0,
+        "no_gaps_days": 172
+      }
+    },
+    "executive_control_patterns": {
+      "average_proactive_ratio_pct": 42.8,
+      "control_level_distribution": {
+        "high_control_days": 56,
+        "moderate_control_days": 53,
+        "low_control_days": 63
+      }
+    }
+  },
+  "optimization_opportunities": {
+    "total_opportunities_identified": 7,
+    "high_priority_opportunities": 4,
+    "medium_priority_opportunities": 3,
+    "potential_daily_time_savings_hours": 9.7,
+    "total_impact_score": 206.7,
+    "opportunities": [
+      {
+        "category": "strategic_focus",
+        "opportunity": "Increase strategic allocation from 17.0% to 60%",
+        "potential_strategic_gain": "43.0 percentage points",
+        "implementation": "Delegate operational tasks, decline tactical meetings",
+        "priority": "high",
+        "impact_score": 86.0
+      },
+      {
+        "category": "time_management",
+        "opportunity": "Reduce total collaboration time from 17.7h to 8h/day",
+        "potential_time_savings_daily": 9.670000000000002,
+        "implementation": "Decline non-essential meetings, batch similar communications",
+        "priority": "high",
+        "impact_score": 48.35000000000001
+      },
+      {
+        "category": "meeting_focus",
+        "opportunity": "Reduce multitasking in 63 meetings",
+        "potential_quality_gain": "10-20% meeting engagement improvement",
+        "implementation": "Phone away policy, designated note-taker role",
+        "priority": "medium",
+        "impact_score": 31.5
+      },
+      {
+        "category": "work_life_balance",
+        "opportunity": "Reduce after-hours work from 33.2% to 20%",
+        "potential_wellbeing_gain": "13.2 percentage points",
+        "implementation": "Establish communication boundaries, batch end-of-day tasks",
+        "priority": "medium",
+        "impact_score": 19.800000000000004
+      },
+      {
+        "category": "context_switching",
+        "opportunity": "Reduce context switching from 10.3 to 6 switches/day",
+        "potential_efficiency_gain": "43% productivity improvement",
+        "implementation": "Batch similar communications, establish communication windows",
+        "priority": "high",
+        "impact_score": 12.900000000000002
+      },
+      {
+        "category": "meeting_preparation",
+        "opportunity": "Improve preparation for 1129 meetings (57%)",
+        "potential_quality_gain": "15-25% meeting effectiveness improvement",
+        "implementation": "Pre-meeting Slack reviews, agenda preparation time blocks",
+        "priority": "medium",
+        "impact_score": 5.690524193548388
+      },
+      {
+        "category": "busy_trap_reduction",
+        "opportunity": "Reduce busy trap score from 2.6 to <2.0",
+        "potential_efficiency_gain": "20-30% productivity improvement",
+        "implementation": "Implement 25/50-minute meetings, establish buffer times",
+        "priority": "high",
+        "impact_score": 2.4800000000000004
+      }
+    ]
+  },
+  "executive_summary": {
+    "analysis_period_days": 172,
+    "average_daily_collaboration_hours": 17.67,
+    "collaboration_platforms": {
+      "meeting_percentage": 98.2,
+      "slack_percentage": 1.8
+    },
+    "efficiency_indicators": {
+      "busy_trap_score": 2.62,
+      "strategic_allocation_pct": 17.0,
+      "context_switches_per_day": 10.3
+    },
+    "key_correlations_count": 10,
+    "optimization_opportunities_count": 7,
+    "potential_daily_savings_hours": 9.7
+  }
+}

@@ -103,10 +103,13 @@ class SlackCollector(BaseArchiveCollector):
         self.data_path = self.project_root / "data" / "raw" / "slack" / today
         self.data_path.mkdir(parents=True, exist_ok=True)
         
-        # Initialize rate limiter with bulk collection settings
+        # Initialize rate limiter with configurable collection intervals
+        collection_mode = self.config.get('collection_mode', 'standard')
+        rate_settings = self._get_rate_settings_for_mode(collection_mode)
+        
         self.rate_limiter = SlackRateLimiter(
-            base_delay=self.config.get('base_delay_seconds', 2.0),  # Conservative 2s for bulk collection
-            channels_per_minute=self.config.get('channels_per_minute', 15)
+            base_delay=rate_settings['base_delay'],
+            channels_per_minute=rate_settings['channels_per_minute']
         )
         
         # Initialize Slack authentication
@@ -135,11 +138,51 @@ class SlackCollector(BaseArchiveCollector):
         print(f"⚡ Rate limit: {self.config.get('requests_per_second', 1.0)} req/sec")
     
     def _load_config(self, config_path: Optional[Path] = None) -> Dict:
-        """Load collection configuration with rule-based filtering"""
+        """Load collection configuration with rule-based filtering and configurable intervals"""
         default_config = {
-            "base_delay_seconds": 2.0,  # 2 seconds between requests for bulk collection
-            "channels_per_minute": 15,  # Conservative rate for overnight bulk collection
+            # Collection mode: 'real_time', 'standard', 'bulk', 'meeting_focused'
+            "collection_mode": "standard",
+            
+            # Legacy rate settings (overridden by collection_mode)
+            "base_delay_seconds": 2.0,
+            "channels_per_minute": 15,
+            
+            # Collection scope
             "rolling_window_hours": 2160,  # 90 days for bulk collection
+            
+            # Collection interval configurations
+            "collection_intervals": {
+                "real_time": {
+                    "base_delay": 0.5,        # 0.5s between requests
+                    "channels_per_minute": 100, # High throughput for real-time
+                    "rolling_window_hours": 24, # Last 24 hours only
+                    "priority_channels_first": True,
+                    "meeting_detection_enabled": True
+                },
+                "standard": {
+                    "base_delay": 2.0,        # 2s between requests
+                    "channels_per_minute": 30, # Balanced throughput
+                    "rolling_window_hours": 168, # Last 7 days
+                    "priority_channels_first": False,
+                    "meeting_detection_enabled": True
+                },
+                "bulk": {
+                    "base_delay": 3.0,        # 3s between requests (conservative)
+                    "channels_per_minute": 15, # Conservative for overnight
+                    "rolling_window_hours": 2160, # 90 days
+                    "priority_channels_first": False,
+                    "meeting_detection_enabled": False # Skip analysis for bulk
+                },
+                "meeting_focused": {
+                    "base_delay": 1.0,        # 1s between requests
+                    "channels_per_minute": 60, # Fast for meeting detection
+                    "rolling_window_hours": 48, # Last 48 hours
+                    "priority_channels_first": True,
+                    "meeting_detection_enabled": True,
+                    "filter_meeting_channels_only": True
+                }
+            },
+            
             "collection_rules": {
                 "include_all_channels": True,
                 "include_dms": True,
@@ -163,6 +206,17 @@ class SlackCollector(BaseArchiveCollector):
                 print(f"⚠️ Failed to load config from {config_path}: {e}")
         
         return default_config
+    
+    def _get_rate_settings_for_mode(self, collection_mode: str) -> Dict:
+        """Get rate limiting settings based on collection mode"""
+        intervals = self.config.get('collection_intervals', {})
+        mode_config = intervals.get(collection_mode, intervals.get('standard', {}))
+        
+        # Extract rate settings from mode configuration
+        return {
+            'base_delay': mode_config.get('base_delay', 2.0),
+            'channels_per_minute': mode_config.get('channels_per_minute', 15)
+        }
     
     def apply_collection_rules(self, channels: Dict[str, Dict]) -> Dict[str, Dict]:
         """Apply collection rules to filter channels"""
@@ -221,7 +275,7 @@ class SlackCollector(BaseArchiveCollector):
     
     def _make_api_request(self, url: str, headers: Optional[Dict] = None, params: Optional[Dict] = None) -> Dict:
         """Make API request to Slack (mockable for testing)"""
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, timeout=30)
         if response.status_code == 200:
             return response.json()
         else:
@@ -279,7 +333,8 @@ class SlackCollector(BaseArchiveCollector):
                 response = requests.get(
                     "https://slack.com/api/conversations.list",
                     headers=headers,
-                    params=params
+                    params=params,
+                    timeout=30
                 )
                 
                 # Handle rate limiting with backoff
@@ -352,7 +407,8 @@ class SlackCollector(BaseArchiveCollector):
                 response = requests.get(
                     "https://slack.com/api/users.list",
                     headers=headers,
-                    params=params
+                    params=params,
+                    timeout=30
                 )
                 
                 if response.status_code == 200:
@@ -422,7 +478,8 @@ class SlackCollector(BaseArchiveCollector):
                 response = requests.get(
                     "https://slack.com/api/conversations.history",
                     headers=headers,
-                    params=params
+                    params=params,
+                    timeout=30
                 )
                 
                 # Handle rate limiting with backoff
@@ -650,17 +707,31 @@ class SlackCollector(BaseArchiveCollector):
         return sum(thread_counts.values()) / len(thread_counts) if thread_counts else 0
     
     def collect_from_filtered_channels(self, filtered_channels: Dict[str, Dict], max_channels: int = 50) -> Dict:
-        """Collect conversation history from filtered channels"""
+        """Collect conversation history from filtered channels with intelligent prioritization"""
         
-        # Prioritize channels based on member count and membership
-        prioritized_channels = sorted(
-            filtered_channels.values(),
-            key=lambda ch: (
-                ch.get('num_members', 0),
-                1 if ch.get('is_member', False) else 0
-            ),
-            reverse=True
-        )[:max_channels]
+        collection_mode = self.config.get('collection_mode', 'standard')
+        mode_config = self.config.get('collection_intervals', {}).get(collection_mode, {})
+        
+        # Apply mode-specific channel filtering
+        if mode_config.get('filter_meeting_channels_only', False):
+            filtered_channels = self._filter_meeting_channels(filtered_channels)
+        
+        # Prioritize channels based on collection mode
+        if mode_config.get('priority_channels_first', False):
+            prioritized_channels = self._prioritize_channels_for_meetings(filtered_channels)
+        else:
+            # Standard prioritization: member count and membership
+            prioritized_channels = sorted(
+                filtered_channels.values(),
+                key=lambda ch: (
+                    ch.get('num_members', 0),
+                    1 if ch.get('is_member', False) else 0
+                ),
+                reverse=True
+            )
+        
+        # Limit to max channels
+        prioritized_channels = prioritized_channels[:max_channels]
         
         print(f"\n💬 COLLECTING FROM FILTERED SLACK CHANNELS")
         print(f"🎯 Processing {len(prioritized_channels)} channels")
@@ -843,6 +914,110 @@ class SlackCollector(BaseArchiveCollector):
             print(f"❌ Collection failed: {e}")
             self.collection_results["status"] = "error"
             return {"error": str(e), "collection_results": self.collection_results}
+    
+    def _filter_meeting_channels(self, channels: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Filter channels to focus on those likely to contain meeting coordination"""
+        meeting_channels = {}
+        
+        # Keywords that indicate meeting-heavy channels
+        meeting_keywords = [
+            'leadership', 'exec', 'management', 'team', 'sync', 
+            'standup', 'planning', 'coordination', 'schedule'
+        ]
+        
+        # Channel types that often have meetings
+        meeting_channel_types = ['private_channel', 'im', 'mpim']
+        
+        for channel_id, channel in channels.items():
+            channel_name = channel.get('name', '').lower()
+            channel_purpose = channel.get('purpose', '').lower()
+            channel_topic = channel.get('topic', '').lower()
+            is_dm = channel.get('is_im', False)
+            is_mpim = channel.get('is_mpim', False)
+            is_private = channel.get('is_private', False)
+            
+            # Always include DMs and group DMs (high meeting potential)
+            if is_dm or is_mpim:
+                meeting_channels[channel_id] = channel
+                continue
+            
+            # Check for meeting keywords in name, purpose, or topic
+            text_to_check = f"{channel_name} {channel_purpose} {channel_topic}"
+            if any(keyword in text_to_check for keyword in meeting_keywords):
+                meeting_channels[channel_id] = channel
+                continue
+            
+            # Include private channels (often used for sensitive meetings)
+            if is_private:
+                meeting_channels[channel_id] = channel
+                continue
+            
+            # Include smaller channels (more likely to have coordination)
+            if channel.get('num_members', 0) <= 10:
+                meeting_channels[channel_id] = channel
+                continue
+        
+        print(f"📅 Meeting focus: filtered to {len(meeting_channels)}/{len(channels)} channels")
+        return meeting_channels
+    
+    def _prioritize_channels_for_meetings(self, channels: Dict[str, Dict]) -> List[Dict]:
+        """Prioritize channels based on meeting coordination likelihood"""
+        channel_list = list(channels.values())
+        
+        def meeting_priority_score(channel):
+            score = 0
+            channel_name = channel.get('name', '').lower()
+            channel_purpose = channel.get('purpose', '').lower()
+            
+            # High priority: DMs and small groups
+            if channel.get('is_im', False):
+                score += 100  # DMs highest priority
+            elif channel.get('is_mpim', False):
+                score += 90   # Group DMs very high priority
+            
+            # High priority: Executive/leadership channels
+            exec_keywords = ['leadership', 'exec', 'management', 'c-level', 'directors']
+            if any(keyword in channel_name or keyword in channel_purpose for keyword in exec_keywords):
+                score += 80
+            
+            # Medium-high priority: Meeting-related channels
+            meeting_keywords = ['sync', 'standup', 'planning', 'coordination', 'team']
+            if any(keyword in channel_name or keyword in channel_purpose for keyword in meeting_keywords):
+                score += 60
+            
+            # Medium priority: Private channels
+            if channel.get('is_private', False):
+                score += 40
+            
+            # Small boost for active channels (more members = more activity)
+            score += min(channel.get('num_members', 0), 20)  # Cap at 20 point boost
+            
+            # Small boost for channels we're members of
+            if channel.get('is_member', False):
+                score += 10
+            
+            return score
+        
+        # Sort by meeting priority score
+        prioritized = sorted(channel_list, key=meeting_priority_score, reverse=True)
+        
+        print(f"🎯 Priority sorting: top channel scores - ", end="")
+        if prioritized:
+            top_3_scores = [meeting_priority_score(ch) for ch in prioritized[:3]]
+            print(f"{top_3_scores}")
+        else:
+            print("no channels")
+        
+        return prioritized
+    
+    def collect(self, force_refresh: bool = False, max_channels: int = 50) -> Dict:
+        """
+        Interface method for unified collection system.
+        
+        This method provides compatibility with the collect_data.py orchestrator
+        by wrapping the existing collect_all_slack_data method.
+        """
+        return self.collect_all_slack_data(force_refresh, max_channels)
 
 def main():
     """Test Slack collector with dynamic discovery"""

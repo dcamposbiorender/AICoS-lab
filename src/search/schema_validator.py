@@ -1,646 +1,661 @@
 """
-Database schema validator for migration integrity checking
-Provides comprehensive schema validation and consistency checking
+Database Schema Validation System - Agent D Implementation
+
+Validates database schema integrity, data consistency, and detects corruption.
+Provides repair mechanisms for common schema issues and data inconsistencies.
+
+Key Features:
+- Schema structure validation against expected Phase 1 schema
+- FTS5 synchronization validation and repair
+- Data consistency checks across tables and indexes
+- Index integrity validation and rebuilding
+- Orphaned record detection and cleanup
+- Performance diagnostics and optimization suggestions
+
+References:
+- migrations/001_initial_schema.sql - Expected baseline schema
+- src/search/migrations.py - Migration system integration
+- tasks/phase1_agent_d_migration.md lines 224-228 for validation requirements
 """
 
 import sqlite3
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Set, Tuple
+from typing import Dict, List, Any, Optional, Tuple, Set
 from dataclasses import dataclass
+from datetime import datetime
+import json
+import time
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class ValidationResult:
-    """Result of schema validation"""
-    valid: bool
+    """Result of a schema validation check"""
+    check_name: str
+    status: str  # 'pass', 'warn', 'fail'
     message: str
     details: Dict[str, Any]
+    repair_available: bool = False
+    repair_action: Optional[str] = None
+
+
+@dataclass
+class SchemaValidationReport:
+    """Complete schema validation report"""
+    database_path: str
+    validation_time: datetime
+    overall_status: str  # 'healthy', 'degraded', 'corrupt'
+    results: List[ValidationResult]
+    performance_metrics: Dict[str, Any]
+    repair_recommendations: List[str]
 
 
 class SchemaValidationError(Exception):
-    """Raised when schema validation fails"""
+    """Schema validation system errors"""
     pass
 
 
 class SchemaValidator:
-    """
-    Database schema validator with comprehensive integrity checking
-    
-    Features:
-    - Table structure validation
-    - Index existence verification
-    - Foreign key constraint checking
-    - FTS5 virtual table consistency
-    - Data integrity validation
-    - Performance optimization verification
-    """
+    """Validates database schema integrity and consistency"""
     
     def __init__(self, db_path: str):
-        """
-        Initialize schema validator
-        
-        Args:
-            db_path: Path to SQLite database file
-        """
         self.db_path = Path(db_path)
-        if not self.db_path.exists():
-            raise SchemaValidationError(f"Database file not found: {db_path}")
         
-        logger.info(f"SchemaValidator initialized for: {self.db_path}")
-    
-    def _get_connection(self) -> sqlite3.Connection:
-        """Get database connection"""
-        try:
-            conn = sqlite3.connect(
-                str(self.db_path),
-                timeout=10.0,
-                check_same_thread=False
-            )
-            
-            # Enable foreign keys for validation
-            conn.execute("PRAGMA foreign_keys=ON")
-            return conn
-            
-        except Exception as e:
-            raise SchemaValidationError(f"Failed to connect to database: {str(e)}")
-    
-    def validate_schema(self) -> Dict[str, Any]:
-        """
-        Comprehensive schema validation
+        # Expected Phase 1 schema structure
+        self.expected_tables = {
+            'messages': ['id', 'content', 'source', 'created_at', 'date', 'metadata', 'person_id', 'channel_id', 'indexed_at'],
+            'messages_fts': [],  # FTS5 virtual table
+            'archives': ['id', 'path', 'source', 'indexed_at', 'record_count', 'checksum', 'status'],
+            'search_metadata': ['key', 'value', 'updated_at'],
+            'schema_migrations': ['version', 'applied_at', 'description', 'checksum']
+        }
         
-        Returns:
-            Validation result with detailed information
-        """
+        self.expected_indexes = [
+            'idx_archives_source',
+            'idx_archives_indexed_at', 
+            'idx_messages_source',
+            'idx_messages_date',
+            'idx_messages_created_at'
+        ]
+        
+        self.expected_triggers = [
+            'messages_ai',  # After Insert
+            'messages_ad',  # After Delete
+            'messages_au'   # After Update
+        ]
+    
+    def validate_complete_schema(self) -> SchemaValidationReport:
+        """Run complete schema validation"""
+        start_time = datetime.now()
+        results = []
+        
+        logger.info(f"Starting schema validation for {self.db_path}")
+        
         try:
-            with self._get_connection() as conn:
-                results = {
-                    'valid': True,
-                    'tables': {},
-                    'indexes': {},
-                    'views': {},
-                    'triggers': {},
-                    'issues': []
-                }
-                
-                # Validate tables
-                tables_result = self._validate_tables(conn)
-                results['tables'] = tables_result['tables']
-                if not tables_result['valid']:
-                    results['valid'] = False
-                    results['issues'].extend(tables_result['issues'])
-                
-                # Validate indexes
-                indexes_result = self._validate_indexes(conn)
-                results['indexes'] = indexes_result['indexes']
-                if not indexes_result['valid']:
-                    results['valid'] = False
-                    results['issues'].extend(indexes_result['issues'])
-                
-                # Validate views
-                views_result = self._validate_views(conn)
-                results['views'] = views_result['views']
-                if not views_result['valid']:
-                    results['valid'] = False
-                    results['issues'].extend(views_result['issues'])
-                
-                # Validate triggers
-                triggers_result = self._validate_triggers(conn)
-                results['triggers'] = triggers_result['triggers']
-                if not triggers_result['valid']:
-                    results['valid'] = False
-                    results['issues'].extend(triggers_result['issues'])
-                
-                return results
-                
+            # Core structure validation
+            results.extend(self._validate_table_structure())
+            results.extend(self._validate_indexes())
+            results.extend(self._validate_triggers())
+            
+            # Data consistency checks
+            results.extend(self._validate_data_consistency())
+            results.extend(self._validate_fts_synchronization())
+            
+            # Performance and optimization
+            results.extend(self._validate_performance_characteristics())
+            
+            # Integrity checks
+            results.extend(self._validate_referential_integrity())
+            
         except Exception as e:
             logger.error(f"Schema validation failed: {e}")
-            return {
-                'valid': False,
-                'error': str(e),
-                'tables': {},
-                'indexes': {},
-                'views': {},
-                'triggers': {},
-                'issues': [f'Validation error: {str(e)}']
-            }
+            results.append(ValidationResult(
+                check_name="validation_execution",
+                status="fail", 
+                message=f"Validation process failed: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        # Determine overall status
+        fail_count = len([r for r in results if r.status == 'fail'])
+        warn_count = len([r for r in results if r.status == 'warn'])
+        
+        if fail_count > 0:
+            overall_status = 'corrupt'
+        elif warn_count > 0:
+            overall_status = 'degraded'
+        else:
+            overall_status = 'healthy'
+        
+        # Generate performance metrics
+        validation_duration = (datetime.now() - start_time).total_seconds()
+        performance_metrics = {
+            'validation_duration_seconds': validation_duration,
+            'total_checks': len(results),
+            'passed_checks': len([r for r in results if r.status == 'pass']),
+            'warning_checks': warn_count,
+            'failed_checks': fail_count
+        }
+        
+        # Generate repair recommendations
+        repair_recommendations = [
+            result.repair_action for result in results 
+            if result.repair_available and result.repair_action
+        ]
+        
+        return SchemaValidationReport(
+            database_path=str(self.db_path),
+            validation_time=start_time,
+            overall_status=overall_status,
+            results=results,
+            performance_metrics=performance_metrics,
+            repair_recommendations=repair_recommendations
+        )
     
-    def _validate_tables(self, conn: sqlite3.Connection) -> Dict[str, Any]:
-        """Validate table structures"""
-        try:
-            cursor = conn.execute("""
-                SELECT name, sql FROM sqlite_master 
-                WHERE type='table' AND name NOT LIKE 'sqlite_%'
-                ORDER BY name
-            """)
-            
-            tables = {}
-            issues = []
-            
-            for table_name, create_sql in cursor.fetchall():
-                table_info = self._analyze_table(conn, table_name, create_sql)
-                tables[table_name] = table_info
-                
-                # Check for common issues (skip for virtual tables)
-                if not table_info.get('has_primary_key') and not table_info.get('is_virtual'):
-                    issues.append(f"Table '{table_name}' lacks primary key")
-                
-                if table_name.endswith('_fts'):
-                    # FTS5 table validation
-                    fts_issues = self._validate_fts5_table(conn, table_name)
-                    issues.extend(fts_issues)
-            
-            return {
-                'valid': len(issues) == 0,
-                'tables': tables,
-                'issues': issues
-            }
-            
-        except Exception as e:
-            return {
-                'valid': False,
-                'tables': {},
-                'issues': [f'Table validation error: {str(e)}']
-            }
-    
-    def _analyze_table(self, conn: sqlite3.Connection, table_name: str, create_sql: str) -> Dict[str, Any]:
-        """Analyze individual table structure"""
-        try:
-            # Get table info - validate table name for security
-            if not table_name.replace('_', '').replace('-', '').isalnum():
-                raise ValueError(f"Invalid table name: {table_name}")
-                
-            cursor = conn.execute(f"PRAGMA table_info({table_name})")
-            columns = []
-            has_primary_key = False
-            
-            for row in cursor.fetchall():
-                cid, name, type_name, not_null, default_value, pk = row
-                columns.append({
-                    'name': name,
-                    'type': type_name,
-                    'not_null': bool(not_null),
-                    'default_value': default_value,
-                    'primary_key': bool(pk)
-                })
-                
-                if pk:
-                    has_primary_key = True
-            
-            # Get foreign keys (table_name already validated above)
-            cursor = conn.execute(f"PRAGMA foreign_key_list({table_name})")
-            foreign_keys = []
-            for row in cursor.fetchall():
-                id_num, seq, table, from_col, to_col, on_update, on_delete, match = row
-                foreign_keys.append({
-                    'from_column': from_col,
-                    'to_table': table,
-                    'to_column': to_col,
-                    'on_update': on_update,
-                    'on_delete': on_delete
-                })
-            
-            # Check if it's a virtual table (FTS5)
-            is_virtual = 'VIRTUAL TABLE' in create_sql.upper() if create_sql else False
-            
-            return {
-                'columns': columns,
-                'foreign_keys': foreign_keys,
-                'has_primary_key': has_primary_key,
-                'is_virtual': is_virtual,
-                'create_sql': create_sql
-            }
-            
-        except Exception as e:
-            logger.warning(f"Failed to analyze table {table_name}: {e}")
-            return {
-                'error': str(e),
-                'columns': [],
-                'foreign_keys': [],
-                'has_primary_key': False,
-                'is_virtual': False
-            }
-    
-    def _validate_fts5_table(self, conn: sqlite3.Connection, fts_table: str) -> List[str]:
-        """Validate FTS5 virtual table consistency"""
-        issues = []
+    def _validate_table_structure(self) -> List[ValidationResult]:
+        """Validate expected tables and columns exist"""
+        results = []
         
         try:
-            # Check if FTS5 table is properly configured
-            cursor = conn.execute(f"SELECT sql FROM sqlite_master WHERE name = ?", (fts_table,))
-            result = cursor.fetchone()
-            
-            if not result:
-                issues.append(f"FTS5 table '{fts_table}' not found in schema")
-                return issues
-            
-            create_sql = result[0]
-            
-            # Basic FTS5 syntax validation
-            if 'fts5' not in create_sql.lower():
-                issues.append(f"Table '{fts_table}' is not a proper FTS5 table")
-            
-            # Check for content table reference
-            if 'content=' in create_sql:
-                # Extract content table name
-                content_table = None
-                parts = create_sql.split('content=')
-                if len(parts) > 1:
-                    content_part = parts[1].split(',')[0].split(')')[0].strip()
-                    content_table = content_part.strip('\'"')
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
                 
-                if content_table:
-                    # Verify content table exists
-                    cursor = conn.execute("""
-                        SELECT name FROM sqlite_master 
-                        WHERE type='table' AND name = ?
-                    """, (content_table,))
+                # Get all tables
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                actual_tables = {row[0] for row in cursor.fetchall()}
+                
+                # Check expected tables exist
+                for table_name, expected_columns in self.expected_tables.items():
+                    if table_name not in actual_tables:
+                        results.append(ValidationResult(
+                            check_name=f"table_exists_{table_name}",
+                            status="fail",
+                            message=f"Required table '{table_name}' is missing",
+                            details={'missing_table': table_name},
+                            repair_available=True,
+                            repair_action=f"Run migration to create table '{table_name}'"
+                        ))
+                        continue
                     
-                    if not cursor.fetchone():
-                        issues.append(f"FTS5 table '{fts_table}' references non-existent content table '{content_table}'")
-            
-            # Test FTS5 functionality - validate FTS table name
-            if not fts_table.replace('_', '').replace('-', '').isalnum():
-                raise ValueError(f"Invalid FTS table name: {fts_table}")
-            try:
-                conn.execute(f"SELECT * FROM {fts_table} WHERE {fts_table} MATCH 'test' LIMIT 1")
-            except Exception as e:
-                issues.append(f"FTS5 table '{fts_table}' is not functional: {str(e)}")
-            
-        except Exception as e:
-            issues.append(f"Failed to validate FTS5 table '{fts_table}': {str(e)}")
-        
-        return issues
-    
-    def _validate_indexes(self, conn: sqlite3.Connection) -> Dict[str, Any]:
-        """Validate database indexes"""
-        try:
-            cursor = conn.execute("""
-                SELECT name, tbl_name, sql FROM sqlite_master 
-                WHERE type='index' AND name NOT LIKE 'sqlite_%'
-                ORDER BY name
-            """)
-            
-            indexes = {}
-            issues = []
-            
-            for index_name, table_name, create_sql in cursor.fetchall():
-                indexes[index_name] = {
-                    'table': table_name,
-                    'sql': create_sql
-                }
-                
-                # Test index usage - validate index name
-                if not index_name.replace('_', '').replace('-', '').isalnum():
-                    issues.append(f"Invalid index name detected: {index_name}")
-                    continue
-                try:
-                    conn.execute(f"ANALYZE {index_name}")
-                except Exception as e:
-                    issues.append(f"Index '{index_name}' analysis failed: {str(e)}")
-            
-            return {
-                'valid': len(issues) == 0,
-                'indexes': indexes,
-                'issues': issues
-            }
-            
-        except Exception as e:
-            return {
-                'valid': False,
-                'indexes': {},
-                'issues': [f'Index validation error: {str(e)}']
-            }
-    
-    def _validate_views(self, conn: sqlite3.Connection) -> Dict[str, Any]:
-        """Validate database views"""
-        try:
-            cursor = conn.execute("""
-                SELECT name, sql FROM sqlite_master 
-                WHERE type='view'
-                ORDER BY name
-            """)
-            
-            views = {}
-            issues = []
-            
-            for view_name, create_sql in cursor.fetchall():
-                views[view_name] = {
-                    'sql': create_sql
-                }
-                
-                # Test view accessibility - validate view name
-                if not view_name.replace('_', '').replace('-', '').isalnum():
-                    issues.append(f"Invalid view name detected: {view_name}")
-                    continue
-                try:
-                    conn.execute(f"SELECT * FROM {view_name} LIMIT 1")
-                except Exception as e:
-                    issues.append(f"View '{view_name}' is not accessible: {str(e)}")
-            
-            return {
-                'valid': len(issues) == 0,
-                'views': views,
-                'issues': issues
-            }
-            
-        except Exception as e:
-            return {
-                'valid': False,
-                'views': {},
-                'issues': [f'View validation error: {str(e)}']
-            }
-    
-    def _validate_triggers(self, conn: sqlite3.Connection) -> Dict[str, Any]:
-        """Validate database triggers"""
-        try:
-            cursor = conn.execute("""
-                SELECT name, tbl_name, sql FROM sqlite_master 
-                WHERE type='trigger'
-                ORDER BY name
-            """)
-            
-            triggers = {}
-            issues = []
-            
-            for trigger_name, table_name, create_sql in cursor.fetchall():
-                triggers[trigger_name] = {
-                    'table': table_name,
-                    'sql': create_sql
-                }
-            
-            return {
-                'valid': len(issues) == 0,
-                'triggers': triggers,
-                'issues': issues
-            }
-            
-        except Exception as e:
-            return {
-                'valid': False,
-                'triggers': {},
-                'issues': [f'Trigger validation error: {str(e)}']
-            }
-    
-    def validate_foreign_keys(self) -> Dict[str, Any]:
-        """Validate foreign key constraints"""
-        try:
-            with self._get_connection() as conn:
-                # Run foreign key check
-                cursor = conn.execute("PRAGMA foreign_key_check")
-                violations = []
-                
-                for row in cursor.fetchall():
-                    table, rowid, parent_table, fk_index = row
-                    violations.append({
-                        'table': table,
-                        'rowid': rowid,
-                        'parent_table': parent_table,
-                        'fk_index': fk_index
-                    })
-                
-                return {
-                    'valid': len(violations) == 0,
-                    'violations': violations,
-                    'message': f'Found {len(violations)} foreign key violations' if violations else 'All foreign keys valid'
-                }
-                
-        except Exception as e:
-            return {
-                'valid': False,
-                'error': str(e),
-                'violations': [],
-                'message': f'Foreign key validation failed: {str(e)}'
-            }
-    
-    def validate_required_indexes(self, required_indexes: Dict[str, str]) -> Dict[str, Any]:
-        """
-        Validate that required indexes exist for performance
-        
-        Args:
-            required_indexes: Dict of {index_name: expected_definition}
-            
-        Returns:
-            Validation result with missing indexes
-        """
-        try:
-            with self._get_connection() as conn:
-                # Get existing indexes
-                cursor = conn.execute("""
-                    SELECT name, sql FROM sqlite_master 
-                    WHERE type='index' AND name NOT LIKE 'sqlite_%'
-                """)
-                
-                existing_indexes = {name: sql for name, sql in cursor.fetchall()}
-                
-                missing_indexes = []
-                invalid_indexes = []
-                
-                for required_name, expected_def in required_indexes.items():
-                    if required_name not in existing_indexes:
-                        missing_indexes.append({
-                            'name': required_name,
-                            'expected_definition': expected_def
-                        })
+                    # For non-virtual tables, check column structure
+                    if expected_columns:  # Skip FTS tables
+                        cursor.execute(f"PRAGMA table_info({table_name})")
+                        actual_columns = {row[1] for row in cursor.fetchall()}
+                        
+                        missing_columns = set(expected_columns) - actual_columns
+                        if missing_columns:
+                            results.append(ValidationResult(
+                                check_name=f"table_columns_{table_name}",
+                                status="fail", 
+                                message=f"Table '{table_name}' missing columns: {missing_columns}",
+                                details={'missing_columns': list(missing_columns)},
+                                repair_available=True,
+                                repair_action=f"Run migration to add missing columns to '{table_name}'"
+                            ))
+                        else:
+                            results.append(ValidationResult(
+                                check_name=f"table_structure_{table_name}",
+                                status="pass",
+                                message=f"Table '{table_name}' structure is valid",
+                                details={'columns': list(actual_columns)}
+                            ))
                     else:
-                        # Could add more sophisticated definition matching here
-                        existing_sql = existing_indexes[required_name]
-                        if existing_sql and expected_def.lower() not in existing_sql.lower():
-                            invalid_indexes.append({
-                                'name': required_name,
-                                'expected': expected_def,
-                                'actual': existing_sql
-                            })
+                        # Basic existence check for virtual tables
+                        results.append(ValidationResult(
+                            check_name=f"virtual_table_{table_name}",
+                            status="pass",
+                            message=f"Virtual table '{table_name}' exists",
+                            details={}
+                        ))
                 
-                return {
-                    'valid': len(missing_indexes) == 0 and len(invalid_indexes) == 0,
-                    'missing_indexes': missing_indexes,
-                    'invalid_indexes': invalid_indexes,
-                    'existing_indexes': list(existing_indexes.keys())
-                }
-                
-        except Exception as e:
-            return {
-                'valid': False,
-                'error': str(e),
-                'missing_indexes': [],
-                'invalid_indexes': [],
-                'existing_indexes': []
-            }
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="table_structure_check",
+                status="fail",
+                message=f"Failed to validate table structure: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        return results
     
-    def validate_data_consistency(self) -> Dict[str, Any]:
-        """Validate data consistency across related tables"""
-        try:
-            with self._get_connection() as conn:
-                issues = []
-                
-                # Run SQLite integrity check
-                cursor = conn.execute("PRAGMA integrity_check")
-                integrity_result = cursor.fetchone()[0]
-                
-                if integrity_result != "ok":
-                    issues.append(f"Database integrity check failed: {integrity_result}")
-                
-                # Check FTS5 synchronization
-                fts_issues = self._check_fts5_sync(conn)
-                issues.extend(fts_issues)
-                
-                # Check for orphaned records (basic check)
-                orphan_issues = self._check_orphaned_records(conn)
-                issues.extend(orphan_issues)
-                
-                return {
-                    'valid': len(issues) == 0,
-                    'issues': issues,
-                    'integrity_check': integrity_result
-                }
-                
-        except Exception as e:
-            return {
-                'valid': False,
-                'error': str(e),
-                'issues': [f'Data consistency check failed: {str(e)}'],
-                'integrity_check': 'failed'
-            }
-    
-    def _check_fts5_sync(self, conn: sqlite3.Connection) -> List[str]:
-        """Check FTS5 virtual table synchronization with content tables"""
-        issues = []
+    def _validate_indexes(self) -> List[ValidationResult]:
+        """Validate expected indexes exist and are functional"""
+        results = []
         
         try:
-            # Find FTS5 tables with content tables
-            cursor = conn.execute("""
-                SELECT name, sql FROM sqlite_master 
-                WHERE type='table' AND sql LIKE '%fts5%' AND sql LIKE '%content=%'
-            """)
-            
-            for fts_table, create_sql in cursor.fetchall():
-                # Extract content table name (simplified parsing)
-                content_table = None
-                if 'content=' in create_sql:
-                    parts = create_sql.split('content=')
-                    if len(parts) > 1:
-                        content_part = parts[1].split(',')[0].split(')')[0].strip()
-                        content_table = content_part.strip('\'"')
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
                 
-                if content_table:
-                    # Check record counts match
-                    try:
-                        cursor = conn.execute(f"SELECT COUNT(*) FROM {content_table}")
-                        content_count = cursor.fetchone()[0]
-                        
-                        cursor = conn.execute(f"SELECT COUNT(*) FROM {fts_table}")
-                        fts_count = cursor.fetchone()[0]
-                        
-                        if content_count != fts_count:
-                            issues.append(
-                                f"FTS5 table '{fts_table}' ({fts_count} records) "
-                                f"out of sync with content table '{content_table}' ({content_count} records)"
-                            )
-                    except Exception as e:
-                        issues.append(f"Failed to check FTS5 sync for '{fts_table}': {str(e)}")
+                # Get all indexes
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='index' AND sql IS NOT NULL")
+                actual_indexes = {row[0] for row in cursor.fetchall()}
+                
+                for index_name in self.expected_indexes:
+                    if index_name not in actual_indexes:
+                        results.append(ValidationResult(
+                            check_name=f"index_exists_{index_name}",
+                            status="warn",
+                            message=f"Index '{index_name}' is missing - performance may be degraded",
+                            details={'missing_index': index_name},
+                            repair_available=True,
+                            repair_action=f"Run query optimization migration to create index '{index_name}'"
+                        ))
+                    else:
+                        results.append(ValidationResult(
+                            check_name=f"index_exists_{index_name}",
+                            status="pass",
+                            message=f"Index '{index_name}' exists",
+                            details={}
+                        ))
+                
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="index_validation",
+                status="fail",
+                message=f"Failed to validate indexes: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
         
-        except Exception as e:
-            issues.append(f"FTS5 sync check failed: {str(e)}")
-        
-        return issues
+        return results
     
-    def _check_orphaned_records(self, conn: sqlite3.Connection) -> List[str]:
-        """Check for orphaned records in tables with foreign keys"""
-        issues = []
+    def _validate_triggers(self) -> List[ValidationResult]:
+        """Validate FTS synchronization triggers exist"""
+        results = []
         
         try:
-            # Get tables with foreign keys
-            cursor = conn.execute("""
-                SELECT name FROM sqlite_master 
-                WHERE type='table' AND name NOT LIKE 'sqlite_%'
-            """)
-            
-            for (table_name,) in cursor.fetchall():
-                # Get foreign key constraints
-                cursor = conn.execute(f"PRAGMA foreign_key_list({table_name})")
-                foreign_keys = cursor.fetchall()
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
                 
-                for fk in foreign_keys:
-                    _, _, parent_table, from_column, to_column, _, _, _ = fk
-                    
-                    # Check for orphaned records
-                    try:
-                        cursor = conn.execute(f"""
-                            SELECT COUNT(*) FROM {table_name} 
-                            WHERE {from_column} IS NOT NULL 
-                            AND {from_column} NOT IN (
-                                SELECT {to_column} FROM {parent_table} 
-                                WHERE {to_column} IS NOT NULL
-                            )
-                        """)
-                        
-                        orphaned_count = cursor.fetchone()[0]
-                        if orphaned_count > 0:
-                            issues.append(
-                                f"Table '{table_name}' has {orphaned_count} orphaned records "
-                                f"in column '{from_column}' referencing '{parent_table}.{to_column}'"
-                            )
-                    except Exception as e:
-                        # Skip if query fails (complex foreign key relationships)
-                        pass
+                # Get all triggers
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='trigger'")
+                actual_triggers = {row[0] for row in cursor.fetchall()}
+                
+                for trigger_name in self.expected_triggers:
+                    if trigger_name not in actual_triggers:
+                        results.append(ValidationResult(
+                            check_name=f"trigger_exists_{trigger_name}",
+                            status="fail",
+                            message=f"Critical trigger '{trigger_name}' is missing - FTS sync broken",
+                            details={'missing_trigger': trigger_name},
+                            repair_available=True,
+                            repair_action=f"Rebuild FTS triggers by re-running initial schema migration"
+                        ))
+                    else:
+                        results.append(ValidationResult(
+                            check_name=f"trigger_exists_{trigger_name}",
+                            status="pass",
+                            message=f"Trigger '{trigger_name}' exists",
+                            details={}
+                        ))
+                
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="trigger_validation",
+                status="fail",
+                message=f"Failed to validate triggers: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
         
-        except Exception as e:
-            issues.append(f"Orphaned record check failed: {str(e)}")
-        
-        return issues
+        return results
     
-    def get_schema_summary(self) -> Dict[str, Any]:
-        """Get comprehensive schema summary"""
+    def _validate_data_consistency(self) -> List[ValidationResult]:
+        """Validate data consistency across tables"""
+        results = []
+        
         try:
-            with self._get_connection() as conn:
-                # Count objects by type
-                cursor = conn.execute("""
-                    SELECT type, COUNT(*) FROM sqlite_master 
-                    WHERE name NOT LIKE 'sqlite_%'
-                    GROUP BY type
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Check for orphaned records
+                # Check if all archived paths have corresponding message records
+                cursor.execute("""
+                    SELECT COUNT(*) FROM archives a 
+                    LEFT JOIN messages m ON a.source = m.source 
+                    WHERE m.source IS NULL AND a.record_count > 0
                 """)
+                orphaned_archives = cursor.fetchone()[0]
                 
-                object_counts = dict(cursor.fetchall())
+                if orphaned_archives > 0:
+                    results.append(ValidationResult(
+                        check_name="orphaned_archives",
+                        status="warn",
+                        message=f"Found {orphaned_archives} archive entries with no message records",
+                        details={'orphaned_count': orphaned_archives},
+                        repair_available=True,
+                        repair_action="Run data cleanup to remove orphaned archive entries"
+                    ))
+                else:
+                    results.append(ValidationResult(
+                        check_name="orphaned_archives",
+                        status="pass",
+                        message="No orphaned archive entries found",
+                        details={}
+                    ))
                 
-                # Get database file info
-                cursor = conn.execute("PRAGMA page_count")
+                # Validate date consistency
+                cursor.execute("""
+                    SELECT COUNT(*) FROM messages 
+                    WHERE date != substr(created_at, 1, 10) 
+                    AND created_at IS NOT NULL AND date IS NOT NULL
+                """)
+                date_inconsistencies = cursor.fetchone()[0]
+                
+                if date_inconsistencies > 0:
+                    results.append(ValidationResult(
+                        check_name="date_consistency",
+                        status="warn", 
+                        message=f"Found {date_inconsistencies} messages with inconsistent date fields",
+                        details={'inconsistent_count': date_inconsistencies},
+                        repair_available=True,
+                        repair_action="Run data normalization to fix date field consistency"
+                    ))
+                else:
+                    results.append(ValidationResult(
+                        check_name="date_consistency",
+                        status="pass",
+                        message="Date fields are consistent",
+                        details={}
+                    ))
+                
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="data_consistency",
+                status="fail",
+                message=f"Failed to validate data consistency: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        return results
+    
+    def _validate_fts_synchronization(self) -> List[ValidationResult]:
+        """Validate FTS5 table is synchronized with main messages table"""
+        results = []
+        
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Check if FTS table exists
+                cursor.execute("SELECT name FROM sqlite_master WHERE name='messages_fts'")
+                if not cursor.fetchone():
+                    results.append(ValidationResult(
+                        check_name="fts_table_exists",
+                        status="fail",
+                        message="FTS5 table 'messages_fts' is missing",
+                        details={},
+                        repair_available=True,
+                        repair_action="Re-run initial schema migration to create FTS table"
+                    ))
+                    return results
+                
+                # Count records in both tables
+                cursor.execute("SELECT COUNT(*) FROM messages")
+                message_count = cursor.fetchone()[0]
+                
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM messages_fts")
+                    fts_count = cursor.fetchone()[0]
+                except sqlite3.Error:
+                    # FTS table might be corrupted
+                    results.append(ValidationResult(
+                        check_name="fts_table_readable",
+                        status="fail", 
+                        message="FTS table is corrupted or unreadable",
+                        details={},
+                        repair_available=True,
+                        repair_action="Rebuild FTS table: INSERT INTO messages_fts(messages_fts) VALUES('rebuild')"
+                    ))
+                    return results
+                
+                # Compare record counts
+                if message_count != fts_count:
+                    results.append(ValidationResult(
+                        check_name="fts_synchronization",
+                        status="fail",
+                        message=f"FTS table out of sync: {message_count} messages vs {fts_count} FTS records",
+                        details={'message_count': message_count, 'fts_count': fts_count},
+                        repair_available=True,
+                        repair_action="Rebuild FTS table to resynchronize with messages"
+                    ))
+                else:
+                    results.append(ValidationResult(
+                        check_name="fts_synchronization",
+                        status="pass",
+                        message=f"FTS table synchronized ({fts_count} records)",
+                        details={'record_count': fts_count}
+                    ))
+                
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="fts_validation",
+                status="fail",
+                message=f"Failed to validate FTS synchronization: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        return results
+    
+    def _validate_performance_characteristics(self) -> List[ValidationResult]:
+        """Validate database performance characteristics"""
+        results = []
+        
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Test query performance (simple benchmark)
+                start_time = time.time()
+                cursor.execute("SELECT COUNT(*) FROM messages WHERE source = 'slack' LIMIT 1000")
+                query_time = time.time() - start_time
+                
+                if query_time > 1.0:  # > 1 second is concerning
+                    results.append(ValidationResult(
+                        check_name="query_performance",
+                        status="warn",
+                        message=f"Source filtering query slow: {query_time:.2f}s",
+                        details={'query_time_seconds': query_time},
+                        repair_available=True,
+                        repair_action="Run ANALYZE and consider adding missing indexes"
+                    ))
+                else:
+                    results.append(ValidationResult(
+                        check_name="query_performance",
+                        status="pass", 
+                        message=f"Query performance acceptable: {query_time:.3f}s",
+                        details={'query_time_seconds': query_time}
+                    ))
+                
+                # Check database size and suggest maintenance
+                cursor.execute("PRAGMA page_size")
+                page_size = cursor.fetchone()[0]
+                cursor.execute("PRAGMA page_count")
                 page_count = cursor.fetchone()[0]
                 
-                cursor = conn.execute("PRAGMA page_size")
-                page_size = cursor.fetchone()[0]
+                db_size_mb = (page_size * page_count) / (1024 * 1024)
                 
-                db_size = page_count * page_size
+                if db_size_mb > 100:  # > 100MB
+                    results.append(ValidationResult(
+                        check_name="database_size",
+                        status="warn",
+                        message=f"Database is large ({db_size_mb:.1f}MB) - consider archival",
+                        details={'size_mb': db_size_mb},
+                        repair_available=True,
+                        repair_action="Run VACUUM and consider data archival for old records"
+                    ))
+                else:
+                    results.append(ValidationResult(
+                        check_name="database_size",
+                        status="pass",
+                        message=f"Database size reasonable ({db_size_mb:.1f}MB)",
+                        details={'size_mb': db_size_mb}
+                    ))
                 
-                # Get table sizes
-                table_sizes = {}
-                cursor = conn.execute("""
-                    SELECT name FROM sqlite_master 
-                    WHERE type='table' AND name NOT LIKE 'sqlite_%'
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="performance_validation",
+                status="fail",
+                message=f"Failed to validate performance: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        return results
+    
+    def _validate_referential_integrity(self) -> List[ValidationResult]:
+        """Validate referential integrity and constraints"""
+        results = []
+        
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Check for NULL values in required fields
+                required_checks = [
+                    ('messages', 'content', 'Message content cannot be null'),
+                    ('messages', 'source', 'Message source cannot be null'),
+                    ('messages', 'created_at', 'Message created_at cannot be null'),
+                    ('archives', 'path', 'Archive path cannot be null'),
+                    ('archives', 'source', 'Archive source cannot be null')
+                ]
+                
+                for table, column, description in required_checks:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE {column} IS NULL")
+                    null_count = cursor.fetchone()[0]
+                    
+                    if null_count > 0:
+                        results.append(ValidationResult(
+                            check_name=f"null_check_{table}_{column}",
+                            status="fail",
+                            message=f"{description}: {null_count} null values found",
+                            details={'null_count': null_count, 'table': table, 'column': column},
+                            repair_available=True,
+                            repair_action=f"Clean up null values in {table}.{column}"
+                        ))
+                    else:
+                        results.append(ValidationResult(
+                            check_name=f"null_check_{table}_{column}",
+                            status="pass",
+                            message=f"No null values in {table}.{column}",
+                            details={}
+                        ))
+                
+        except sqlite3.Error as e:
+            results.append(ValidationResult(
+                check_name="referential_integrity",
+                status="fail",
+                message=f"Failed to validate referential integrity: {e}",
+                details={'error': str(e)},
+                repair_available=False
+            ))
+        
+        return results
+    
+    def repair_fts_synchronization(self) -> bool:
+        """Repair FTS5 synchronization issues"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                logger.info("Rebuilding FTS5 table synchronization")
+                
+                # Rebuild FTS table
+                cursor.execute("INSERT INTO messages_fts(messages_fts) VALUES('rebuild')")
+                conn.commit()
+                
+                logger.info("FTS5 synchronization repair completed")
+                return True
+                
+        except sqlite3.Error as e:
+            logger.error(f"Failed to repair FTS synchronization: {e}")
+            return False
+    
+    def repair_orphaned_data(self) -> bool:
+        """Clean up orphaned data records"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                logger.info("Cleaning up orphaned data")
+                
+                # Remove archive entries with no corresponding messages
+                cursor.execute("""
+                    DELETE FROM archives 
+                    WHERE id IN (
+                        SELECT a.id FROM archives a 
+                        LEFT JOIN messages m ON a.source = m.source 
+                        WHERE m.source IS NULL AND a.record_count = 0
+                    )
                 """)
                 
-                for (table_name,) in cursor.fetchall():
-                    try:
-                        cursor = conn.execute(f"SELECT COUNT(*) FROM {table_name}")
-                        row_count = cursor.fetchone()[0]
-                        table_sizes[table_name] = row_count
-                    except:
-                        table_sizes[table_name] = 'unknown'
+                deleted_count = cursor.rowcount
+                conn.commit()
                 
-                return {
-                    'object_counts': object_counts,
-                    'database_size_bytes': db_size,
-                    'database_size_mb': db_size / 1024**2,
-                    'page_count': page_count,
-                    'page_size': page_size,
-                    'table_sizes': table_sizes,
-                    'database_path': str(self.db_path)
-                }
+                logger.info(f"Cleaned up {deleted_count} orphaned archive entries")
+                return True
                 
-        except Exception as e:
-            return {
-                'error': f'Failed to get schema summary: {str(e)}',
-                'database_path': str(self.db_path)
-            }
+        except sqlite3.Error as e:
+            logger.error(f"Failed to repair orphaned data: {e}")
+            return False
+
+
+def create_schema_validator(db_path: str = "data/search.db") -> SchemaValidator:
+    """Factory function to create schema validator"""
+    return SchemaValidator(db_path)
+
+
+def format_validation_report(report: SchemaValidationReport) -> str:
+    """Format validation report for CLI display"""
+    lines = []
+    
+    lines.append(f"Schema Validation Report")
+    lines.append(f"Database: {report.database_path}")
+    lines.append(f"Validated: {report.validation_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    lines.append(f"Overall Status: {report.overall_status.upper()}")
+    lines.append("")
+    
+    lines.append(f"Performance Metrics:")
+    for key, value in report.performance_metrics.items():
+        lines.append(f"  {key}: {value}")
+    lines.append("")
+    
+    # Group results by status
+    passed = [r for r in report.results if r.status == 'pass']
+    warned = [r for r in report.results if r.status == 'warn']
+    failed = [r for r in report.results if r.status == 'fail']
+    
+    if passed:
+        lines.append(f"✅ PASSED ({len(passed)} checks)")
+        for result in passed:
+            lines.append(f"  • {result.message}")
+        lines.append("")
+    
+    if warned:
+        lines.append(f"⚠️  WARNINGS ({len(warned)} issues)")
+        for result in warned:
+            lines.append(f"  • {result.message}")
+            if result.repair_action:
+                lines.append(f"    → {result.repair_action}")
+        lines.append("")
+    
+    if failed:
+        lines.append(f"❌ FAILED ({len(failed)} critical issues)")
+        for result in failed:
+            lines.append(f"  • {result.message}")
+            if result.repair_action:
+                lines.append(f"    → {result.repair_action}")
+        lines.append("")
+    
+    if report.repair_recommendations:
+        lines.append("Repair Recommendations:")
+        for i, recommendation in enumerate(report.repair_recommendations, 1):
+            lines.append(f"  {i}. {recommendation}")
+    
+    return '\n'.join(lines)

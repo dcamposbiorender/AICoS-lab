@@ -1,0 +1,71 @@
+{
+  "busy_trap_assessment": {
+    "overall_busy_trap_score": 74.0,
+    "component_scores": {
+      "volume": 90,
+      "back_to_back": 90,
+      "fragmentation": 60,
+      "duration_efficiency": 70,
+      "trend": 20
+    },
+    "raw_metrics": {
+      "avg_meetings_per_day": 15.3,
+      "back_to_back_ratio": 76.2,
+      "short_meeting_ratio": 13.1,
+      "avg_meeting_duration": 86.4,
+      "volume_increase_6months": -19.1
+    },
+    "interpretation": {
+      "score_range": "0-100",
+      "severity": "CRITICAL"
+    }
+  },
+  "optimization_opportunities": [
+    {
+      "opportunity": "Add 15-minute buffers between meetings",
+      "current_issue": "1796 back-to-back meetings in 6 months",
+      "weekly_time_savings": "748 minutes",
+      "implementation": "Block 15-minute buffers in calendar, decline overlapping meetings",
+      "priority": "HIGH",
+      "effort": "LOW"
+    },
+    {
+      "opportunity": "Consolidate or eliminate short meetings",
+      "current_issue": "308 meetings \u226415 minutes in 6 months",
+      "weekly_time_savings": "96 minutes",
+      "implementation": "Batch similar topics, use async communication for quick updates",
+      "priority": "MEDIUM",
+      "effort": "MEDIUM"
+    },
+    {
+      "opportunity": "Increase protected deep work blocks",
+      "current_issue": "Only 10.8% of calendar is protected deep work",
+      "weekly_time_savings": "N/A - Quality improvement",
+      "implementation": "Block 2-4 hour chunks daily, decline meetings during these times",
+      "priority": "CRITICAL",
+      "effort": "HIGH"
+    },
+    {
+      "opportunity": "Optimize recurring meetings with top collaborators",
+      "current_issue": "~27.5 weekly meetings with shiz",
+      "weekly_time_savings": "412 minutes (reducing frequency/duration)",
+      "implementation": "Shift to biweekly, reduce duration, or combine meetings",
+      "priority": "MEDIUM",
+      "effort": "LOW"
+    },
+    {
+      "opportunity": "Delegate attendance at large meetings",
+      "current_issue": "107 meetings with >5 attendees in 6 months",
+      "weekly_time_savings": "120 minutes",
+      "implementation": "Send team members as representatives, get summary reports",
+      "priority": "MEDIUM",
+      "effort": "LOW"
+    }
+  ],
+  "analysis_metadata": {
+    "generated_at": "2025-08-19T14:57:42.396194",
+    "source_analysis": "6_month_pattern_analysis.json",
+    "total_events": 2358,
+    "period": "2024-08-20 to 2025-02-07"
+  }
+}

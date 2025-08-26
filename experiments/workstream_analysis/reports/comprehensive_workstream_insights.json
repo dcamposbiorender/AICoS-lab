@@ -1,0 +1,437 @@
+{
+  "analysis_metadata": {
+    "generated_at": "2025-08-19T17:11:39.520539",
+    "data_sources": [
+      "slack",
+      "calendar",
+      "drive"
+    ],
+    "target_user": "david.campos@biorender.com"
+  },
+  "workstream_allocation": {
+    "calendar_time_percent": {
+      "gtm_efficiency": 66.80728667305848,
+      "executive": 20.709491850431448,
+      "data_platform": 4.544582933844678,
+      "ai_transformation": 7.938638542665386
+    },
+    "slack_messages_percent": {
+      "data_platform": 100.0
+    },
+    "drive_documents_percent": {
+      "data_platform": 5.857740585774058,
+      "gtm_efficiency": 70.7112970711297,
+      "executive": 10.460251046025103,
+      "ai_bizops_team": 2.510460251046025,
+      "ai_transformation": 8.368200836820083,
+      "icp_expansion": 1.6736401673640167,
+      "cost_optimization": 0.41841004184100417
+    }
+  },
+  "goal_alignment_assessment": {
+    "gtm_efficiency": {
+      "actual_percent": 66.80728667305848,
+      "expected_range": "25-40%",
+      "priority": "HIGH",
+      "alignment": "OVER_ALLOCATED",
+      "gap_percent": 26.807286673058485,
+      "goals": [
+        "Increase productivity per BDR by 40%",
+        "Increase productivity per AE by 30%",
+        "Increase productivity per CSM by 30%",
+        "Double pipeline per quarter"
+      ]
+    },
+    "data_platform": {
+      "actual_percent": 4.544582933844678,
+      "expected_range": "10-25%",
+      "priority": "MEDIUM",
+      "alignment": "UNDER_ALLOCATED",
+      "gap_percent": 5.455417066155322,
+      "goals": [
+        "Understand and organize data for AI tooling use",
+        "Scope end-user / customer data clarity project - build MVP"
+      ]
+    },
+    "icp_expansion": {
+      "actual_percent": 0,
+      "expected_range": "10-25%",
+      "priority": "MEDIUM",
+      "alignment": "UNDER_ALLOCATED",
+      "gap_percent": 10,
+      "goals": [
+        "Outline GTM expansion opportunities - run 3 tests"
+      ]
+    },
+    "ai_transformation": {
+      "actual_percent": 7.938638542665386,
+      "expected_range": "10-25%",
+      "priority": "MEDIUM",
+      "alignment": "UNDER_ALLOCATED",
+      "gap_percent": 2.0613614573346144,
+      "goals": [
+        "With Katya and Jon, build out AI governance and 'citizen developer approach'"
+      ]
+    },
+    "ai_bizops_team": {
+      "actual_percent": 0,
+      "expected_range": "10-25%",
+      "priority": "MEDIUM",
+      "alignment": "UNDER_ALLOCATED",
+      "gap_percent": 10,
+      "goals": [
+        "Build plan to reduce cost base by $2M+"
+      ]
+    },
+    "cost_optimization": {
+      "actual_percent": 0,
+      "expected_range": "25-40%",
+      "priority": "HIGH",
+      "alignment": "UNDER_ALLOCATED",
+      "gap_percent": 25,
+      "goals": [
+        "Build plan to reduce cost base by $2M+"
+      ]
+    }
+  },
+  "key_stakeholders_by_workstream": {
+    "data_platform": [
+      {
+        "email": "adam.shapiro@biorender.com",
+        "interaction_score": 533.9085330776606
+      },
+      {
+        "email": "natalie@biorender.com",
+        "interaction_score": 3.181208053691275
+      },
+      {
+        "email": "ryan@biorender.com",
+        "interaction_score": 3.135762224352828
+      },
+      {
+        "email": "kiran.rao@biorender.com",
+        "interaction_score": 2.590412272291467
+      },
+      {
+        "email": "michael.edmonson@biorender.com",
+        "interaction_score": 2.4995206136145733
+      }
+    ],
+    "gtm_efficiency": [
+      {
+        "email": "natalie@biorender.com",
+        "interaction_score": 46.76510067114094
+      },
+      {
+        "email": "ryan@biorender.com",
+        "interaction_score": 46.09702780441035
+      },
+      {
+        "email": "adam.shapiro@biorender.com",
+        "interaction_score": 42.75666347075743
+      },
+      {
+        "email": "kiran.rao@biorender.com",
+        "interaction_score": 38.08015340364334
+      },
+      {
+        "email": "michael.edmonson@biorender.com",
+        "interaction_score": 36.744007670182164
+      }
+    ],
+    "executive": [
+      {
+        "email": "natalie@biorender.com",
+        "interaction_score": 14.496644295302012
+      },
+      {
+        "email": "ryan@biorender.com",
+        "interaction_score": 14.289549376797698
+      },
+      {
+        "email": "adam.shapiro@biorender.com",
+        "interaction_score": 13.254074784276126
+      },
+      {
+        "email": "kiran.rao@biorender.com",
+        "interaction_score": 11.804410354745924
+      },
+      {
+        "email": "michael.edmonson@biorender.com",
+        "interaction_score": 11.390220517737296
+      }
+    ],
+    "ai_transformation": [
+      {
+        "email": "natalie@biorender.com",
+        "interaction_score": 5.55704697986577
+      },
+      {
+        "email": "ryan@biorender.com",
+        "interaction_score": 5.477660594439116
+      },
+      {
+        "email": "adam.shapiro@biorender.com",
+        "interaction_score": 5.080728667305847
+      },
+      {
+        "email": "kiran.rao@biorender.com",
+        "interaction_score": 4.525023969319269
+      },
+      {
+        "email": "michael.edmonson@biorender.com",
+        "interaction_score": 4.366251198465962
+      }
+    ]
+  },
+  "high_priority_actions": [
+    {
+      "type": "INCREASE_FOCUS",
+      "workstream": "cost_optimization",
+      "priority": "HIGH",
+      "description": "Increase focus on cost_optimization - currently 0.0% vs expected 25-40%",
+      "suggested_actions": [
+        "Schedule more meetings with cost_optimization stakeholders",
+        "Review active documents in cost_optimization",
+        "Block calendar time for cost_optimization deep work"
+      ]
+    },
+    {
+      "type": "REVIEW_DOCUMENT",
+      "workstream": "gtm_efficiency",
+      "priority": "MEDIUM",
+      "description": "Review high-activity document: biorender-software-analysis-csv1.xlsx...",
+      "document_url": "https://docs.google.com/spreadsheets/d/1DdWoiyusFUuwHyG2h3COC8tTYVACBq33/edit?usp=drivesdk&ouid=115843179335012907735&rtpof=true&sd=true",
+      "suggested_actions": [
+        "Review recent changes",
+        "Provide input or feedback",
+        "Ensure alignment with workstream goals"
+      ]
+    },
+    {
+      "type": "REVIEW_DOCUMENT",
+      "workstream": "gtm_efficiency",
+      "priority": "MEDIUM",
+      "description": "Review high-activity document: Kiran / David - GSD/close open fronts - 2025/08/14...",
+      "document_url": "https://docs.google.com/document/d/1Opjg-M7xacNMtcjwaGE2nkXr1o2sO2KL4iWMFnjwzS4/edit?usp=drivesdk",
+      "suggested_actions": [
+        "Review recent changes",
+        "Provide input or feedback",
+        "Ensure alignment with workstream goals"
+      ]
+    },
+    {
+      "type": "REVIEW_DOCUMENT",
+      "workstream": "gtm_efficiency",
+      "priority": "MEDIUM",
+      "description": "Review high-activity document: Michael / David - 2025/08/14 13:00 PDT - Notes by ...",
+      "document_url": "https://docs.google.com/document/d/1YwaIDDzLTHj8DzLe8a-DCwq33B9cEqN60xpHQ5BnY9E/edit?usp=drivesdk",
+      "suggested_actions": [
+        "Review recent changes",
+        "Provide input or feedback",
+        "Ensure alignment with workstream goals"
+      ]
+    },
+    {
+      "type": "REVIEW_DOCUMENT",
+      "workstream": "gtm_efficiency",
+      "priority": "MEDIUM",
+      "description": "Review high-activity document: 20250721 Funnel & Metrics proposal ...",
+      "document_url": "https://docs.google.com/document/d/1QryWZAKCiv1lav7aL5CxJDq7M1VyDRF7XMw4rx7jmZ8/edit?usp=drivesdk",
+      "suggested_actions": [
+        "Review recent changes",
+        "Provide input or feedback",
+        "Ensure alignment with workstream goals"
+      ]
+    },
+    {
+      "type": "REVIEW_DOCUMENT",
+      "workstream": "executive",
+      "priority": "MEDIUM",
+      "description": "Review high-activity document: David Ryan onboarding - running thesis...",
+      "document_url": "https://docs.google.com/document/d/1r1JcIEeoPjfMocyY_Ju6lmU0LORE2L00mzHwKDXLlSo/edit?usp=drivesdk",
+      "suggested_actions": [
+        "Review recent changes",
+        "Provide input or feedback",
+        "Ensure alignment with workstream goals"
+      ]
+    }
+  ],
+  "weekly_recommendations": {
+    "focus_areas": [
+      {
+        "workstream": "data_platform",
+        "current_percent": 4.544582933844678,
+        "target_increase": "+5.5%",
+        "specific_goals": [
+          "Understand and organize data for AI tooling use",
+          "Scope end-user / customer data clarity project - build MVP"
+        ]
+      },
+      {
+        "workstream": "icp_expansion",
+        "current_percent": 0,
+        "target_increase": "+10.0%",
+        "specific_goals": [
+          "Outline GTM expansion opportunities - run 3 tests"
+        ]
+      },
+      {
+        "workstream": "ai_transformation",
+        "current_percent": 7.938638542665386,
+        "target_increase": "+2.1%",
+        "specific_goals": [
+          "With Katya and Jon, build out AI governance and 'citizen developer approach'"
+        ]
+      },
+      {
+        "workstream": "ai_bizops_team",
+        "current_percent": 0,
+        "target_increase": "+10.0%",
+        "specific_goals": [
+          "Build plan to reduce cost base by $2M+"
+        ]
+      },
+      {
+        "workstream": "cost_optimization",
+        "current_percent": 0,
+        "target_increase": "+25.0%",
+        "specific_goals": [
+          "Build plan to reduce cost base by $2M+"
+        ]
+      }
+    ],
+    "key_meetings_to_schedule": [],
+    "documents_to_review": [
+      {
+        "name": "Data Platform Engineering Team Charter",
+        "workstream": "data_platform",
+        "url": "https://docs.google.com/document/d/1e-8PLMEixuM0wTPp4nBS7N0E3rnG37THSdTMMdIYvkw/edit?usp=drivesdk",
+        "days_since_modified": 3,
+        "priority": "Medium"
+      },
+      {
+        "name": "David Onboarding Data / Asks",
+        "workstream": "data_platform",
+        "url": "https://docs.google.com/document/d/1BfCYQgbgg1HkedAm3dlWvqwkysT6KJZK8Sp6zgqUOAA/edit?usp=drivesdk",
+        "days_since_modified": 7,
+        "priority": "Medium"
+      },
+      {
+        "name": "202507 - Consolidated team charter planner Data Revops FP&A",
+        "workstream": "data_platform",
+        "url": "https://docs.google.com/document/d/1vm7UopDqXuxFr3-p2eypxvskbwMKAK4wdPGNvyCCQyw/edit?usp=drivesdk",
+        "days_since_modified": 11,
+        "priority": "Medium"
+      },
+      {
+        "name": "Marketing Priorities Jams: June/July 2025",
+        "workstream": "icp_expansion",
+        "url": "https://docs.google.com/document/d/1bv5kuSJnNmVD4fBz5y4KpuSuRl5eUSSWjd8F_aoOWgs/edit?usp=drivesdk",
+        "days_since_modified": 22,
+        "priority": "Medium"
+      },
+      {
+        "name": "20250811 AICoS PRD and questions",
+        "workstream": "ai_transformation",
+        "url": "https://docs.google.com/document/d/1E8-KnbNXgm6hm4QXZ6SHSUMiP38vAox-3lT5AKSfmnI/edit?usp=drivesdk",
+        "days_since_modified": 7,
+        "priority": "High"
+      },
+      {
+        "name": "PR - Fundraise Questions",
+        "workstream": "ai_transformation",
+        "url": "https://docs.google.com/document/d/1NBV3F651uA-ibm-lLpeaU9LLZaxTd8LQ2hyV4jHkRFM/edit?usp=drivesdk",
+        "days_since_modified": 7,
+        "priority": "Medium"
+      },
+      {
+        "name": "[Private] - Meghana view on what is broken/painful & thesis items",
+        "workstream": "ai_transformation",
+        "url": "https://docs.google.com/document/d/168-R3HBkaGM8oe5q9_BuyXVvnqGY39PgTmOzlXSQeiM/edit?usp=drivesdk",
+        "days_since_modified": 20,
+        "priority": "Medium"
+      },
+      {
+        "name": "All Tools Indicated by Teams that their teams need/use",
+        "workstream": "ai_bizops_team",
+        "url": "https://docs.google.com/document/d/1DFt62tsUollvV5Gfgh3uyRn2XhhS7LB-Tw6LDch1qcc/edit?usp=drivesdk",
+        "days_since_modified": 6,
+        "priority": "Medium"
+      },
+      {
+        "name": "20250727 RevOps team charter",
+        "workstream": "ai_bizops_team",
+        "url": "https://docs.google.com/document/d/1bdLGeLtOHhFAyhZVbsuepREtrSwEimGL6posUZilVWU/edit?usp=drivesdk",
+        "days_since_modified": 20,
+        "priority": "Medium"
+      },
+      {
+        "name": "SS Team Hiring ",
+        "workstream": "ai_bizops_team",
+        "url": "https://docs.google.com/document/d/1I37I3HzyX4X6MtMOGNizO00tChb4p0vxQhk8N1ui6t0/edit?usp=drivesdk",
+        "days_since_modified": 11,
+        "priority": "Medium"
+      }
+    ],
+    "people_to_connect_with": [
+      {
+        "email": "adam.shapiro@biorender.com",
+        "workstream": "data_platform",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Weekly 1:1"
+      },
+      {
+        "email": "natalie@biorender.com",
+        "workstream": "data_platform",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Bi-weekly check-in"
+      },
+      {
+        "email": "ryan@biorender.com",
+        "workstream": "data_platform",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Bi-weekly check-in"
+      },
+      {
+        "email": "natalie@biorender.com",
+        "workstream": "ai_transformation",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Bi-weekly check-in"
+      },
+      {
+        "email": "ryan@biorender.com",
+        "workstream": "ai_transformation",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Bi-weekly check-in"
+      },
+      {
+        "email": "adam.shapiro@biorender.com",
+        "workstream": "ai_transformation",
+        "reason": "Key stakeholder for under-allocated workstream",
+        "suggested_frequency": "Bi-weekly check-in"
+      }
+    ],
+    "time_allocation_adjustments": []
+  },
+  "executive_summary": {
+    "top_insights": [
+      "Currently spending 66.8% of calendar time on gtm_efficiency",
+      "Found 20 key stakeholder relationships across workstreams",
+      "Identified 1 high-priority action items",
+      "Active on 119 recently modified documents"
+    ],
+    "critical_gaps": [
+      "data_platform is under-allocated (current: 4.5%, expected: 10-25%)",
+      "icp_expansion is under-allocated (current: 0.0%, expected: 10-25%)",
+      "ai_transformation is under-allocated (current: 7.9%, expected: 10-25%)",
+      "ai_bizops_team is under-allocated (current: 0.0%, expected: 10-25%)",
+      "cost_optimization is under-allocated (current: 0.0%, expected: 25-40%)"
+    ],
+    "recommended_focus_shifts": [
+      "Increase data_platform by +5.5%",
+      "Increase icp_expansion by +10.0%",
+      "Increase ai_transformation by +2.1%"
+    ]
+  }
+}

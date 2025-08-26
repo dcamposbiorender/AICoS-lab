@@ -1,0 +1,26 @@
+{
+  "overall": {
+    "total_hours": 1799,
+    "total_meetings": 2280,
+    "total_meeting_minutes": 179325,
+    "total_messages": 1489,
+    "active_days": 172,
+    "avg_engagement_score": 101.34
+  },
+  "daily_averages": {
+    "meetings_per_day": 13.3,
+    "meeting_minutes_per_day": 1042.6,
+    "messages_per_day": 8.7,
+    "engagement_score_per_day": 1059.9
+  },
+  "activity_distribution": {
+    "moderate_activity": {
+      "hours": 1189,
+      "percentage": 66.09
+    },
+    "high_activity": {
+      "hours": 610,
+      "percentage": 33.91
+    }
+  }
+}

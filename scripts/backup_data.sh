@@ -14,7 +14,7 @@ fi
 
 # Backup configuration files
 echo "Backing up configuration..."
-cp -r scavenge/config "$BACKUP_DIR/" 2>/dev/null || true
+# Legacy scavenge config backup removed
 
 # Create backup manifest
 echo "Creating backup manifest..."

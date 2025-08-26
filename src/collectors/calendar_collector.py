@@ -9,7 +9,7 @@ import random
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 import time
 
 from ..core.auth_manager import credential_vault
@@ -144,6 +144,45 @@ class CalendarCollector(BaseArchiveCollector):
         print(f"📅 CALENDAR COLLECTOR INITIALIZED")
         print(f"💾 Storage: {self.data_path}")
         print(f"⚡ Rate limit: {self.config.get('requests_per_second', 10.0)} req/sec")
+    
+    def collect(self) -> Dict[str, Any]:
+        """
+        Generic collect method for CalendarCollector - implements BaseArchiveCollector interface
+        
+        Returns:
+            Collection results dictionary compatible with collect_data.py
+        """
+        # Initialize Google Calendar service if not already done
+        if not self.calendar_service:
+            if not self.setup_calendar_service():
+                return {
+                    'status': 'error',
+                    'error': 'Failed to setup Google Calendar service',
+                    'data': {}
+                }
+        
+        try:
+            # Use default collection method (all employees, default time windows)
+            result = self.collect_all_employee_calendars(
+                weeks_backward=26,  # 6 months
+                weeks_forward=4     # 1 month
+            )
+            
+            # Transform result to match expected format for collect_data.py
+            return {
+                'status': 'success',
+                'data': result,
+                'collection_stats': {
+                    'calendars': len(result),
+                    'total_events': sum(len(cal_data.get('events', [])) for cal_data in result.values())
+                }
+            }
+        except Exception as e:
+            return {
+                'status': 'error',
+                'error': str(e),
+                'data': {}
+            }
     
     def _load_config(self, config_path: Optional[Path] = None) -> Dict:
         """Load collection configuration with rule-based filtering"""
@@ -490,6 +529,13 @@ class CalendarCollector(BaseArchiveCollector):
         Returns:
             Dictionary of calendar_id -> {calendar_info, events, collection_stats}
         """
+        # Initialize Google Calendar service if not already done
+        if not self.calendar_service:
+            if not self.setup_calendar_service():
+                return {
+                    'error': 'Failed to setup Google Calendar service',
+                    'data': {}
+                }
         print(f"\n📅 BULK EMPLOYEE CALENDAR COLLECTION")
         print(f"📊 Target: {weeks_backward} weeks backward + {weeks_forward} weeks forward")
         print(f"📊 Collection period: {weeks_backward + weeks_forward} weeks per calendar")
@@ -879,6 +925,23 @@ class CalendarCollector(BaseArchiveCollector):
         Returns:
             Dictionary with collection results and statistics
         """
+        # Initialize Google Calendar service if not already done
+        if not self.calendar_service:
+            if not self.setup_calendar_service():
+                return {
+                    'error': 'Failed to setup Google Calendar service',
+                    'bulk_collection_summary': {
+                        'total_employees': len(employee_emails),
+                        'successful_collections': 0,
+                        'failed_collections': len(employee_emails),
+                        'permission_denied': 0,
+                        'total_events_collected': 0,
+                        'success_rate': 0.0,
+                        'days_back': days_back
+                    },
+                    'collected_data': {}
+                }
+        
         print(f"\n🏢 BULK CALENDAR COLLECTION FROM {len(employee_emails)} EMPLOYEES")
         print(f"📅 Looking back {days_back} days from today")
         print("-" * 60)
@@ -1021,6 +1084,17 @@ class CalendarCollector(BaseArchiveCollector):
     def collect_from_filtered_calendars(self, calendars: Dict[str, Dict], max_calendars: int = 50) -> Dict:
         """Collect events from filtered calendars with rate limiting"""
         
+        # Initialize Google Calendar service if not already done
+        if not self.calendar_service:
+            if not self.setup_calendar_service():
+                return {
+                    'error': 'Failed to setup Google Calendar service',
+                    'successful_collections': 0,
+                    'failed_collections': len(calendars),
+                    'total_events_collected': 0,
+                    'collected_data': {}
+                }
+        
         collected_data = {}
         successful_collections = 0
         failed_collections = 0
@@ -1118,6 +1192,21 @@ class CalendarCollector(BaseArchiveCollector):
         Returns:
             Dictionary with results from all time windows
         """
+        # Initialize Google Calendar service if not already done
+        if not self.calendar_service:
+            if not self.setup_calendar_service():
+                return {
+                    'error': 'Failed to setup Google Calendar service',
+                    'aggregated_stats': {
+                        'total_employees': len(employee_emails),
+                        'windows_completed': 0,
+                        'total_events_collected': 0,
+                        'successful_collections': 0,
+                        'failed_collections': len(employee_emails)
+                    },
+                    'window_results': {}
+                }
+        
         if not self.config.get('progressive_collection', {}).get('enabled', True):
             print("⚠️ Progressive collection is disabled, using standard collection")
             return self.collect_from_employee_list(employee_emails, self.config.get('lookback_days', 30))

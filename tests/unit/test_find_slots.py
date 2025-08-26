@@ -10,8 +10,8 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 # Import the modules we'll be testing
-from src.scheduling.availability import AvailabilityEngine, FreeSlot
-from src.scheduling.conflicts import ConflictDetector
+from src.calendar.availability import AvailabilityEngine, FreeSlot
+from src.calendar.conflicts import ConflictDetector
 
 
 class TestAvailabilityEngine:

@@ -1,0 +1,78 @@
+{
+  "generation_timestamp": "2025-08-19T22:25:56.166604",
+  "total_visualizations": 9,
+  "output_directory": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated",
+  "visualizations": [
+    {
+      "name": "Combined Workload Heatmap",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/01_combined_workload_heatmap.png",
+      "interactive_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/01_combined_workload_heatmap_interactive.html",
+      "description": "Hourly workload patterns combining meetings and Slack activity"
+    },
+    {
+      "name": "Total Engagement Timeline",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/02_total_engagement_timeline.png",
+      "interactive_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/02_total_engagement_timeline_interactive.html",
+      "description": "Daily engagement patterns across calendar and Slack platforms"
+    },
+    {
+      "name": "Pre/Post-Meeting Patterns",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/03_pre_post_meeting_patterns.png",
+      "interactive_path": null,
+      "description": "Slack communication patterns before and after meetings"
+    },
+    {
+      "name": "Context Switching Analysis",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/04_context_switching_analysis.png",
+      "interactive_path": null,
+      "description": "Analysis of context switching patterns across meetings and Slack channels"
+    },
+    {
+      "name": "Strategic vs Operational Allocation",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/05_strategic_operational_allocation.png",
+      "interactive_path": null,
+      "description": "Time allocation analysis across strategic, coaching, and operational activities"
+    },
+    {
+      "name": "Collaboration Network Unified",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/06_collaboration_network.png",
+      "interactive_path": null,
+      "description": "Unified view of collaboration patterns across meetings and Slack"
+    },
+    {
+      "name": "Correlation Matrix",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/07_correlation_matrix.png",
+      "interactive_path": null,
+      "description": "Correlation analysis between key calendar and Slack metrics"
+    },
+    {
+      "name": "Workload Intensity Dashboard",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/08_workload_intensity_dashboard.png",
+      "interactive_path": null,
+      "description": "Comprehensive analysis of workload intensity and busy trap indicators"
+    },
+    {
+      "name": "Efficiency Comparison",
+      "static_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/09_efficiency_comparison.png",
+      "interactive_path": null,
+      "description": "Comparative analysis of calendar vs Slack efficiency patterns"
+    }
+  ],
+  "visualization_categories": {
+    "temporal_correlations": 3,
+    "behavioral_patterns": 3,
+    "efficiency_analysis": 2,
+    "executive_insights": 2
+  },
+  "files_created": [
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/01_combined_workload_heatmap.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/02_total_engagement_timeline.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/03_pre_post_meeting_patterns.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/04_context_switching_analysis.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/05_strategic_operational_allocation.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/06_collaboration_network.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/07_correlation_matrix.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/08_workload_intensity_dashboard.png",
+    "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/integrated/09_efficiency_comparison.png"
+  ]
+}

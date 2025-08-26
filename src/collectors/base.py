@@ -2,8 +2,8 @@
 BaseArchiveCollector abstract class for unified data collection.
 Provides retry logic, circuit breaker, archive writing, and state persistence.
 
-This is the foundation for all collector wrappers that integrate existing scavenge/
-collectors with the AI Chief of Staff archive system.
+This is the foundation for all AI Chief of Staff data collectors including
+Slack, Calendar, Drive, and Employee collectors.
 
 References:
 - Stage 1a ArchiveWriter integration
@@ -25,6 +25,11 @@ from src.core.archive_writer import ArchiveWriter, ArchiveError
 from src.collectors.circuit_breaker import CircuitBreaker
 
 logger = logging.getLogger(__name__)
+
+
+class CollectorError(Exception):
+    """Base exception class for all collector errors"""
+    pass
 
 
 class BaseArchiveCollector:
@@ -294,7 +299,7 @@ class BaseArchiveCollector:
         """Load state using Stage 1a StateManager."""
         try:
             state_key = f"{self.collector_type}_state"
-            saved_state = self.state_manager.read_state(state_key)
+            saved_state = self.state_manager.get_state(state_key)
             
             if saved_state:
                 self.set_state(saved_state)

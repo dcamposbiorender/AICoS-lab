@@ -186,6 +186,29 @@ class EncryptedKeyManager:
     def store_key(self, key_id: str, data: Dict[str, Any], key_type: str = "api_key", metadata: Optional[Dict] = None) -> bool:
         """Store encrypted credentials with per-key random salt"""
         try:
+            # Safeguard: Prevent test tokens from being stored in production keys
+            if key_id == 'slack_tokens_production':
+                # Check if any value contains 'test'
+                data_str = json.dumps(data).lower()
+                if 'test' in data_str or any('test' in str(v).lower() for v in data.values() if isinstance(v, str)):
+                    print("🛑 BLOCKED: Cannot store test tokens in production key 'slack_tokens_production'")
+                    print("   Use 'slack_tokens_test' for test tokens")
+                    return False
+                
+                # Require confirmation for production key updates
+                print("⚠️  WARNING: About to store tokens in PRODUCTION key 'slack_tokens_production'")
+                print("   This should only be done when setting real Slack tokens")
+                print("   Test tokens should use 'slack_tokens_test' key")
+            
+            # Safeguard: Prevent production tokens from being stored in test keys
+            if key_id == 'slack_tokens_test':
+                # Check if tokens look like real production tokens (not test tokens)
+                for key, value in data.items():
+                    if isinstance(value, str) and value.startswith(('xoxb-', 'xoxp-')) and not value.startswith(('xoxb-test-', 'xoxp-test-')):
+                        print("🛑 BLOCKED: Detected real token in test key 'slack_tokens_test'")
+                        print("   Real tokens should use 'slack_tokens_production'")
+                        print("   Test tokens should start with 'xoxb-test-' or 'xoxp-test-'")
+                        return False
             # Generate new cipher suite with random salt for this key
             cipher_suite, salt = self._get_cipher_suite()
             

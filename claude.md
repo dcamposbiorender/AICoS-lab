@@ -32,6 +32,34 @@ When planning is finishing the user will ask for a detailed task list to execute
 
 Use `gh auth switch --user [account]` before any GitHub operations.
 
+## Token Management Rules
+
+**CRITICAL: Before ANY token operations, ALWAYS read README.md "Authentication System" section.**
+
+### Slack Token Protection Rules:
+1. **NEVER write to `slack_tokens_production`** unless explicitly providing real production tokens
+2. **Test tokens ONLY go in `slack_tokens_test`** key
+3. **Production tokens ONLY go in `slack_tokens_production`** key
+4. **Check token documentation first**: Always read README.md before token operations
+5. **Environment matters**: 
+   - `AICOS_TEST_MODE=true` uses test tokens
+   - `AICOS_TEST_MODE=false` or unset uses production tokens
+
+### Token Verification Commands:
+```bash
+# Check which tokens are loaded
+python -c "from src.core.auth_manager import credential_vault; credential_vault.validate_authentication()"
+
+# List all stored keys
+python -c "from src.core.key_manager import key_manager; print([k['key_id'] for k in key_manager.list_keys()])"
+```
+
+### If Tokens Are Missing:
+1. Check README.md "Authentication System" section first
+2. Verify which mode you're in (test vs production)
+3. Ask user for production tokens if `slack_tokens_production` is missing
+4. NEVER guess or create fake tokens
+
 ## Task Context Management
 
 When breaking down plans into sub-tasks, ALWAYS include a "Relevant Files" section for each sub-task that lists:
@@ -47,8 +75,8 @@ This keeps agent context focused without overwhelming with unnecessary informati
 ```
 ### Relevant Files for [Task Name]
 **Read for Context:**
-- `scavenge/src/collectors/slack.py` - Rate limiting patterns (lines 19-50)
-- `scavenge/src/core/system_state_manager.py` - State persistence approach
+- `src/collectors/slack_collector.py` - Rate limiting patterns and collection methods
+- `src/core/state.py` - State persistence approach
 
 **Files to Modify:**
 - `src/core/config.py` - Add new configuration options
@@ -57,7 +85,7 @@ This keeps agent context focused without overwhelming with unnecessary informati
 - `src/core/archive_writer.py` - New JSONL writer implementation
 
 **Reference Patterns:**
-- `scavenge/src/core/auth_manager.py` - Credential validation pattern
+- `src/core/auth_manager.py` - Credential validation pattern
 ```
 
 ## How to Work:

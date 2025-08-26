@@ -1,0 +1,119 @@
+{
+  "dashboard_created": "2025-08-19T22:37:14.752330",
+  "analysis_type": "Cross-Platform Calendar + Slack Correlation Analysis",
+  "analysis_period_days": 172,
+  "key_metrics": {
+    "average_daily_collaboration_hours": 17.67,
+    "busy_trap_score": 2.62,
+    "strategic_allocation_pct": 17.0,
+    "context_switches_per_day": 10.3,
+    "potential_daily_savings_hours": 9.7
+  },
+  "platform_distribution": {
+    "meeting_percentage": 98.2,
+    "slack_percentage": 1.8
+  },
+  "top_opportunities": [
+    {
+      "category": "strategic_focus",
+      "opportunity": "Increase strategic allocation from 17.0% to 60%",
+      "potential_strategic_gain": "43.0 percentage points",
+      "implementation": "Delegate operational tasks, decline tactical meetings",
+      "priority": "high",
+      "impact_score": 86.0
+    },
+    {
+      "category": "time_management",
+      "opportunity": "Reduce total collaboration time from 17.7h to 8h/day",
+      "potential_time_savings_daily": 9.670000000000002,
+      "implementation": "Decline non-essential meetings, batch similar communications",
+      "priority": "high",
+      "impact_score": 48.35000000000001
+    },
+    {
+      "category": "meeting_focus",
+      "opportunity": "Reduce multitasking in 63 meetings",
+      "potential_quality_gain": "10-20% meeting engagement improvement",
+      "implementation": "Phone away policy, designated note-taker role",
+      "priority": "medium",
+      "impact_score": 31.5
+    },
+    {
+      "category": "work_life_balance",
+      "opportunity": "Reduce after-hours work from 33.2% to 20%",
+      "potential_wellbeing_gain": "13.2 percentage points",
+      "implementation": "Establish communication boundaries, batch end-of-day tasks",
+      "priority": "medium",
+      "impact_score": 19.800000000000004
+    },
+    {
+      "category": "context_switching",
+      "opportunity": "Reduce context switching from 10.3 to 6 switches/day",
+      "potential_efficiency_gain": "43% productivity improvement",
+      "implementation": "Batch similar communications, establish communication windows",
+      "priority": "high",
+      "impact_score": 12.900000000000002
+    }
+  ],
+  "deliverables": {
+    "analytical_views": 15,
+    "visualizations_created": 9,
+    "correlation_coefficients_calculated": 10,
+    "optimization_opportunities": 7
+  },
+  "files_included": {
+    "databases": [
+      "unified_analytics.db"
+    ],
+    "visualizations": [
+      "visualizations/06_collaboration_network.png",
+      "visualizations/01_combined_workload_heatmap.png",
+      "visualizations/01_combined_workload_heatmap_interactive.html",
+      "visualizations/08_workload_intensity_dashboard.png",
+      "visualizations/07_correlation_matrix.png",
+      "visualizations/09_efficiency_comparison.png",
+      "visualizations/03_pre_post_meeting_patterns.png",
+      "visualizations/05_strategic_operational_allocation.png",
+      "visualizations/visualization_summary.json",
+      "visualizations/02_total_engagement_timeline_interactive.html",
+      "visualizations/04_context_switching_analysis.png",
+      "visualizations/02_total_engagement_timeline.png",
+      "visualizations/calendar/05_deep_work_analysis.png",
+      "visualizations/calendar/01_weekly_load_heatmap.png",
+      "visualizations/calendar/06_collaboration_network.png",
+      "visualizations/calendar/02_meeting_volume_time_series_interactive.html",
+      "visualizations/calendar/02_meeting_volume_time_series.png",
+      "visualizations/calendar/08_executive_dashboard.png",
+      "visualizations/calendar/03_back_to_back_analysis.png",
+      "visualizations/calendar/04_topic_analysis.png",
+      "visualizations/calendar/02_meeting_volume_time_series_interactive.png",
+      "visualizations/calendar/01_weekly_load_heatmap_interactive.png",
+      "visualizations/calendar/01_weekly_load_heatmap_interactive.html",
+      "visualizations/calendar/07_efficiency_metrics.png",
+      "visualizations/slack/03_channel_activity_breakdown.png",
+      "visualizations/slack/01_slack_activity_heatmap_interactive.html",
+      "visualizations/slack/04_communication_intensity.png",
+      "visualizations/slack/11_peak_hours_analysis.png",
+      "visualizations/slack/02_message_volume_timeseries_interactive.html",
+      "visualizations/slack/05_response_patterns.png",
+      "visualizations/slack/02_message_volume_timeseries.png",
+      "visualizations/slack/09_thread_participation.png",
+      "visualizations/slack/01_slack_activity_heatmap.png",
+      "visualizations/slack/visualization_summary.json",
+      "visualizations/slack/06_dm_vs_channel_preference.png",
+      "visualizations/slack/12_executive_dashboard.png",
+      "visualizations/slack/10_strategic_vs_operational.png",
+      "visualizations/slack/08_after_hours_analysis.png",
+      "visualizations/slack/07_collaboration_network.png"
+    ],
+    "insights": [
+      "integrated_insights_summary.md",
+      "calendar_analysis_summary.md",
+      "slack_analysis_summary.md"
+    ],
+    "metrics": [
+      "integrated_metrics.json",
+      "integrated_metrics_summary.json"
+    ]
+  }
+}

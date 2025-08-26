@@ -1,0 +1,179 @@
+{
+  "delegation_framework": {
+    "version": "1.0",
+    "created": "2025-08-19",
+    "purpose": "Guide systematic delegation to reduce Ryan's operational burden"
+  },
+  "decision_authority_matrix": {
+    "strategic_decisions": {
+      "description": "High-level direction, vision, major resource allocation",
+      "authority": "Ryan Only",
+      "examples": [
+        "Product roadmap direction",
+        "Market entry decisions",
+        "Major partnership agreements",
+        "Organizational structure changes",
+        "Budget allocation >$100K",
+        "Hiring C-level executives"
+      ],
+      "delegation_criteria": "Cannot be delegated - requires executive judgment"
+    },
+    "tactical_decisions": {
+      "description": "Implementation details, process optimization, team coordination",
+      "authority": "Direct Reports with Ryan Oversight",
+      "examples": [
+        "Feature prioritization within approved roadmap",
+        "Team structure optimization",
+        "Process improvement implementations",
+        "Vendor selection <$50K",
+        "Hiring decisions below director level",
+        "Customer escalation resolution"
+      ],
+      "delegation_criteria": "Can be delegated with clear guidelines and escalation thresholds"
+    },
+    "operational_decisions": {
+      "description": "Day-to-day execution, routine operations, administrative tasks",
+      "authority": "Direct Reports - Full Autonomy",
+      "examples": [
+        "Meeting scheduling and coordination",
+        "Status reporting and updates",
+        "Routine customer communications",
+        "Internal process management",
+        "Resource allocation within approved budgets",
+        "Performance management (non-executive)"
+      ],
+      "delegation_criteria": "Should be fully delegated - no Ryan involvement needed"
+    }
+  },
+  "delegation_targets": [
+    {
+      "name": "Alex Chen - Head of Product",
+      "current_ryan_involvement": "High",
+      "target_ryan_involvement": "Strategic Only",
+      "decision_authority": [
+        "Product feature prioritization",
+        "Development team coordination",
+        "Customer feedback integration",
+        "Product marketing coordination"
+      ],
+      "escalation_thresholds": [
+        "Budget variance >10%",
+        "Timeline delays >2 weeks",
+        "Customer churn risk",
+        "Competitive threat response"
+      ],
+      "development_needed": [
+        "Executive decision-making framework",
+        "Stakeholder communication skills",
+        "Strategic thinking development"
+      ]
+    },
+    {
+      "name": "Sarah Kim - Head of Operations",
+      "current_ryan_involvement": "High",
+      "target_ryan_involvement": "Strategic Only",
+      "decision_authority": [
+        "Process optimization",
+        "Team coordination",
+        "Vendor management",
+        "Operational metrics reporting"
+      ],
+      "escalation_thresholds": [
+        "Process failure affecting customers",
+        "Cost variance >15%",
+        "Team performance issues",
+        "Compliance concerns"
+      ],
+      "development_needed": [
+        "Autonomous decision-making confidence",
+        "Cross-functional coordination",
+        "Executive communication skills"
+      ]
+    }
+  ],
+  "delegation_process": {
+    "step_1_identify": {
+      "description": "Identify decisions/meetings for delegation",
+      "criteria": [
+        "Operational vs strategic nature",
+        "Frequency of similar decisions",
+        "Development opportunity for team member",
+        "Risk level if delegated"
+      ]
+    },
+    "step_2_prepare": {
+      "description": "Prepare delegate for authority",
+      "actions": [
+        "Define decision boundaries clearly",
+        "Establish escalation criteria",
+        "Provide historical context",
+        "Create success metrics"
+      ]
+    },
+    "step_3_delegate": {
+      "description": "Transfer authority formally",
+      "actions": [
+        "Communicate authority change to stakeholders",
+        "Update meeting invitations/ownership",
+        "Provide initial support/coaching",
+        "Schedule check-in reviews"
+      ]
+    },
+    "step_4_monitor": {
+      "description": "Ensure successful delegation",
+      "actions": [
+        "Track decision quality and outcomes",
+        "Provide coaching as needed",
+        "Adjust boundaries based on performance",
+        "Celebrate autonomous successes"
+      ]
+    }
+  },
+  "escalation_guidelines": {
+    "immediate_escalation": [
+      "Customer threats to cancel >$100K ARR",
+      "Legal/regulatory issues",
+      "Security incidents",
+      "Board/investor inquiries",
+      "Major competitive moves"
+    ],
+    "daily_escalation": [
+      "Budget variances >10%",
+      "Timeline delays >1 week",
+      "Team performance concerns",
+      "Process failures affecting quality"
+    ],
+    "weekly_escalation": [
+      "Strategic opportunities identified",
+      "Market intelligence requiring response",
+      "Partnership opportunities",
+      "Process improvement recommendations"
+    ],
+    "monthly_escalation": [
+      "Organizational development needs",
+      "Long-term resource planning",
+      "Strategic initiative updates",
+      "Performance review summaries"
+    ]
+  },
+  "success_metrics": {
+    "delegation_effectiveness": [
+      "Decision quality (measured by outcome success)",
+      "Decision speed (time from issue to resolution)",
+      "Stakeholder satisfaction with delegated authority",
+      "Escalation rate (should decrease over time)"
+    ],
+    "ryan_time_recovery": [
+      "Hours/week returned to strategic focus",
+      "Number of operational meetings eliminated",
+      "Reduction in operational decisions made",
+      "Increase in strategic initiative time"
+    ],
+    "team_development": [
+      "Confidence in autonomous decision-making",
+      "Quality of strategic thinking",
+      "Leadership capability growth",
+      "Cross-functional collaboration improvement"
+    ]
+  }
+}

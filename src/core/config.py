@@ -99,7 +99,7 @@ class Config:
         # Create base directory if it doesn't exist
         if not base_dir.exists():
             try:
-                base_dir.mkdir(parents=True, exist_ok=True)
+                base_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
             except PermissionError:
                 raise ConfigurationError(
                     f"Cannot create base directory: {base_dir}\n"
@@ -144,7 +144,7 @@ class Config:
         
         for dir_path in required_dirs:
             try:
-                dir_path.mkdir(parents=True, exist_ok=True)
+                dir_path.mkdir(parents=True, exist_ok=True, mode=0o700)
             except PermissionError:
                 raise ConfigurationError(
                     f"Cannot create directory: {dir_path}\n"

@@ -287,7 +287,7 @@ def get_pattern_extractor() -> Union[StructuredExtractor, 'MockStructuredExtract
         return MockStructuredExtractor()
     
     try:
-        from src.extractors.structured import StructuredExtractorImpl
+        from src.queries.structured import StructuredExtractor as StructuredExtractorImpl
         return StructuredExtractorImpl()
     except ImportError:
         return MockStructuredExtractor()

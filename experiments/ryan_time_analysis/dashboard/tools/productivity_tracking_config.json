@@ -1,0 +1,175 @@
+{
+  "tracking_system": {
+    "name": "Ryan Executive Productivity Monitor",
+    "version": "1.0",
+    "purpose": "Automated tracking of executive effectiveness metrics",
+    "update_frequency": "Real-time with daily summaries"
+  },
+  "data_sources": {
+    "calendar": {
+      "source": "Google Calendar API",
+      "metrics": [
+        "Total meeting hours per day",
+        "Meeting frequency and duration patterns",
+        "Strategic block protection compliance",
+        "Meeting preparation time",
+        "Back-to-back meeting percentage"
+      ],
+      "tracking_tags": {
+        "strategic": [
+          "strategic planning",
+          "vision",
+          "roadmap"
+        ],
+        "operational": [
+          "status",
+          "update",
+          "coordination"
+        ],
+        "external": [
+          "customer",
+          "partner",
+          "investor"
+        ],
+        "team": [
+          "1:1",
+          "team meeting",
+          "all hands"
+        ]
+      }
+    },
+    "communication": {
+      "source": "Slack API + Email Analytics",
+      "metrics": [
+        "Message volume per hour/day",
+        "Response time patterns",
+        "After-hours communication count",
+        "Channel switching frequency",
+        "Communication preparation quality"
+      ],
+      "tracking_channels": [
+        "Direct messages",
+        "Strategic channels",
+        "Operational channels",
+        "External communications"
+      ]
+    },
+    "focus_time": {
+      "source": "Manual entry + App tracking",
+      "metrics": [
+        "Strategic work hours per day",
+        "Deep work session duration",
+        "Context switching frequency",
+        "Interruption patterns",
+        "Focus quality self-assessment"
+      ]
+    }
+  },
+  "key_metrics": {
+    "daily_tracking": {
+      "collaboration_hours": {
+        "target": 8.0,
+        "warning_threshold": 10.0,
+        "crisis_threshold": 12.0,
+        "calculation": "sum(meeting_hours) + (slack_messages * 0.05)"
+      },
+      "strategic_allocation": {
+        "target": 60.0,
+        "warning_threshold": 40.0,
+        "crisis_threshold": 30.0,
+        "calculation": "(strategic_hours / total_work_hours) * 100"
+      },
+      "context_switches": {
+        "target": 6,
+        "warning_threshold": 8,
+        "crisis_threshold": 10,
+        "calculation": "count(app_switches) + count(meeting_transitions)"
+      },
+      "executive_block_protection": {
+        "target": 100.0,
+        "warning_threshold": 80.0,
+        "crisis_threshold": 60.0,
+        "calculation": "(protected_days / total_days) * 100"
+      }
+    },
+    "weekly_tracking": {
+      "busy_trap_score": {
+        "target": 2.0,
+        "calculation": "weighted_average(daily_scores)"
+      },
+      "meeting_efficiency": {
+        "target": 80.0,
+        "calculation": "average(meeting_effectiveness_ratings)"
+      },
+      "team_autonomy_index": {
+        "target": 80.0,
+        "calculation": "delegated_decisions / total_decisions * 100"
+      }
+    }
+  },
+  "alert_system": {
+    "real_time_alerts": [
+      {
+        "trigger": "Executive block interruption request",
+        "action": "Require emergency justification",
+        "notification": "EA/Chief of Staff"
+      },
+      {
+        "trigger": "Daily collaboration >12 hours",
+        "action": "End-of-day alert with recommendations",
+        "notification": "Ryan + EA"
+      },
+      {
+        "trigger": "After-hours communication",
+        "action": "Boundary reminder message",
+        "notification": "Sender + Ryan"
+      }
+    ],
+    "daily_alerts": [
+      {
+        "trigger": "Strategic allocation <30%",
+        "action": "Next-day optimization recommendations",
+        "notification": "Ryan + EA"
+      },
+      {
+        "trigger": "Context switches >10",
+        "action": "Batching recommendations for tomorrow",
+        "notification": "Ryan"
+      }
+    ],
+    "weekly_alerts": [
+      {
+        "trigger": "Busy trap score >2.5",
+        "action": "Schedule optimization review meeting",
+        "notification": "EA/Chief of Staff"
+      },
+      {
+        "trigger": "Executive block protection <80%",
+        "action": "Calendar audit and protection reinforcement",
+        "notification": "EA + Ryan"
+      }
+    ]
+  },
+  "dashboard_views": {
+    "executive_summary": {
+      "refresh_frequency": "Real-time",
+      "widgets": [
+        "Today's collaboration hours vs target",
+        "Strategic allocation progress",
+        "Executive block protection status",
+        "Week-to-date trends",
+        "Optimization recommendations"
+      ]
+    },
+    "detailed_analytics": {
+      "refresh_frequency": "Daily",
+      "reports": [
+        "30-day trend analysis",
+        "Meeting efficiency breakdown",
+        "Communication pattern analysis",
+        "Busy trap score evolution",
+        "Delegation effectiveness tracking"
+      ]
+    }
+  }
+}

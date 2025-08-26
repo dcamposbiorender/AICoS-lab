@@ -1,0 +1,82 @@
+{
+  "setup_timestamp": "2025-08-19T20:50:33.853075",
+  "database_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/data/processed/duckdb/slack_analytics.db",
+  "total_messages": 2470,
+  "ryan_messages": 1489,
+  "channels": 6,
+  "users": 24,
+  "ryan_message_percentage": 60.3,
+  "statistics": {
+    "channel_distribution": [
+      {
+        "channel": "Direct Message",
+        "total_messages": 556,
+        "ryan_messages": 505
+      },
+      {
+        "channel": "executive-team",
+        "total_messages": 553,
+        "ryan_messages": 438
+      },
+      {
+        "channel": "leadership",
+        "total_messages": 473,
+        "ryan_messages": 338
+      },
+      {
+        "channel": "product-strategy",
+        "total_messages": 373,
+        "ryan_messages": 163
+      },
+      {
+        "channel": "marketing",
+        "total_messages": 259,
+        "ryan_messages": 12
+      },
+      {
+        "channel": "engineering",
+        "total_messages": 256,
+        "ryan_messages": 33
+      }
+    ],
+    "business_hours_split": [
+      {
+        "period": "After Hours",
+        "total_messages": 412,
+        "ryan_messages": 231
+      },
+      {
+        "period": "Business Hours",
+        "total_messages": 2058,
+        "ryan_messages": 1258
+      }
+    ],
+    "daily_activity": [
+      {
+        "day": "Tuesday",
+        "total_messages": 514,
+        "ryan_messages": 329
+      },
+      {
+        "day": "Friday",
+        "total_messages": 502,
+        "ryan_messages": 294
+      },
+      {
+        "day": "Wednesday",
+        "total_messages": 494,
+        "ryan_messages": 306
+      },
+      {
+        "day": "Monday",
+        "total_messages": 485,
+        "ryan_messages": 295
+      },
+      {
+        "day": "Thursday",
+        "total_messages": 475,
+        "ryan_messages": 265
+      }
+    ]
+  }
+}

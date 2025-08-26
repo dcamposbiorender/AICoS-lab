@@ -1,0 +1,259 @@
+{
+  "extraction_timestamp": "2025-08-19T20:56:14.589177",
+  "database_path": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/data/processed/duckdb/slack_analytics.db",
+  "ryan_slack_id": "UBL74SKU0",
+  "analysis_summary": {
+    "basic_statistics": {
+      "total_messages": 2470,
+      "ryan_messages": 1489,
+      "ryan_message_percentage": 60.3,
+      "total_channels": 6,
+      "total_users": 9,
+      "total_days_analyzed": 124,
+      "ryan_avg_messages_per_day": 12.0,
+      "channel_breakdown": [
+        {
+          "channel": "Direct Message",
+          "total_messages": 556,
+          "ryan_messages": 505,
+          "ryan_participation_pct": 90.8,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 47.6
+        },
+        {
+          "channel": "executive-team",
+          "total_messages": 553,
+          "ryan_messages": 438,
+          "ryan_participation_pct": 79.2,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 57.9
+        },
+        {
+          "channel": "leadership",
+          "total_messages": 473,
+          "ryan_messages": 338,
+          "ryan_participation_pct": 71.5,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 51.1
+        },
+        {
+          "channel": "product-strategy",
+          "total_messages": 373,
+          "ryan_messages": 163,
+          "ryan_participation_pct": 43.7,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 45.1
+        },
+        {
+          "channel": "marketing",
+          "total_messages": 259,
+          "ryan_messages": 12,
+          "ryan_participation_pct": 4.6,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 49.1
+        },
+        {
+          "channel": "engineering",
+          "total_messages": 256,
+          "ryan_messages": 33,
+          "ryan_participation_pct": 12.9,
+          "participants": 9,
+          "thread_messages": 0,
+          "avg_message_length": 47.8
+        }
+      ]
+    },
+    "temporal_patterns": {
+      "business_hours_messages": 1258,
+      "after_hours_messages": 231,
+      "after_hours_percentage": 15.5,
+      "peak_hours": [
+        {
+          "hour": 15,
+          "messages": 184
+        },
+        {
+          "hour": 14,
+          "messages": 142
+        },
+        {
+          "hour": 16,
+          "messages": 82
+        },
+        {
+          "hour": 11,
+          "messages": 70
+        },
+        {
+          "hour": 13,
+          "messages": 36
+        }
+      ],
+      "daily_patterns": [
+        {
+          "day": "Tuesday",
+          "avg_messages": 13.2,
+          "total_messages": 329
+        },
+        {
+          "day": "Wednesday",
+          "avg_messages": 12.2,
+          "total_messages": 306
+        },
+        {
+          "day": "Monday",
+          "avg_messages": 12.3,
+          "total_messages": 295
+        },
+        {
+          "day": "Friday",
+          "avg_messages": 11.8,
+          "total_messages": 294
+        },
+        {
+          "day": "Thursday",
+          "avg_messages": 10.6,
+          "total_messages": 265
+        }
+      ]
+    },
+    "communication_behavior": {
+      "dm_messages": 505,
+      "channel_messages": 984,
+      "dm_preference_percentage": 33.9,
+      "thread_replies": 0,
+      "initial_messages": 1489,
+      "avg_thread_usage_pct": 0,
+      "avg_message_length": 51.1,
+      "others_avg_message_length": 49.3,
+      "max_message_length": 66,
+      "min_message_length": 29
+    },
+    "collaboration_patterns": {
+      "top_collaborators": [
+        {
+          "name": "Rodney Draaisma",
+          "type": "Channel",
+          "total_messages": 125,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 6",
+          "type": "Channel",
+          "total_messages": 125,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 8",
+          "type": "Channel",
+          "total_messages": 121,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 9",
+          "type": "Channel",
+          "total_messages": 120,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 5",
+          "type": "Channel",
+          "total_messages": 117,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 7",
+          "type": "Channel",
+          "total_messages": 117,
+          "avg_daily": 1.0
+        },
+        {
+          "name": "Katya Shteyn",
+          "type": "Channel",
+          "total_messages": 110,
+          "avg_daily": 1.0
+        },
+        {
+          "name": "Shiz Aoki",
+          "type": "Channel",
+          "total_messages": 95,
+          "avg_daily": 1.1
+        },
+        {
+          "name": "Team Member 6",
+          "type": "DM",
+          "total_messages": 8,
+          "avg_daily": 1.0
+        },
+        {
+          "name": "Team Member 9",
+          "type": "DM",
+          "total_messages": 7,
+          "avg_daily": 1.0
+        }
+      ],
+      "avg_channels_per_day": 4.0,
+      "max_channels_per_day": 6,
+      "high_context_switching_days": 95,
+      "high_switching_percentage": 76.6
+    },
+    "strategic_communication": {
+      "category_breakdown": [
+        {
+          "category": "Strategic",
+          "messages": 776,
+          "avg_message_length": 43.9,
+          "percentage": 52.1
+        },
+        {
+          "category": "Mixed",
+          "messages": 505,
+          "avg_message_length": 43.2,
+          "percentage": 33.9
+        },
+        {
+          "category": "Strategic-Product",
+          "messages": 163,
+          "avg_message_length": 18.2,
+          "percentage": 10.9
+        },
+        {
+          "category": "Operational",
+          "messages": 45,
+          "avg_message_length": 3.8,
+          "percentage": 3.0
+        }
+      ],
+      "strategic_messages": 939,
+      "operational_messages": 45,
+      "strategic_percentage": 63.1
+    },
+    "efficiency_metrics": {
+      "dm_efficiency_ratio": 0.38,
+      "avg_channel_switching": 4.0,
+      "avg_after_hours_pct": 16.6,
+      "high_after_hours_days": 21,
+      "high_after_hours_percentage": 16.9,
+      "communication_efficiency_score": 58.2,
+      "score_breakdown": {
+        "dm_preference_score": 67.8,
+        "time_management_score": 66.8,
+        "focus_score": 40.0
+      }
+    }
+  },
+  "executive_insights": [
+    "High communication volume: Ryan generates 60.3% of all messages",
+    "Strategic focus: 63.1% of communication is strategic",
+    "High context switching: Active in 4.0 channels daily on average"
+  ],
+  "recommendations": [
+    "Consider implementing communication boundaries to reduce after-hours messaging",
+    "Consolidate communication channels to reduce context switching"
+  ]
+}

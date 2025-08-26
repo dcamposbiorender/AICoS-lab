@@ -50,7 +50,7 @@ class ArchiveWriter:
     │       └── manifest.json
     
     References:
-    - scavenge/src/core/system_state_manager.py:63-77 (atomic write pattern)
+    - src/core/state.py (atomic write pattern)
     - CLAUDE.md: No hardcoded values, reuse existing patterns
     """
     
@@ -78,7 +78,7 @@ class ArchiveWriter:
         # Ensure source directory exists
         self.source_dir = self.archive_dir / source_name
         try:
-            self.source_dir.mkdir(parents=True, exist_ok=True)
+            self.source_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
         except (OSError, PermissionError) as e:
             raise ArchiveError(f"Cannot create source directory {self.source_dir}: {str(e)}") from e
     
@@ -121,7 +121,7 @@ class ArchiveWriter:
             try:
                 # Get daily directory and ensure it exists
                 daily_dir = self._get_daily_directory(target_date)
-                daily_dir.mkdir(parents=True, exist_ok=True)
+                daily_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
                 
                 data_file = daily_dir / "data.jsonl"
                 manifest_file = daily_dir / "manifest.json"
@@ -159,7 +159,7 @@ class ArchiveWriter:
     def _atomic_append_jsonl(self, data_file: Path, records: List[Dict[str, Any]]) -> None:
         """
         Atomically append records to JSONL file using temp file + rename pattern
-        Extracted from scavenge/src/core/system_state_manager.py:63-77
+        Implements atomic write operations for data safety
         """
         # Prepare JSONL content
         jsonl_lines = []

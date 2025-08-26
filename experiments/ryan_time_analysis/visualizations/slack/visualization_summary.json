@@ -1,0 +1,19 @@
+{
+  "generation_timestamp": "2025-08-19T20:55:14.735264",
+  "visualizations_created": 12,
+  "output_directory": "/Users/david.campos/VibeCode/AICoS-Lab/experiments/ryan_time_analysis/visualizations/slack",
+  "visualization_list": [
+    "Slack Activity Heatmap",
+    "Message Volume Time Series",
+    "Channel Activity Breakdown",
+    "Communication Intensity",
+    "Response Patterns",
+    "DM vs Channel Preference",
+    "Collaboration Network",
+    "After Hours Analysis",
+    "Thread Participation",
+    "Strategic vs Operational",
+    "Peak Hours Analysis",
+    "Executive Dashboard"
+  ]
+}

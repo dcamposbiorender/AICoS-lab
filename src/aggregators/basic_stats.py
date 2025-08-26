@@ -17,6 +17,8 @@ from collections import defaultdict, Counter
 import json
 import statistics
 from dataclasses import dataclass
+import os
+import glob
 
 logger = logging.getLogger(__name__)
 
@@ -1014,3 +1016,402 @@ class ActivityAnalyzer:
             'meeting_types': {},
             'time_period': 'unknown'
         }
+
+
+# =============================================================================
+# ACTIVITY ANALYZER IMPLEMENTATION
+# =============================================================================
+
+class ActivityAnalyzerImpl:
+    """
+    Real implementation of ActivityAnalyzer interface
+    Reads actual collected data from /data/raw/ directories and generates summaries
+    """
+    
+    def __init__(self, base_dir: Optional[str] = None):
+        """Initialize with base data directory"""
+        self.base_dir = Path(base_dir) if base_dir else Path(os.environ.get('AICOS_BASE_DIR', '.'))
+        self.data_dir = self.base_dir / 'data' / 'raw'
+        self.logger = logging.getLogger(__name__ + '.ActivityAnalyzerImpl')
+        
+    def generate_daily_summary(self, date: str, person: Optional[str] = None, **kwargs) -> Dict[str, Any]:
+        """
+        Generate daily activity summary from collected data
+        
+        Args:
+            date: Date in YYYY-MM-DD format
+            person: Optional person filter
+            **kwargs: Additional parameters (detailed, exclude_weekends, etc.)
+            
+        Returns:
+            Daily summary dictionary with real data
+        """
+        target_date = datetime.fromisoformat(date).date()
+        date_str = target_date.isoformat()
+        
+        # Initialize summary structure
+        summary = {
+            'date': date_str,
+            'person': person,
+            'slack_activity': {},
+            'calendar_activity': {},
+            'drive_activity': {},
+            'key_highlights': [],
+            'statistics': {},
+            'generation_metadata': {
+                'generated_at': datetime.now().isoformat(),
+                'data_sources_found': [],
+                'real_implementation': True
+            }
+        }
+        
+        # Load Slack data
+        slack_data = self._load_slack_data(target_date)
+        if slack_data:
+            summary['slack_activity'] = self._analyze_slack_activity(slack_data, person)
+            summary['generation_metadata']['data_sources_found'].append('slack')
+            
+        # Load Calendar data
+        calendar_data = self._load_calendar_data(target_date)
+        if calendar_data:
+            summary['calendar_activity'] = self._analyze_calendar_activity(calendar_data, person)
+            summary['generation_metadata']['data_sources_found'].append('calendar')
+            
+        # Load Drive data
+        drive_data = self._load_drive_data(target_date)
+        if drive_data:
+            summary['drive_activity'] = self._analyze_drive_activity(drive_data, person)
+            summary['generation_metadata']['data_sources_found'].append('drive')
+            
+        # Generate key highlights
+        summary['key_highlights'] = self._generate_highlights(summary)
+        
+        # Calculate statistics
+        summary['statistics'] = self._calculate_daily_statistics(summary)
+        
+        return summary
+    
+    def generate_weekly_summary(self, week_start: str, person: Optional[str] = None, **kwargs) -> Dict[str, Any]:
+        """
+        Generate weekly activity summary
+        
+        Args:
+            week_start: Week start date in YYYY-MM-DD format
+            person: Optional person filter
+            **kwargs: Additional parameters
+            
+        Returns:
+            Weekly summary dictionary
+        """
+        start_date = datetime.fromisoformat(week_start).date()
+        
+        # Generate daily summaries for the week
+        daily_summaries = []
+        for i in range(7):
+            day = start_date + timedelta(days=i)
+            daily_summary = self.generate_daily_summary(day.isoformat(), person)
+            daily_summaries.append(daily_summary)
+        
+        # Aggregate weekly data
+        return {
+            'week_start': week_start,
+            'person': person,
+            'summary_stats': self._aggregate_weekly_stats(daily_summaries),
+            'trends': self._analyze_weekly_trends(daily_summaries),
+            'top_achievements': self._extract_weekly_achievements(daily_summaries),
+            'metadata': {
+                'generated_at': datetime.now().isoformat(),
+                'daily_summaries_count': len(daily_summaries),
+                'real_implementation': True
+            }
+        }
+    
+    def get_statistics(self, time_range: str, breakdown: Optional[str] = None, **kwargs) -> Dict[str, Any]:
+        """
+        Get activity statistics for time range
+        
+        Args:
+            time_range: Time range identifier
+            breakdown: Optional breakdown type
+            **kwargs: Additional parameters
+            
+        Returns:
+            Statistics dictionary
+        """
+        return {
+            'time_range': time_range,
+            'breakdown': breakdown,
+            'total_messages': 0,  # TODO: Implement based on collected data
+            'total_meetings': 0,  # TODO: Implement based on collected data
+            'unique_participants': 0,  # TODO: Implement based on collected data
+            'metadata': {'real_implementation': True, 'status': 'basic_implementation'}
+        }
+    
+    # Private helper methods
+    
+    def _load_slack_data(self, target_date: date) -> Optional[Dict[str, Any]]:
+        """Load Slack data for the target date"""
+        date_str = target_date.isoformat()
+        slack_dir = self.data_dir / 'slack' / date_str
+        
+        if not slack_dir.exists():
+            self.logger.debug(f"No Slack data found for {date_str}")
+            return None
+            
+        # Look for JSONL files with message data
+        message_files = list(slack_dir.glob('messages_*.jsonl'))
+        if not message_files:
+            self.logger.debug(f"No Slack message files found in {slack_dir}")
+            return None
+            
+        # Load and parse JSONL data
+        messages = []
+        for file_path in message_files:
+            try:
+                with open(file_path, 'r') as f:
+                    for line in f:
+                        if line.strip():
+                            messages.append(json.loads(line))
+            except Exception as e:
+                self.logger.error(f"Failed to load {file_path}: {e}")
+                
+        return {'messages': messages} if messages else None
+    
+    def _load_calendar_data(self, target_date: date) -> Optional[Dict[str, Any]]:
+        """Load Calendar data for the target date"""
+        date_str = target_date.isoformat()
+        calendar_dir = self.data_dir / 'calendar' / date_str
+        
+        if not calendar_dir.exists():
+            return None
+            
+        # Look for JSON files with event data
+        event_files = list(calendar_dir.glob('events_*.json'))
+        if not event_files:
+            return None
+            
+        events = []
+        for file_path in event_files:
+            try:
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
+                    if isinstance(data, list):
+                        events.extend(data)
+                    elif isinstance(data, dict) and 'events' in data:
+                        events.extend(data['events'])
+            except Exception as e:
+                self.logger.error(f"Failed to load {file_path}: {e}")
+                
+        return {'events': events} if events else None
+    
+    def _load_drive_data(self, target_date: date) -> Optional[Dict[str, Any]]:
+        """Load Drive data for the target date"""
+        date_str = target_date.isoformat()
+        drive_dir = self.data_dir / 'drive' / date_str
+        
+        if not drive_dir.exists():
+            return None
+            
+        # Load the drive summary file
+        summary_file = drive_dir / 'drive_summary.json'
+        if summary_file.exists():
+            try:
+                with open(summary_file, 'r') as f:
+                    return json.load(f)
+            except Exception as e:
+                self.logger.error(f"Failed to load {summary_file}: {e}")
+                
+        return None
+    
+    def _analyze_slack_activity(self, slack_data: Dict[str, Any], person: Optional[str]) -> Dict[str, Any]:
+        """Analyze Slack activity data"""
+        messages = slack_data.get('messages', [])
+        
+        if person:
+            # Filter messages for specific person
+            messages = [msg for msg in messages if msg.get('author') == person or msg.get('user') == person]
+        
+        # Calculate basic metrics
+        message_count = len(messages)
+        unique_authors = len(set(msg.get('author', msg.get('user', 'unknown')) for msg in messages))
+        channels = set(msg.get('channel') for msg in messages if msg.get('channel'))
+        
+        # Find peak activity hour
+        hourly_counts = defaultdict(int)
+        for msg in messages:
+            timestamp = msg.get('timestamp')
+            if timestamp:
+                try:
+                    # Handle different timestamp formats
+                    if isinstance(timestamp, str):
+                        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                    else:
+                        dt = datetime.fromtimestamp(float(timestamp))
+                    hourly_counts[dt.hour] += 1
+                except:
+                    continue
+        
+        peak_hour = max(hourly_counts.items(), key=lambda x: x[1])[0] if hourly_counts else None
+        
+        return {
+            'message_count': message_count,
+            'channels_active': list(channels)[:10],  # Limit to top 10
+            'unique_authors': unique_authors,
+            'peak_activity_hour': peak_hour
+        }
+    
+    def _analyze_calendar_activity(self, calendar_data: Dict[str, Any], person: Optional[str]) -> Dict[str, Any]:
+        """Analyze Calendar activity data"""
+        events = calendar_data.get('events', [])
+        
+        if person:
+            # Filter events for specific person (attendee or organizer)
+            filtered_events = []
+            for event in events:
+                attendees = event.get('attendees', [])
+                organizer = event.get('organizer', {}).get('email', '')
+                if any(person in att.get('email', '') for att in attendees) or person in organizer:
+                    filtered_events.append(event)
+            events = filtered_events
+        
+        meeting_count = len(events)
+        total_duration = 0
+        meeting_types = defaultdict(int)
+        
+        for event in events:
+            # Calculate duration
+            start = event.get('start', {}).get('dateTime')
+            end = event.get('end', {}).get('dateTime')
+            if start and end:
+                try:
+                    start_dt = datetime.fromisoformat(start.replace('Z', '+00:00'))
+                    end_dt = datetime.fromisoformat(end.replace('Z', '+00:00'))
+                    duration = (end_dt - start_dt).total_seconds() / 60  # minutes
+                    total_duration += duration
+                except:
+                    pass
+            
+            # Categorize meeting types (simple heuristic)
+            summary = event.get('summary', '').lower()
+            if 'standup' in summary or 'daily' in summary:
+                meeting_types['standup'] += 1
+            elif 'review' in summary or 'retro' in summary:
+                meeting_types['review'] += 1
+            elif 'planning' in summary or 'plan' in summary:
+                meeting_types['planning'] += 1
+            else:
+                meeting_types['general'] += 1
+        
+        return {
+            'meeting_count': meeting_count,
+            'total_duration_minutes': int(total_duration),
+            'meeting_types': dict(meeting_types),
+            'average_duration': int(total_duration / meeting_count) if meeting_count > 0 else 0
+        }
+    
+    def _analyze_drive_activity(self, drive_data: Dict[str, Any], person: Optional[str]) -> Dict[str, Any]:
+        """Analyze Drive activity data"""
+        stats = drive_data.get('file_statistics', {})
+        collection_stats = drive_data.get('collection_metadata', {}).get('collection_stats', {})
+        
+        return {
+            'files_modified': collection_stats.get('files_collected', 0),
+            'files_created': 0,  # Not available in current drive data format
+            'collaborations': stats.get('externally_shared_files', 0),
+            'total_files': stats.get('total_files', 0),
+            'recently_active_files': stats.get('recently_active_files', 0)
+        }
+    
+    def _generate_highlights(self, summary: Dict[str, Any]) -> List[str]:
+        """Generate key highlights from the summary data"""
+        highlights = []
+        
+        slack = summary.get('slack_activity', {})
+        calendar = summary.get('calendar_activity', {})
+        drive = summary.get('drive_activity', {})
+        
+        # Slack highlights
+        if slack.get('message_count', 0) > 0:
+            highlights.append(f"Sent {slack['message_count']} messages across {len(slack.get('channels_active', []))} channels")
+        
+        # Calendar highlights
+        if calendar.get('meeting_count', 0) > 0:
+            duration = calendar.get('total_duration_minutes', 0)
+            highlights.append(f"Attended {calendar['meeting_count']} meetings ({duration//60}h {duration%60}m total)")
+        
+        # Drive highlights
+        if drive.get('files_modified', 0) > 0:
+            highlights.append(f"Worked with {drive['files_modified']} files in Drive")
+        
+        # Default if no activity
+        if not highlights:
+            highlights.append("Light activity day with minimal recorded interactions")
+        
+        return highlights[:5]  # Limit to top 5 highlights
+    
+    def _calculate_daily_statistics(self, summary: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate overall daily statistics"""
+        slack = summary.get('slack_activity', {})
+        calendar = summary.get('calendar_activity', {})
+        drive = summary.get('drive_activity', {})
+        
+        total_interactions = (
+            slack.get('message_count', 0) +
+            calendar.get('meeting_count', 0) * 5 +  # Weight meetings more heavily
+            drive.get('files_modified', 0)
+        )
+        
+        # Simple productivity score based on activity level
+        productivity_score = min(100, total_interactions * 2)
+        
+        return {
+            'total_interactions': total_interactions,
+            'productivity_score': productivity_score,
+            'collaboration_index': slack.get('unique_authors', 0) + calendar.get('meeting_count', 0)
+        }
+    
+    def _aggregate_weekly_stats(self, daily_summaries: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Aggregate statistics from daily summaries"""
+        total_messages = sum(day.get('slack_activity', {}).get('message_count', 0) for day in daily_summaries)
+        total_meetings = sum(day.get('calendar_activity', {}).get('meeting_count', 0) for day in daily_summaries)
+        total_hours = sum(day.get('calendar_activity', {}).get('total_duration_minutes', 0) for day in daily_summaries) // 60
+        
+        return {
+            'total_messages': total_messages,
+            'total_meetings': total_meetings,
+            'total_meeting_hours': total_hours,
+            'active_days': len([day for day in daily_summaries if day.get('statistics', {}).get('total_interactions', 0) > 0])
+        }
+    
+    def _analyze_weekly_trends(self, daily_summaries: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Analyze trends across the week"""
+        message_counts = [day.get('slack_activity', {}).get('message_count', 0) for day in daily_summaries]
+        
+        if len(message_counts) >= 2:
+            recent_avg = sum(message_counts[-3:]) / 3 if len(message_counts) >= 3 else message_counts[-1]
+            early_avg = sum(message_counts[:3]) / 3 if len(message_counts) >= 3 else message_counts[0]
+            
+            if recent_avg > early_avg * 1.2:
+                trend = 'increasing'
+            elif recent_avg < early_avg * 0.8:
+                trend = 'decreasing'
+            else:
+                trend = 'stable'
+        else:
+            trend = 'stable'
+        
+        return {
+            'message_volume': trend,
+            'meeting_load': 'stable',  # TODO: Implement based on meeting data
+            'collaboration_trend': 'stable'  # TODO: Implement based on interaction data
+        }
+    
+    def _extract_weekly_achievements(self, daily_summaries: List[Dict[str, Any]]) -> List[str]:
+        """Extract top achievements from the week"""
+        all_highlights = []
+        for day in daily_summaries:
+            all_highlights.extend(day.get('key_highlights', []))
+        
+        # For now, return the most common highlights (could be improved with better logic)
+        highlight_counts = Counter(all_highlights)
+        return [highlight for highlight, count in highlight_counts.most_common(3)]

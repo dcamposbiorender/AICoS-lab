@@ -1,65 +1,56 @@
 -- Agent A Query Engine Optimizations
 -- Indexes and views to support time, person, and structured queries
--- Performance optimizations for Phase 1 query requirements
 
--- Time-based query optimization (compound indexes)
+-- Schema version tracking table (ensure exists)
+CREATE TABLE IF NOT EXISTS schema_migrations (
+    version INTEGER PRIMARY KEY,
+    applied_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    description TEXT,
+    checksum TEXT
+);
+
+-- Time-based query optimization
 CREATE INDEX IF NOT EXISTS idx_messages_created_at_source ON messages(created_at, source);
 CREATE INDEX IF NOT EXISTS idx_messages_date_person ON messages(date, person_id);
-CREATE INDEX IF NOT EXISTS idx_messages_date_source ON messages(date, source);
 
 -- Person query optimization  
 CREATE INDEX IF NOT EXISTS idx_messages_person_created ON messages(person_id, created_at);
-CREATE INDEX IF NOT EXISTS idx_messages_person_source ON messages(person_id, source);
+CREATE INDEX IF NOT EXISTS idx_messages_person_date ON messages(person_id, date);
 
 -- Structured pattern query optimization
 CREATE INDEX IF NOT EXISTS idx_messages_content_prefix ON messages(
-    CASE 
-        WHEN length(content) > 50 THEN substr(content, 1, 50)
-        ELSE content 
-    END
+    substr(content, 1, 100)  -- Index first 100 chars for pattern matching
 );
 
--- Channel/location based queries
-CREATE INDEX IF NOT EXISTS idx_messages_channel_created ON messages(channel_id, created_at);
-CREATE INDEX IF NOT EXISTS idx_messages_channel_source ON messages(channel_id, source);
+-- Channel activity optimization
+CREATE INDEX IF NOT EXISTS idx_messages_channel_date ON messages(channel_id, date);
 
--- Views for common query patterns (Agent A requirements)
+-- Composite indexes for complex queries
+CREATE INDEX IF NOT EXISTS idx_messages_source_date_person ON messages(source, date, person_id);
+
+-- Views for common query patterns
 CREATE VIEW IF NOT EXISTS daily_activity AS
 SELECT 
-    date(created_at) as activity_date,
+    date as activity_date,
     source,
     person_id,
-    channel_id,
     COUNT(*) as activity_count,
-    MIN(created_at) as first_activity,
-    MAX(created_at) as last_activity
+    COUNT(DISTINCT channel_id) as channels_active
 FROM messages 
-GROUP BY date(created_at), source, person_id, channel_id;
+GROUP BY date, source, person_id;
 
--- Time-range query optimization view
-CREATE VIEW IF NOT EXISTS time_range_summary AS
+-- Time range optimization view
+CREATE VIEW IF NOT EXISTS weekly_activity AS
 SELECT 
-    strftime('%Y-%m', created_at) as month,
-    strftime('%Y-%W', created_at) as week, 
-    date(created_at) as day,
+    strftime('%Y-%W', date) as week,
     source,
-    COUNT(*) as message_count,
-    COUNT(DISTINCT person_id) as unique_people,
-    COUNT(DISTINCT channel_id) as unique_channels
-FROM messages
-GROUP BY strftime('%Y-%m', created_at), strftime('%Y-%W', created_at), date(created_at), source;
-
--- Person activity summary view (optimized for Agent A person queries)
-CREATE VIEW IF NOT EXISTS person_activity_summary AS
-SELECT 
     person_id,
-    source,
-    COUNT(*) as total_messages,
-    COUNT(DISTINCT date(created_at)) as active_days,
-    COUNT(DISTINCT channel_id) as channels_participated,
-    MIN(created_at) as first_seen,
-    MAX(created_at) as last_seen,
-    AVG(length(content)) as avg_message_length
-FROM messages 
-WHERE person_id IS NOT NULL
-GROUP BY person_id, source;
+    COUNT(*) as activity_count,
+    MIN(date) as week_start,
+    MAX(date) as week_end
+FROM messages
+GROUP BY strftime('%Y-%W', date), source, person_id;
+
+-- Record version 2
+INSERT OR REPLACE INTO schema_migrations (version, description, checksum) 
+VALUES (2, 'Agent A query engine optimizations', 'sha256:agent-a-opt');

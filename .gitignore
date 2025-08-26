@@ -61,6 +61,10 @@ logs/
 .coverage
 .pytest_cache/
 htmlcov/
+reports/coverage/
+reports/final_coverage/
+reports/final_working_coverage/
+reports/query_engines_coverage/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
@@ -79,6 +83,60 @@ config/secrets.yaml
 documentation/test-data/
 setup_credentials.py
 
+# Database files (generated)
+*.db
+*.db-shm
+*.db-wal
+
+# Generated result files
+*_results.json
+test_results.json
+performance_*.json
+calendar_scale_*.json
+
+# Test log files
+test_*.log
+archive_verification.log
+
 # Encrypted credential storage
-scavenge/src/core/encrypted_keys.db
-scavenge/src/core/.master_key
+src/core/encrypted_keys.db
+src/core/.master_key
+
+# Experiments (keep code, ignore data and results)
+experiments/*/data/
+experiments/*/*.json
+experiments/*/*.csv
+experiments/*/*.db
+experiments/*/*.pickle
+
+# Test artifacts and temporary files
+advanced_performance_tests.py
+test_*.py
+demo_*.py
+run_*.py
+populate_*.py
+quick_*.py
+validate_*.py
+
+# Environment files (all variations)
+.env.test
+.env.*
+
+# Comprehensive test suite reports and artifacts
+test_suite_comprehensive/reports/
+test_suite_comprehensive/*.json
+test_suite_comprehensive/*.txt
+test_suite_comprehensive/*.db
+test_suite_comprehensive/search.db*
+
+# Collection summaries and overnight logs
+overnight_collection_summary_*.json
+overnight_collection.log
+
+# All pickle files (may contain credentials)
+*.pickle
+
+# Additional database patterns (comprehensive)
+search.db*
+*.sqlite
+*.sqlite3

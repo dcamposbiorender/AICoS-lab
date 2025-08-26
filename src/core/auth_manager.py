@@ -17,7 +17,7 @@ import pickle
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Optional, Any, Union
+from typing import Dict, Optional, Any, Union, List, Set
 from dataclasses import dataclass
 from enum import Enum
 import base64
@@ -160,6 +160,9 @@ class CredentialVault:
         # Initialize secure config if available
         self.secure_config = self._init_secure_config()
         
+        # Initialize OAuth scope management
+        self._init_oauth_scopes()
+        
     def _init_secure_config(self):
         """Initialize secure config system if available"""
         try:
@@ -169,6 +172,152 @@ class CredentialVault:
         except ImportError:
             print("⚠️ Secure config not available, using fallback file system")
             return None
+    
+    def _init_oauth_scopes(self):
+        """Initialize OAuth scope management system"""
+        try:
+            from .slack_scopes import slack_scopes
+            self.slack_scopes = slack_scopes
+            print("✅ OAuth scope management system initialized")
+        except ImportError:
+            print("⚠️ OAuth scope definitions not available")
+            self.slack_scopes = None
+    
+    def get_slack_scopes(self, token_type: str = 'bot') -> Optional[Set[str]]:
+        """Get stored OAuth scopes for Slack tokens"""
+        cache_key = f'slack_scopes_{token_type}'
+        
+        # Return cached if fresh
+        cached_scopes = self.auth_cache.get(cache_key)
+        if cached_scopes and self._cache_key_age(cache_key) < 60:
+            return set(json.loads(cached_scopes))
+        
+        # Try secure config first
+        if self.secure_config:
+            try:
+                slack_config = self.secure_config.get_slack_config()
+                if slack_config and slack_config.get(f'{token_type}_scopes'):
+                    scopes = set(slack_config[f'{token_type}_scopes'])
+                    self.auth_cache.set(cache_key, json.dumps(list(scopes)))
+                    print(f"✅ Slack {token_type} scopes loaded from secure config")
+                    return scopes
+            except Exception as e:
+                print(f"⚠️ Secure config slack scopes failed: {e}")
+        
+        # Fallback to file system
+        config_file = self._find_credential_file('slack_config')
+        if config_file:
+            config = self._load_json_config(config_file)
+            if config and config.get(f'{token_type}_scopes'):
+                scopes = set(config[f'{token_type}_scopes'])
+                self.auth_cache.set(cache_key, json.dumps(list(scopes)))
+                print(f"✅ Slack {token_type} scopes loaded from {config_file}")
+                return scopes
+        
+        # Return default minimal scopes if none found
+        if self.slack_scopes:
+            if token_type == 'bot':
+                default_scopes = self.slack_scopes.get_minimal_scope_set()['basic_messaging']
+            else:
+                default_scopes = ['identity.basic', 'identity.email']
+            
+            print(f"⚠️ No stored {token_type} scopes found, using defaults: {default_scopes}")
+            return set(default_scopes)
+        
+        print(f"❌ Slack {token_type} scopes not found")
+        return None
+    
+    def store_slack_scopes(self, scopes: List[str], token_type: str = 'bot', 
+                          storage_method: str = 'secure') -> bool:
+        """Store OAuth scopes for Slack tokens"""
+        try:
+            # Validate scopes if possible
+            if self.slack_scopes:
+                validation = self.slack_scopes.validate_scopes(scopes, token_type)
+                if not validation['all_valid']:
+                    print(f"⚠️ Invalid scopes detected: {validation['invalid']}")
+                    print(f"✅ Valid scopes: {validation['valid']}")
+            
+            if storage_method == 'secure' and self.secure_config:
+                # Store in encrypted secure config
+                try:
+                    from .key_manager import key_manager
+                    current_config = key_manager.retrieve_key('slack_credentials') or {}
+                    current_config[f'{token_type}_scopes'] = scopes
+                    
+                    success = key_manager.store_key('slack_credentials', current_config, 'slack_oauth')
+                    if success:
+                        print(f"✅ Slack {token_type} scopes stored securely")
+                        # Update cache
+                        cache_key = f'slack_scopes_{token_type}'
+                        self.auth_cache.set(cache_key, json.dumps(scopes))
+                        return True
+                except Exception as e:
+                    print(f"⚠️ Secure scope storage failed: {e}")
+                    # Fall through to file storage
+            
+            # Fallback to file system
+            scopes_file = self.project_root / "data" / "auth" / "slack_scopes.json"
+            scopes_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Load existing scopes or create new
+            if scopes_file.exists():
+                with open(scopes_file, 'r') as f:
+                    stored_scopes = json.load(f)
+            else:
+                stored_scopes = {}
+            
+            # Update with new scopes
+            stored_scopes[f'{token_type}_scopes'] = scopes
+            stored_scopes['updated_at'] = datetime.now().isoformat()
+            
+            with open(scopes_file, 'w') as f:
+                json.dump(stored_scopes, f, indent=2)
+            
+            print(f"✅ Slack {token_type} scopes stored to {scopes_file}")
+            
+            # Update cache
+            cache_key = f'slack_scopes_{token_type}'
+            self.auth_cache.set(cache_key, json.dumps(scopes))
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Failed to store Slack {token_type} scopes: {e}")
+            return False
+    
+    def validate_slack_permissions(self, required_scopes: List[str], 
+                                 token_type: str = 'bot') -> Dict[str, Any]:
+        """Validate that current token has required OAuth scopes"""
+        current_scopes = self.get_slack_scopes(token_type)
+        
+        if not current_scopes:
+            return {
+                'valid': False,
+                'missing_scopes': required_scopes,
+                'available_scopes': [],
+                'error': f'No {token_type} scopes available'
+            }
+        
+        missing_scopes = []
+        for scope in required_scopes:
+            if scope not in current_scopes:
+                missing_scopes.append(scope)
+        
+        return {
+            'valid': len(missing_scopes) == 0,
+            'missing_scopes': missing_scopes,
+            'available_scopes': list(current_scopes),
+            'required_scopes': required_scopes
+        }
+    
+    def get_scopes_for_feature(self, feature_name: str) -> Set[str]:
+        """Get required OAuth scopes for a specific feature"""
+        if not self.slack_scopes:
+            print("⚠️ OAuth scope definitions not available")
+            return set()
+        
+        return self.slack_scopes.get_required_scopes_for_feature(feature_name)
     
     def _find_credential_file(self, credential_type: str) -> Optional[Path]:
         """Find the first existing credential file for given type"""
@@ -194,7 +343,7 @@ class CredentialVault:
         return delta.total_seconds() / 60
     
     def get_slack_bot_token(self) -> Optional[str]:
-        """Get Slack bot token with encrypted caching and fallback"""
+        """Get Slack bot token with encrypted caching and clear test/production separation"""
         cache_key = 'slack_bot_token'
         
         # Return cached if fresh (< 30 minutes)
@@ -202,41 +351,61 @@ class CredentialVault:
         if cached_token and self._cache_key_age(cache_key) < 30:
             return cached_token
         
-        # Try secure config first
-        if self.secure_config:
+        # Check if we're in test mode
+        test_mode = os.environ.get('AICOS_TEST_MODE', 'false').lower() == 'true'
+        
+        if test_mode:
+            # Test mode: use test tokens
             try:
-                slack_config = self.secure_config.get_slack_config()
-                if slack_config and slack_config.get('bot_token'):
-                    token = slack_config['bot_token']
+                from .key_manager import key_manager
+                test_tokens = key_manager.retrieve_key('slack_tokens_test')
+                if test_tokens and test_tokens.get('bot_token'):
+                    token = test_tokens['bot_token']
                     self.auth_cache.set(cache_key, token)
-                    print("✅ Slack bot token loaded from secure config")
+                    print("🧪 Slack bot token loaded from TEST tokens")
                     return token
             except Exception as e:
-                print(f"⚠️ Secure config slack token failed: {e}")
+                print(f"⚠️ Test token retrieval failed: {e}")
+        else:
+            # Production mode: use production tokens
+            try:
+                from .key_manager import key_manager
+                prod_tokens = key_manager.retrieve_key('slack_tokens_production')
+                if prod_tokens and prod_tokens.get('bot_token'):
+                    token = prod_tokens['bot_token']
+                    self.auth_cache.set(cache_key, token)
+                    print("🔐 Slack bot token loaded from PRODUCTION tokens")
+                    return token
+            except Exception as e:
+                print(f"⚠️ Production token retrieval failed: {e}")
+            
+            # Fallback: try legacy secure config
+            if self.secure_config:
+                try:
+                    slack_config = self.secure_config.get_slack_config()
+                    if slack_config and slack_config.get('bot_token'):
+                        token = slack_config['bot_token']
+                        self.auth_cache.set(cache_key, token)
+                        print("⚠️ Slack bot token loaded from legacy secure config")
+                        return token
+                except Exception as e:
+                    print(f"⚠️ Legacy secure config failed: {e}")
         
-        # Fallback to environment variables
+        # Final fallback to environment variables
         env_token = os.environ.get('SLACK_BOT_TOKEN')
         if env_token:
             token = env_token
             self.auth_cache.set(cache_key, token)
-            print("✅ Slack bot token loaded from environment variable")
+            mode_label = "TEST" if test_mode else "PRODUCTION"
+            print(f"⚠️ Slack bot token loaded from environment variable ({mode_label} mode)")
             return token
         
-        # Fallback to file system
-        config_file = self._find_credential_file('slack_config')
-        if config_file:
-            config = self._load_json_config(config_file)
-            if config and config.get('bot_token'):
-                token = config['bot_token']
-                self.auth_cache.set(cache_key, token)
-                print(f"✅ Slack bot token loaded from {config_file}")
-                return token
-        
-        print("❌ Slack bot token not found")
+        mode_label = "test" if test_mode else "production"
+        print(f"❌ Slack bot token not found in {mode_label} mode")
         return None
     
     def get_slack_user_token(self) -> Optional[str]:
-        """Get Slack user token with encrypted caching and fallback"""
+        """Get Slack user token with encrypted caching and clear test/production separation"""
         cache_key = 'slack_user_token'
         
         # Return cached if fresh
@@ -244,37 +413,57 @@ class CredentialVault:
         if cached_token and self._cache_key_age(cache_key) < 30:
             return cached_token
         
-        # Try secure config first
-        if self.secure_config:
+        # Check if we're in test mode
+        test_mode = os.environ.get('AICOS_TEST_MODE', 'false').lower() == 'true'
+        
+        if test_mode:
+            # Test mode: use test tokens
             try:
-                slack_config = self.secure_config.get_slack_config()
-                if slack_config and slack_config.get('user_token'):
-                    token = slack_config['user_token']
+                from .key_manager import key_manager
+                test_tokens = key_manager.retrieve_key('slack_tokens_test')
+                if test_tokens and test_tokens.get('user_token'):
+                    token = test_tokens['user_token']
                     self.auth_cache.set(cache_key, token)
-                    print("✅ Slack user token loaded from secure config")
+                    print("🧪 Slack user token loaded from TEST tokens")
                     return token
             except Exception as e:
-                print(f"⚠️ Secure config slack user token failed: {e}")
+                print(f"⚠️ Test user token retrieval failed: {e}")
+        else:
+            # Production mode: use production tokens
+            try:
+                from .key_manager import key_manager
+                prod_tokens = key_manager.retrieve_key('slack_tokens_production')
+                if prod_tokens and prod_tokens.get('user_token'):
+                    token = prod_tokens['user_token']
+                    self.auth_cache.set(cache_key, token)
+                    print("🔐 Slack user token loaded from PRODUCTION tokens")
+                    return token
+            except Exception as e:
+                print(f"⚠️ Production user token retrieval failed: {e}")
+            
+            # Fallback: try legacy secure config
+            if self.secure_config:
+                try:
+                    slack_config = self.secure_config.get_slack_config()
+                    if slack_config and slack_config.get('user_token'):
+                        token = slack_config['user_token']
+                        self.auth_cache.set(cache_key, token)
+                        print("⚠️ Slack user token loaded from legacy secure config")
+                        return token
+                except Exception as e:
+                    print(f"⚠️ Legacy secure config user token failed: {e}")
         
-        # Fallback to environment variables
+        # Final fallback to environment variables
         env_token = os.environ.get('SLACK_USER_TOKEN')
         if env_token:
             token = env_token
             self.auth_cache.set(cache_key, token)
-            print("✅ Slack user token loaded from environment variable")
+            mode_label = "TEST" if test_mode else "PRODUCTION"
+            print(f"⚠️ Slack user token loaded from environment variable ({mode_label} mode)")
             return token
         
-        # Fallback to file system
-        config_file = self._find_credential_file('slack_config')
-        if config_file:
-            config = self._load_json_config(config_file)
-            if config and config.get('user_token'):
-                token = config['user_token']
-                self.auth_cache.set(cache_key, token)
-                print(f"✅ Slack user token loaded from {config_file}")
-                return token
-        
-        print("❌ Slack user token not found")
+        mode_label = "test" if test_mode else "production"
+        print(f"❌ Slack user token not found in {mode_label} mode")
         return None
     
     def get_google_oauth_credentials(self) -> Optional[Any]:
@@ -418,6 +607,8 @@ class CredentialVault:
         validation_results = {
             'slack_bot_token': bool(self.get_slack_bot_token()),
             'slack_user_token': bool(self.get_slack_user_token()),
+            'slack_bot_scopes': bool(self.get_slack_scopes('bot')),
+            'slack_user_scopes': bool(self.get_slack_scopes('user')),
             'google_oauth': bool(self.get_google_oauth_credentials()),
             'google_config': bool(self.get_google_config())
         }
@@ -426,6 +617,15 @@ class CredentialVault:
         for auth_type, is_valid in validation_results.items():
             status = "✅" if is_valid else "❌"
             print(f"  {status} {auth_type}")
+        
+        # Show scope counts if available
+        if validation_results['slack_bot_scopes']:
+            bot_scopes = self.get_slack_scopes('bot')
+            print(f"    📊 Bot scopes: {len(bot_scopes)} permissions")
+        
+        if validation_results['slack_user_scopes']:
+            user_scopes = self.get_slack_scopes('user')
+            print(f"    📊 User scopes: {len(user_scopes)} permissions")
         
         return validation_results
     

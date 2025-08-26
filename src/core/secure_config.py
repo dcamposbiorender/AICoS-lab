@@ -20,61 +20,20 @@ class SecureConfig:
             # Try current location first
             self.cache['google_apis'] = key_manager.retrieve_key('google_apis')
             
-            # If not found, try original location
-            if not self.cache['google_apis']:
-                try:
-                    import sys
-                    from pathlib import Path
-                    
-                    # Add original scavenge path
-                    scavenge_path = Path(__file__).parent.parent.parent / "scavenge" / "src"
-                    sys.path.insert(0, str(scavenge_path))
-                    
-                    from core.key_manager import EncryptedKeyManager as OriginalKeyManager
-                    
-                    # Use original database location
-                    original_db_path = scavenge_path / "core" / "encrypted_keys.db"
-                    original_km = OriginalKeyManager(storage_path=str(original_db_path))
-                    
-                    original_config = original_km.retrieve_key('google_apis')
-                    if original_config:
-                        print("✅ Google APIs configuration found in original location")
-                        self.cache['google_apis'] = original_config
-                    
-                except Exception as e:
-                    print(f"⚠️ Could not check original Google APIs config: {e}")
+            # Legacy fallback removed - scavenge directory no longer exists
                     
         return self.cache['google_apis']
     
     def get_slack_config(self) -> Optional[Dict]:
         """Get Slack configuration with fallback to original location"""
         if 'slack_credentials' not in self.cache:
-            # Try current location first
-            self.cache['slack_credentials'] = key_manager.retrieve_key('slack_credentials')
+            # Try current location first - check both key names
+            self.cache['slack_credentials'] = (
+                key_manager.retrieve_key('slack_tokens') or 
+                key_manager.retrieve_key('slack_credentials')
+            )
             
-            # If not found, try original location
-            if not self.cache['slack_credentials']:
-                try:
-                    import sys
-                    from pathlib import Path
-                    
-                    # Add original scavenge path
-                    scavenge_path = Path(__file__).parent.parent.parent / "scavenge" / "src"
-                    sys.path.insert(0, str(scavenge_path))
-                    
-                    from core.key_manager import EncryptedKeyManager as OriginalKeyManager
-                    
-                    # Use original database location
-                    original_db_path = scavenge_path / "core" / "encrypted_keys.db"
-                    original_km = OriginalKeyManager(storage_path=str(original_db_path))
-                    
-                    original_creds = original_km.retrieve_key('slack_credentials')
-                    if original_creds:
-                        print("✅ Slack credentials found in original location")
-                        self.cache['slack_credentials'] = original_creds
-                    
-                except Exception as e:
-                    print(f"⚠️ Could not check original Slack credentials: {e}")
+            # Legacy fallback removed - scavenge directory no longer exists
                     
         return self.cache['slack_credentials']
     

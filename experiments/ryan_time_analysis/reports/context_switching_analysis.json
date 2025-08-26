@@ -1,0 +1,5019 @@
+{
+  "analysis_type": "context_switching",
+  "subject": "Ryan Marien",
+  "analysis_date": "2025-08-19T12:46:42.974365",
+  "data_period": {
+    "total_events": 545,
+    "meetings_analyzed": 508
+  },
+  "metrics": {
+    "total_meetings": 508,
+    "meeting_duration_analysis": {
+      "duration_distribution": {
+        "15_min": 99,
+        "30_min": 208,
+        "45_min": 56,
+        "60_min": 71,
+        "90_min": 15,
+        "120_min_plus": 59
+      },
+      "average_duration": 56.21653543307087,
+      "short_meeting_count": 99,
+      "short_meeting_percentage": 19.488188976377952,
+      "total_meeting_time": 28558
+    },
+    "fragmentation_analysis": {
+      "gap_analysis": {
+        "no_gap": 343,
+        "short_gap": 25,
+        "medium_gap": 60,
+        "long_gap": 79
+      },
+      "gap_distribution": [
+        780,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -45,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        -135,
+        90,
+        45,
+        0,
+        90,
+        570,
+        45,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -45,
+        0,
+        0,
+        -30,
+        -60,
+        60,
+        0,
+        -30,
+        30,
+        540,
+        -540,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -45,
+        15,
+        15,
+        0,
+        0,
+        -30,
+        30,
+        90,
+        570,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -30,
+        30,
+        0,
+        90,
+        540,
+        0,
+        0,
+        0,
+        -15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -60,
+        30,
+        0,
+        0,
+        1185,
+        1290,
+        780,
+        0,
+        0,
+        -360,
+        5,
+        0,
+        0,
+        0,
+        -15,
+        210,
+        -45,
+        -30,
+        45,
+        0,
+        30,
+        30,
+        570,
+        -30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -45,
+        15,
+        0,
+        0,
+        0,
+        0,
+        -30,
+        -90,
+        -150,
+        60,
+        0,
+        -30,
+        30,
+        540,
+        -555,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        -15,
+        0,
+        15,
+        -15,
+        30,
+        0,
+        60,
+        570,
+        -60,
+        0,
+        15,
+        0,
+        0,
+        15,
+        -165,
+        120,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        30,
+        30,
+        570,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        -45,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        0,
+        0,
+        -15,
+        0,
+        0,
+        0,
+        15,
+        1110,
+        1290,
+        780,
+        150,
+        240,
+        -120,
+        75,
+        45,
+        0,
+        90,
+        570,
+        0,
+        0,
+        0,
+        5,
+        -15,
+        -30,
+        0,
+        0,
+        0,
+        -45,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        -135,
+        60,
+        60,
+        0,
+        30,
+        540,
+        -555,
+        0,
+        0,
+        0,
+        -15,
+        -60,
+        0,
+        0,
+        0,
+        0,
+        15,
+        15,
+        0,
+        -15,
+        -135,
+        150,
+        90,
+        570,
+        90,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -30,
+        30,
+        0,
+        90,
+        540,
+        0,
+        0,
+        45,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -60,
+        30,
+        0,
+        0,
+        1185,
+        1290,
+        120,
+        630,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -15,
+        -30,
+        0,
+        -15,
+        -30,
+        45,
+        0,
+        90,
+        570,
+        60,
+        0,
+        -30,
+        0,
+        -15,
+        0,
+        0,
+        -30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        45,
+        30,
+        0,
+        30,
+        540,
+        -520,
+        -233,
+        15,
+        0,
+        60,
+        45,
+        -30,
+        -135,
+        150,
+        90,
+        570,
+        90,
+        0,
+        255,
+        -120,
+        135,
+        0,
+        90,
+        810,
+        225,
+        0,
+        0,
+        0,
+        1185,
+        1110,
+        165,
+        780,
+        -60,
+        45,
+        0,
+        -15,
+        0,
+        -60,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -45,
+        -30,
+        45,
+        0,
+        90,
+        495,
+        30,
+        30,
+        0,
+        45,
+        -330,
+        -300,
+        -60,
+        285,
+        -15,
+        -60,
+        60,
+        0,
+        30,
+        540,
+        -540,
+        75,
+        0,
+        0,
+        0,
+        75,
+        0,
+        0,
+        -30,
+        -120,
+        135,
+        90,
+        570,
+        30,
+        45,
+        0,
+        5,
+        0,
+        0,
+        0,
+        -30,
+        0,
+        30,
+        0,
+        0,
+        30,
+        0,
+        90,
+        540,
+        -15,
+        -60,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        60,
+        0,
+        0,
+        -60,
+        30,
+        0,
+        0,
+        1185,
+        1290,
+        780,
+        0,
+        0,
+        30,
+        0,
+        0,
+        -90,
+        0,
+        60,
+        60,
+        -30,
+        -30,
+        45,
+        0,
+        90,
+        570,
+        -10,
+        -5,
+        75,
+        0,
+        -60,
+        45,
+        40,
+        -30,
+        30,
+        0,
+        -120,
+        -30,
+        -60,
+        60,
+        0,
+        30,
+        540,
+        -540,
+        90,
+        0,
+        -30,
+        -60,
+        0,
+        60,
+        15,
+        -45,
+        -30,
+        30,
+        90,
+        570,
+        30,
+        105,
+        15,
+        0,
+        0,
+        15,
+        120,
+        30,
+        0,
+        90,
+        750,
+        30,
+        0,
+        0,
+        0,
+        15,
+        30,
+        0,
+        0,
+        0,
+        0,
+        1185
+      ],
+      "average_gap_minutes": 60.418145956607496,
+      "fragmentation_score": 76.33136094674556
+    },
+    "back_to_back_analysis": {
+      "back_to_back_chains": [
+        8,
+        9,
+        2,
+        15,
+        3,
+        10,
+        4,
+        6,
+        12,
+        2,
+        14,
+        3,
+        4,
+        5,
+        3,
+        2,
+        9,
+        8,
+        3,
+        11,
+        2,
+        2,
+        3,
+        3,
+        2,
+        6,
+        2,
+        10,
+        12,
+        2,
+        2,
+        4,
+        17,
+        2,
+        11,
+        4,
+        2,
+        13,
+        2,
+        3,
+        7,
+        10,
+        3,
+        15,
+        2,
+        16,
+        2,
+        3,
+        2,
+        3,
+        2,
+        2,
+        2,
+        4,
+        2,
+        6,
+        8,
+        2,
+        2,
+        4,
+        3,
+        2,
+        2,
+        4,
+        5,
+        2,
+        6,
+        3,
+        2,
+        9,
+        4,
+        3,
+        3,
+        5,
+        3,
+        2,
+        3,
+        3,
+        2,
+        5,
+        2,
+        2,
+        5,
+        3,
+        3,
+        2,
+        4,
+        5
+      ],
+      "longest_chain": 17,
+      "total_chains": 88,
+      "average_chain_length": 4.8977272727272725
+    },
+    "daily_patterns": {
+      "daily_breakdown": {
+        "2025-07-20": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-20 17:00:00",
+              "end": "2025-07-20 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-07-21": {
+          "meeting_count": 22,
+          "total_duration_hours": 13.5,
+          "meeting_density": 2.75,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-21 08:30:00",
+              "end": "2025-07-21 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-07-21 09:45:00",
+              "end": "2025-07-21 10:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "SS Follow Up Prep",
+              "start": "2025-07-21 10:15:00",
+              "end": "2025-07-21 10:30:00",
+              "duration_minutes": 15,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Mon Morning heads down]",
+              "start": "2025-07-21 10:30:00",
+              "end": "2025-07-21 11:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Zoom | Sixth Street <> BioRender",
+              "start": "2025-07-21 11:30:00",
+              "end": "2025-07-21 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-21 12:00:00",
+              "end": "2025-07-21 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Cofounder Monday Sync",
+              "start": "2025-07-21 13:00:00",
+              "end": "2025-07-21 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Feedback Form: Janet Tambasco",
+              "start": "2025-07-21 13:30:00",
+              "end": "2025-07-21 14:15:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Janet Tambasco <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-07-21 13:30:00",
+              "end": "2025-07-21 14:15:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[OH] SS Follow Up",
+              "start": "2025-07-21 14:30:00",
+              "end": "2025-07-21 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "[OH] NIH Follow Up Post MBR / Budget Relief Cut",
+              "start": "2025-07-21 15:00:00",
+              "end": "2025-07-21 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "[OH] Top Deals Meet Feedback/Prep",
+              "start": "2025-07-21 15:30:00",
+              "end": "2025-07-21 15:45:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "[Heads Down]",
+              "start": "2025-07-21 15:45:00",
+              "end": "2025-07-21 16:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Options Exercise Decision [Heads Down]",
+              "start": "2025-07-21 16:15:00",
+              "end": "2025-07-21 16:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-21 16:45:00",
+              "end": "2025-07-21 17:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "[OH] Bryan Muntzer",
+              "start": "2025-07-21 17:00:00",
+              "end": "2025-07-21 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 3,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-21 17:00:00",
+              "end": "2025-07-21 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-21 17:15:00",
+              "end": "2025-07-21 17:30:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-07-21 19:00:00",
+              "end": "2025-07-21 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-21 20:00:00",
+              "end": "2025-07-21 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-07-21 20:30:00",
+              "end": "2025-07-21 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-21 22:30:00",
+              "end": "2025-07-21 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-22": {
+          "meeting_count": 20,
+          "total_duration_hours": 15.0,
+          "meeting_density": 2.5,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-22 08:30:00",
+              "end": "2025-07-22 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Reno consultation ",
+              "start": "2025-07-22 10:15:00",
+              "end": "2025-07-22 10:45:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Heads Down]",
+              "start": "2025-07-22 10:45:00",
+              "end": "2025-07-22 11:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-22 11:15:00",
+              "end": "2025-07-22 11:30:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-22 11:30:00",
+              "end": "2025-07-22 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "[Head Down]",
+              "start": "2025-07-22 11:45:00",
+              "end": "2025-07-22 12:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-22 12:15:00",
+              "end": "2025-07-22 13:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "[OH] Hackathon Strategy Input",
+              "start": "2025-07-22 13:00:00",
+              "end": "2025-07-22 13:15:00",
+              "duration_minutes": 15,
+              "attendees": 3,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-07-22 13:15:00",
+              "end": "2025-07-22 14:45:00",
+              "duration_minutes": 90,
+              "attendees": 8,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Ryan<>Natalie - Tactical Working Session + Prep for tmrw heads down",
+              "start": "2025-07-22 14:45:00",
+              "end": "2025-07-22 15:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Shanee Ben-Zur <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-07-22 15:15:00",
+              "end": "2025-07-22 16:00:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Shanee Ben-Zur",
+              "start": "2025-07-22 15:15:00",
+              "end": "2025-07-22 16:00:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Oak / Data Room Prep (Jason isn't avail today anymore)",
+              "start": "2025-07-22 16:00:00",
+              "end": "2025-07-22 17:00:00",
+              "duration_minutes": 60,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dimension Call",
+              "start": "2025-07-22 17:00:00",
+              "end": "2025-07-22 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-22 17:00:00",
+              "end": "2025-07-22 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout",
+              "start": "2025-07-22 18:30:00",
+              "end": "2025-07-22 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-22 20:00:00",
+              "end": "2025-07-22 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Finalize v1 data room (Oak, Sixth Street, possibly Dimension)",
+              "start": "2025-07-22 21:00:00",
+              "end": "2025-07-22 21:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-07-22 21:00:00",
+              "end": "2025-07-22 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-22 22:30:00",
+              "end": "2025-07-22 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-23": {
+          "meeting_count": 17,
+          "total_duration_hours": 22.75,
+          "meeting_density": 2.125,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-07-23 08:00:00",
+              "end": "2025-07-23 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - Working Session",
+              "start": "2025-07-23 10:00:00",
+              "end": "2025-07-23 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Heads Down] ",
+              "start": "2025-07-23 10:30:00",
+              "end": "2025-07-23 11:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-23 11:15:00",
+              "end": "2025-07-23 11:30:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-23 11:30:00",
+              "end": "2025-07-23 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Dave / Ryan ",
+              "start": "2025-07-23 11:45:00",
+              "end": "2025-07-23 12:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-07-23 12:00:00",
+              "end": "2025-07-23 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-23 12:30:00",
+              "end": "2025-07-23 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Ted Sapountzis <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-07-23 13:00:00",
+              "end": "2025-07-23 13:45:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Ted Sapountzis",
+              "start": "2025-07-23 13:00:00",
+              "end": "2025-07-23 13:45:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Funding U.S. Science Through Uncertainty",
+              "start": "2025-07-23 14:00:00",
+              "end": "2025-07-23 15:30:00",
+              "duration_minutes": 90,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[OH] SS Follow Up",
+              "start": "2025-07-23 15:45:00",
+              "end": "2025-07-23 16:00:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Coaching: Michael/Ryan",
+              "start": "2025-07-23 16:00:00",
+              "end": "2025-07-23 17:00:00",
+              "duration_minutes": 60,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Data room follow-up?",
+              "start": "2025-07-23 17:00:00",
+              "end": "2025-07-23 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-23 17:00:00",
+              "end": "2025-07-23 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-07-23 20:00:00",
+              "end": "2025-07-23 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-23 22:30:00",
+              "end": "2025-07-23 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-24": {
+          "meeting_count": 22,
+          "total_duration_hours": 12.833333333333334,
+          "meeting_density": 2.75,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-24 08:30:00",
+              "end": "2025-07-24 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "[Heads Down]",
+              "start": "2025-07-24 09:30:00",
+              "end": "2025-07-24 10:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-24 10:30:00",
+              "end": "2025-07-24 10:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-24 10:45:00",
+              "end": "2025-07-24 11:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "All Hands Final Prep",
+              "start": "2025-07-24 11:00:00",
+              "end": "2025-07-24 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 8,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "All Hands \ud83d\udc4b \ud83d\ude80",
+              "start": "2025-07-24 11:30:00",
+              "end": "2025-07-24 12:10:00",
+              "duration_minutes": 40,
+              "attendees": 1,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-24 12:15:00",
+              "end": "2025-07-24 12:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "(12:50 pm ET start) Leadership / Critical Role Hiring Sync",
+              "start": "2025-07-24 12:50:00",
+              "end": "2025-07-24 13:30:00",
+              "duration_minutes": 40,
+              "attendees": 6,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Aperture <> BioRender - Weekly Sync",
+              "start": "2025-07-24 13:30:00",
+              "end": "2025-07-24 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Meghana / Ryan 1:1 - biweekly",
+              "start": "2025-07-24 14:00:00",
+              "end": "2025-07-24 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Break/Buffer",
+              "start": "2025-07-24 14:30:00",
+              "end": "2025-07-24 14:45:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Hiring - Biweekly Review Session",
+              "start": "2025-07-24 14:45:00",
+              "end": "2025-07-24 15:15:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Editor - Biweekly Review Session",
+              "start": "2025-07-24 15:15:00",
+              "end": "2025-07-24 15:35:00",
+              "duration_minutes": 20,
+              "attendees": 19,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Presentation - Biweekly Review Session",
+              "start": "2025-07-24 15:35:00",
+              "end": "2025-07-24 15:55:00",
+              "duration_minutes": 20,
+              "attendees": 20,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Graphing - Biweekly Review Session",
+              "start": "2025-07-24 15:55:00",
+              "end": "2025-07-24 16:15:00",
+              "duration_minutes": 20,
+              "attendees": 17,
+              "event_type": "sync"
+            },
+            {
+              "summary": " NIH Biweekly Sales/Revenue Stand Up",
+              "start": "2025-07-24 16:15:00",
+              "end": "2025-07-24 16:30:00",
+              "duration_minutes": 15,
+              "attendees": 11,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Revenue Hiring Sync",
+              "start": "2025-07-24 16:30:00",
+              "end": "2025-07-24 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "David / Ryan",
+              "start": "2025-07-24 17:00:00",
+              "end": "2025-07-24 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-24 17:00:00",
+              "end": "2025-07-24 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-24 20:00:00",
+              "end": "2025-07-24 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-07-24 20:30:00",
+              "end": "2025-07-24 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-24 22:30:00",
+              "end": "2025-07-24 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-25": {
+          "meeting_count": 17,
+          "total_duration_hours": 14.0,
+          "meeting_density": 2.125,
+          "meetings": [
+            {
+              "summary": "2024 Founders Forum Meeting Hold",
+              "start": "2025-07-25 08:00:00",
+              "end": "2025-07-25 12:00:00",
+              "duration_minutes": 240,
+              "attendees": 11,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-25 12:00:00",
+              "end": "2025-07-25 12:45:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Ryan / Nat - EOW Wrap Up",
+              "start": "2025-07-25 12:45:00",
+              "end": "2025-07-25 13:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-07-25 13:15:00",
+              "end": "2025-07-25 13:30:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Charlie / Ryan (+ David when possible) 1:1",
+              "start": "2025-07-25 13:15:00",
+              "end": "2025-07-25 13:45:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Chris / Ryan 1:1",
+              "start": "2025-07-25 13:45:00",
+              "end": "2025-07-25 14:30:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Top Deals Review",
+              "start": "2025-07-25 14:30:00",
+              "end": "2025-07-25 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Break",
+              "start": "2025-07-25 15:00:00",
+              "end": "2025-07-25 15:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Kiran / Ryan 1:1 ",
+              "start": "2025-07-25 15:15:00",
+              "end": "2025-07-25 16:00:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "[OH] SS Follow Up",
+              "start": "2025-07-25 16:00:00",
+              "end": "2025-07-25 16:15:00",
+              "duration_minutes": 15,
+              "attendees": 4,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Robin <> Ryan 1:1",
+              "start": "2025-07-25 16:15:00",
+              "end": "2025-07-25 16:45:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Nat / Ryan - EOW Wrap Follow Up",
+              "start": "2025-07-25 16:45:00",
+              "end": "2025-07-25 17:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-25 17:00:00",
+              "end": "2025-07-25 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nanny payroll - Reconfirm hrs to process payroll for next Fri",
+              "start": "2025-07-25 18:30:00",
+              "end": "2025-07-25 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-07-25 19:30:00",
+              "end": "2025-07-25 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-07-25 20:15:00",
+              "end": "2025-07-25 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-07-25 20:45:00",
+              "end": "2025-07-25 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-26": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-26 17:00:00",
+              "end": "2025-07-26 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-07-27": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-27 17:00:00",
+              "end": "2025-07-27 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-07-28": {
+          "meeting_count": 16,
+          "total_duration_hours": 16.666666666666668,
+          "meeting_density": 2.0,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-28 08:30:00",
+              "end": "2025-07-28 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-07-28 09:30:00",
+              "end": "2025-07-28 10:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Cofounder Planning Block]",
+              "start": "2025-07-28 10:00:00",
+              "end": "2025-07-28 17:00:00",
+              "duration_minutes": 420,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Cofounders <> Juan",
+              "start": "2025-07-28 11:00:00",
+              "end": "2025-07-28 11:40:00",
+              "duration_minutes": 40,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-28 11:45:00",
+              "end": "2025-07-28 12:30:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-28 12:30:00",
+              "end": "2025-07-28 12:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-28 12:45:00",
+              "end": "2025-07-28 13:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Janet Tambasco <> Ryan Marien (BioRender)",
+              "start": "2025-07-28 13:00:00",
+              "end": "2025-07-28 13:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-07-28 13:00:00",
+              "end": "2025-07-28 13:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dimension Prep",
+              "start": "2025-07-28 16:45:00",
+              "end": "2025-07-28 17:45:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-28 17:00:00",
+              "end": "2025-07-28 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-07-28 19:00:00",
+              "end": "2025-07-28 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-28 20:00:00",
+              "end": "2025-07-28 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-07-28 20:30:00",
+              "end": "2025-07-28 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dimension prep with Kiran / Angela / Michael",
+              "start": "2025-07-28 21:30:00",
+              "end": "2025-07-28 22:00:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-28 22:30:00",
+              "end": "2025-07-28 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-29": {
+          "meeting_count": 21,
+          "total_duration_hours": 19.0,
+          "meeting_density": 2.625,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-29 08:30:00",
+              "end": "2025-07-29 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Flood Person",
+              "start": "2025-07-29 09:00:00",
+              "end": "2025-07-29 09:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Heads Down + Dimension Prep",
+              "start": "2025-07-29 09:30:00",
+              "end": "2025-07-29 11:30:00",
+              "duration_minutes": 120,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Zoom: Biorender <> Dimension",
+              "start": "2025-07-29 11:30:00",
+              "end": "2025-07-29 13:00:00",
+              "duration_minutes": 90,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-29 13:00:00",
+              "end": "2025-07-29 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "AI Research - Biweekly Review Session",
+              "start": "2025-07-29 13:30:00",
+              "end": "2025-07-29 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 14,
+              "event_type": "sync"
+            },
+            {
+              "summary": " Christopher R. Thorn <> Ryan Marien (BioRender)",
+              "start": "2025-07-29 14:00:00",
+              "end": "2025-07-29 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Polly I. <> Ryan Marien (BioRender) - Intro Call",
+              "start": "2025-07-29 14:30:00",
+              "end": "2025-07-29 15:15:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Polly Israni",
+              "start": "2025-07-29 14:30:00",
+              "end": "2025-07-29 15:15:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Marty Kausas (Pylon) <> Ryan Marien (BioRender)",
+              "start": "2025-07-29 15:30:00",
+              "end": "2025-07-29 16:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dimension <> BioRender",
+              "start": "2025-07-29 16:00:00",
+              "end": "2025-07-29 16:15:00",
+              "duration_minutes": 15,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dimension Debrief/Oak Prep + Jason Prep",
+              "start": "2025-07-29 16:15:00",
+              "end": "2025-07-29 16:30:00",
+              "duration_minutes": 15,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Jason Pate <> BioRender - Weekly Sync",
+              "start": "2025-07-29 16:30:00",
+              "end": "2025-07-29 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "sync"
+            },
+            {
+              "summary": " Brian Longo <> Ryan Marien (BioRender) ",
+              "start": "2025-07-29 17:00:00",
+              "end": "2025-07-29 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-29 17:00:00",
+              "end": "2025-07-29 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Lunch Lady - 6 pm Reservation",
+              "start": "2025-07-29 18:00:00",
+              "end": "2025-07-29 21:00:00",
+              "duration_minutes": 180,
+              "attendees": 3,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout",
+              "start": "2025-07-29 18:30:00",
+              "end": "2025-07-29 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-29 20:00:00",
+              "end": "2025-07-29 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-07-29 21:00:00",
+              "end": "2025-07-29 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Timing TBD] Nat / Ryan - Beginning of Week Priorities Sync",
+              "start": "2025-07-29 21:30:00",
+              "end": "2025-07-29 22:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-29 22:30:00",
+              "end": "2025-07-29 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-30": {
+          "meeting_count": 16,
+          "total_duration_hours": 23.25,
+          "meeting_density": 2.0,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-07-30 08:00:00",
+              "end": "2025-07-30 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - Working Session",
+              "start": "2025-07-30 09:45:00",
+              "end": "2025-07-30 10:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Oak Prep]",
+              "start": "2025-07-30 10:15:00",
+              "end": "2025-07-30 11:30:00",
+              "duration_minutes": 75,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-07-30 11:30:00",
+              "end": "2025-07-30 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-07-30 11:45:00",
+              "end": "2025-07-30 12:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-07-30 12:00:00",
+              "end": "2025-07-30 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-30 12:30:00",
+              "end": "2025-07-30 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-07-30 13:00:00",
+              "end": "2025-07-30 14:30:00",
+              "duration_minutes": 90,
+              "attendees": 10,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Zoom: Dimension <> BioRender",
+              "start": "2025-07-30 14:15:00",
+              "end": "2025-07-30 15:00:00",
+              "duration_minutes": 45,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-07-30 14:45:00",
+              "end": "2025-07-30 15:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Coaching: Michael/Ryan",
+              "start": "2025-07-30 15:00:00",
+              "end": "2025-07-30 16:00:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Oak <> BioRender - Growth focused",
+              "start": "2025-07-30 16:15:00",
+              "end": "2025-07-30 17:15:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-30 17:00:00",
+              "end": "2025-07-30 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-07-30 20:00:00",
+              "end": "2025-07-30 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Shiz/Ryan <> Sayaka (nanny interview)",
+              "start": "2025-07-30 21:00:00",
+              "end": "2025-07-30 21:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "interview"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-30 22:30:00",
+              "end": "2025-07-30 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-07-31": {
+          "meeting_count": 18,
+          "total_duration_hours": 14.25,
+          "meeting_density": 2.25,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-07-31 08:30:00",
+              "end": "2025-07-31 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Dr. Appointment with Dr. Nwankwo",
+              "start": "2025-07-31 08:30:00",
+              "end": "2025-07-31 09:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Travel time",
+              "start": "2025-07-31 09:00:00",
+              "end": "2025-07-31 09:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Heads Down] Sixth Street Prep",
+              "start": "2025-07-31 09:30:00",
+              "end": "2025-07-31 10:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Gary Bader / Chris Sanders Prep",
+              "start": "2025-07-31 10:30:00",
+              "end": "2025-07-31 11:00:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Self Serve Follow Up",
+              "start": "2025-07-31 11:00:00",
+              "end": "2025-07-31 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[BioRender Office] Sixth Street <> BioRender",
+              "start": "2025-07-31 11:45:00",
+              "end": "2025-07-31 14:30:00",
+              "duration_minutes": 165,
+              "attendees": 11,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-07-31 11:45:00",
+              "end": "2025-07-31 12:30:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Buffer/Break",
+              "start": "2025-07-31 14:30:00",
+              "end": "2025-07-31 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Revenue - Biweekly Review Session",
+              "start": "2025-07-31 15:00:00",
+              "end": "2025-07-31 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 11,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Applied AI Experiences - Biweekly Review Session",
+              "start": "2025-07-31 15:30:00",
+              "end": "2025-07-31 16:00:00",
+              "duration_minutes": 30,
+              "attendees": 18,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Finance Team Calibrations",
+              "start": "2025-07-31 16:00:00",
+              "end": "2025-07-31 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Leadership / Critical Role Hiring Sync",
+              "start": "2025-07-31 16:30:00",
+              "end": "2025-07-31 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-07-31 17:00:00",
+              "end": "2025-07-31 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-07-31 20:00:00",
+              "end": "2025-07-31 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-07-31 20:30:00",
+              "end": "2025-07-31 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[ASYNC] David / Ryan - David on plane, Ryan review / comment async",
+              "start": "2025-07-31 21:30:00",
+              "end": "2025-07-31 22:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-07-31 22:30:00",
+              "end": "2025-07-31 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-01": {
+          "meeting_count": 23,
+          "total_duration_hours": 15.0,
+          "meeting_density": 2.875,
+          "meetings": [
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 08:30:00",
+              "end": "2025-08-01 09:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Travel home/Buffer",
+              "start": "2025-08-01 09:00:00",
+              "end": "2025-08-01 10:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Virtual] Gary Bader / Chris Sander / BioRender",
+              "start": "2025-08-01 10:00:00",
+              "end": "2025-08-01 11:00:00",
+              "duration_minutes": 60,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Buffer",
+              "start": "2025-08-01 11:00:00",
+              "end": "2025-08-01 11:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 11:15:00",
+              "end": "2025-08-01 11:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 11:45:00",
+              "end": "2025-08-01 12:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ted Tsang <> Ryan Marien (BioRender) - Intro Call",
+              "start": "2025-08-01 11:45:00",
+              "end": "2025-08-01 12:30:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Ted Tsang",
+              "start": "2025-08-01 11:45:00",
+              "end": "2025-08-01 12:30:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Melissa Fung <> Ryan Marien (BioRender) ",
+              "start": "2025-08-01 12:30:00",
+              "end": "2025-08-01 12:50:00",
+              "duration_minutes": 20,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-01 12:50:00",
+              "end": "2025-08-01 13:30:00",
+              "duration_minutes": 40,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Chris / Ryan 1:1",
+              "start": "2025-08-01 13:45:00",
+              "end": "2025-08-01 14:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Prep for Oak",
+              "start": "2025-08-01 14:15:00",
+              "end": "2025-08-01 14:30:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Oak <> BioRender - Finance focused",
+              "start": "2025-08-01 14:30:00",
+              "end": "2025-08-01 15:30:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Ryan<>Natalie - EOW Synthesis / Next Week Prep",
+              "start": "2025-08-01 15:30:00",
+              "end": "2025-08-01 15:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Design consultation",
+              "start": "2025-08-01 15:45:00",
+              "end": "2025-08-01 16:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 16:00:00",
+              "end": "2025-08-01 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 16:30:00",
+              "end": "2025-08-01 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-01 17:00:00",
+              "end": "2025-08-01 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-01 17:00:00",
+              "end": "2025-08-01 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-08-01 19:30:00",
+              "end": "2025-08-01 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-08-01 20:15:00",
+              "end": "2025-08-01 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-08-01 20:45:00",
+              "end": "2025-08-01 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Discussion",
+              "start": "2025-08-01 21:30:00",
+              "end": "2025-08-01 22:30:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-02": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-02 17:00:00",
+              "end": "2025-08-02 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-03": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-03 17:00:00",
+              "end": "2025-08-03 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-04": {
+          "meeting_count": 8,
+          "total_duration_hours": 6.5,
+          "meeting_density": 1.0,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-04 08:30:00",
+              "end": "2025-08-04 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-04 12:00:00",
+              "end": "2025-08-04 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-04 17:00:00",
+              "end": "2025-08-04 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "[Proposed] Daily Secondary Sync",
+              "start": "2025-08-04 17:30:00",
+              "end": "2025-08-04 17:45:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-08-04 19:00:00",
+              "end": "2025-08-04 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-04 20:00:00",
+              "end": "2025-08-04 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-04 20:30:00",
+              "end": "2025-08-04 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-04 22:30:00",
+              "end": "2025-08-04 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-05": {
+          "meeting_count": 25,
+          "total_duration_hours": 15.916666666666666,
+          "meeting_density": 3.125,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-05 08:30:00",
+              "end": "2025-08-05 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-08-05 09:30:00",
+              "end": "2025-08-05 10:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Beginning Week Morning heads down]",
+              "start": "2025-08-05 10:00:00",
+              "end": "2025-08-05 11:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Juan<>BioRender partnerships",
+              "start": "2025-08-05 11:00:00",
+              "end": "2025-08-05 11:25:00",
+              "duration_minutes": 25,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-05 11:30:00",
+              "end": "2025-08-05 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Janet Tambasco <> Ryan Marien (BioRender) - Practical Prep",
+              "start": "2025-08-05 11:30:00",
+              "end": "2025-08-05 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Janet Tambasco",
+              "start": "2025-08-05 11:30:00",
+              "end": "2025-08-05 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-08-05 12:00:00",
+              "end": "2025-08-05 12:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-05 12:15:00",
+              "end": "2025-08-05 12:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Feedback Form: Polly Israni",
+              "start": "2025-08-05 12:45:00",
+              "end": "2025-08-05 13:30:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Polly I. <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-08-05 12:45:00",
+              "end": "2025-08-05 13:30:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Robin / Ryan",
+              "start": "2025-08-05 13:30:00",
+              "end": "2025-08-05 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-05 14:00:00",
+              "end": "2025-08-05 14:45:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Break",
+              "start": "2025-08-05 14:45:00",
+              "end": "2025-08-05 15:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-05 15:00:00",
+              "end": "2025-08-05 15:15:00",
+              "duration_minutes": 15,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Kiran / Ryan 1:1 (Resched from Fri)",
+              "start": "2025-08-05 15:15:00",
+              "end": "2025-08-05 15:45:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-05 15:45:00",
+              "end": "2025-08-05 16:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Jason Pate <> BioRender - Weekly Sync",
+              "start": "2025-08-05 16:15:00",
+              "end": "2025-08-05 17:00:00",
+              "duration_minutes": 45,
+              "attendees": 4,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Ryan<>Natalie - Tactical Working Session + Prep for tmrw heads down",
+              "start": "2025-08-05 17:00:00",
+              "end": "2025-08-05 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-05 17:00:00",
+              "end": "2025-08-05 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-05 17:15:00",
+              "end": "2025-08-05 17:30:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Workout",
+              "start": "2025-08-05 18:30:00",
+              "end": "2025-08-05 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-05 20:00:00",
+              "end": "2025-08-05 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-08-05 21:00:00",
+              "end": "2025-08-05 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-05 22:30:00",
+              "end": "2025-08-05 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-06": {
+          "meeting_count": 18,
+          "total_duration_hours": 23.5,
+          "meeting_density": 2.25,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-08-06 08:00:00",
+              "end": "2025-08-06 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Catch Katya",
+              "start": "2025-08-06 09:45:00",
+              "end": "2025-08-06 10:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - Working Session",
+              "start": "2025-08-06 10:00:00",
+              "end": "2025-08-06 10:45:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Prep for practical",
+              "start": "2025-08-06 10:45:00",
+              "end": "2025-08-06 11:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Janet Notes",
+              "start": "2025-08-06 11:00:00",
+              "end": "2025-08-06 11:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Janet Tambasco <> BioRender - CMO Practical",
+              "start": "2025-08-06 11:00:00",
+              "end": "2025-08-06 12:00:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Janet Tambasco",
+              "start": "2025-08-06 11:00:00",
+              "end": "2025-08-06 12:00:00",
+              "duration_minutes": 60,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Janet Debrief + Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-08-06 12:00:00",
+              "end": "2025-08-06 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-06 12:30:00",
+              "end": "2025-08-06 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-08-06 13:00:00",
+              "end": "2025-08-06 14:30:00",
+              "duration_minutes": 90,
+              "attendees": 10,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-06 14:30:00",
+              "end": "2025-08-06 14:45:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Coaching: Michael/Ryan",
+              "start": "2025-08-06 15:00:00",
+              "end": "2025-08-06 16:00:00",
+              "duration_minutes": 60,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] Join Sales/Marketing meet?",
+              "start": "2025-08-06 16:15:00",
+              "end": "2025-08-06 17:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[OH] AI Pricing & Packaging",
+              "start": "2025-08-06 17:00:00",
+              "end": "2025-08-06 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-06 17:00:00",
+              "end": "2025-08-06 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "[Proposed] Daily Secondary Sync",
+              "start": "2025-08-06 17:15:00",
+              "end": "2025-08-06 17:30:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-08-06 20:00:00",
+              "end": "2025-08-06 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-06 22:30:00",
+              "end": "2025-08-06 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-07": {
+          "meeting_count": 19,
+          "total_duration_hours": 11.416666666666666,
+          "meeting_density": 2.375,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-07 08:30:00",
+              "end": "2025-08-07 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "All Hands Final Prep",
+              "start": "2025-08-07 11:00:00",
+              "end": "2025-08-07 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 9,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "All Hands \ud83d\udc4b \ud83d\ude80",
+              "start": "2025-08-07 11:30:00",
+              "end": "2025-08-07 12:10:00",
+              "duration_minutes": 40,
+              "attendees": 1,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "Cell Press Next Steps",
+              "start": "2025-08-07 12:15:00",
+              "end": "2025-08-07 12:30:00",
+              "duration_minutes": 15,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-07 12:30:00",
+              "end": "2025-08-07 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Leadership / Critical Role Hiring Sync",
+              "start": "2025-08-07 13:00:00",
+              "end": "2025-08-07 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Aperture <> BioRender - Weekly Sync",
+              "start": "2025-08-07 13:30:00",
+              "end": "2025-08-07 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "People Team Calibrations",
+              "start": "2025-08-07 14:00:00",
+              "end": "2025-08-07 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "RevOps Calibrations",
+              "start": "2025-08-07 14:30:00",
+              "end": "2025-08-07 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Buffer/Break",
+              "start": "2025-08-07 15:00:00",
+              "end": "2025-08-07 15:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-07 15:15:00",
+              "end": "2025-08-07 15:30:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Maroki Planning",
+              "start": "2025-08-07 15:30:00",
+              "end": "2025-08-07 16:15:00",
+              "duration_minutes": 45,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": " NIH Biweekly Sales/Revenue Stand Up",
+              "start": "2025-08-07 16:15:00",
+              "end": "2025-08-07 16:30:00",
+              "duration_minutes": 15,
+              "attendees": 11,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Adam Lagerhausen <> Ryan Marien (BioRender) - Catch Up",
+              "start": "2025-08-07 16:30:00",
+              "end": "2025-08-07 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "David / Ryan",
+              "start": "2025-08-07 17:00:00",
+              "end": "2025-08-07 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-07 17:00:00",
+              "end": "2025-08-07 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-07 20:00:00",
+              "end": "2025-08-07 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-07 20:30:00",
+              "end": "2025-08-07 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-07 22:30:00",
+              "end": "2025-08-07 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-08": {
+          "meeting_count": 23,
+          "total_duration_hours": 12.833333333333334,
+          "meeting_density": 2.875,
+          "meetings": [
+            {
+              "summary": "Travel",
+              "start": "2025-08-08 08:00:00",
+              "end": "2025-08-08 08:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dr. Nwonkwo follow up",
+              "start": "2025-08-08 08:15:00",
+              "end": "2025-08-08 08:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Travel",
+              "start": "2025-08-08 08:45:00",
+              "end": "2025-08-08 09:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Send Teddy notes to Shiz",
+              "start": "2025-08-08 09:45:00",
+              "end": "2025-08-08 10:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Magnus Josias (FUJIFILM) <> Ryan Marien (BioRender) ",
+              "start": "2025-08-08 10:00:00",
+              "end": "2025-08-08 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - EOW Synthesis / Next Week Prep",
+              "start": "2025-08-08 10:30:00",
+              "end": "2025-08-08 11:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Charlie / Ryan (+ David when possible) 1:1",
+              "start": "2025-08-08 11:00:00",
+              "end": "2025-08-08 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-08 11:30:00",
+              "end": "2025-08-08 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-08 11:45:00",
+              "end": "2025-08-08 12:30:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Andy Smith (Oak) <> Ryan Marien (BioRender)",
+              "start": "2025-08-08 12:30:00",
+              "end": "2025-08-08 12:50:00",
+              "duration_minutes": 20,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Kiran / Ryan 1:1 ",
+              "start": "2025-08-08 13:00:00",
+              "end": "2025-08-08 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "AI Research - Biweekly Session",
+              "start": "2025-08-08 13:30:00",
+              "end": "2025-08-08 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 12,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Final Exec Calibration",
+              "start": "2025-08-08 14:00:00",
+              "end": "2025-08-08 14:45:00",
+              "duration_minutes": 45,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Break/Buffer",
+              "start": "2025-08-08 14:45:00",
+              "end": "2025-08-08 15:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": " Ildar Shar <> Ryan Marien (BioRender)",
+              "start": "2025-08-08 15:00:00",
+              "end": "2025-08-08 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Chris / Ryan 1:1",
+              "start": "2025-08-08 15:30:00",
+              "end": "2025-08-08 16:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Robin <> Ryan 1:1",
+              "start": "2025-08-08 16:00:00",
+              "end": "2025-08-08 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Angela / Ryan / Kiran 1:1 (Weekly)",
+              "start": "2025-08-08 16:30:00",
+              "end": "2025-08-08 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-08 17:00:00",
+              "end": "2025-08-08 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nanny payroll - Reconfirm hrs to process payroll for next Fri",
+              "start": "2025-08-08 18:30:00",
+              "end": "2025-08-08 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-08-08 19:30:00",
+              "end": "2025-08-08 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-08-08 20:15:00",
+              "end": "2025-08-08 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-08-08 20:45:00",
+              "end": "2025-08-08 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-09": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-09 17:00:00",
+              "end": "2025-08-09 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-10": {
+          "meeting_count": 2,
+          "total_duration_hours": 3.0,
+          "meeting_density": 0.25,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-10 17:00:00",
+              "end": "2025-08-10 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Shiz/Ryan <> Sayaka (Nanny interview)",
+              "start": "2025-08-10 21:30:00",
+              "end": "2025-08-10 22:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "interview"
+            }
+          ]
+        },
+        "2025-08-11": {
+          "meeting_count": 19,
+          "total_duration_hours": 13.25,
+          "meeting_density": 2.375,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-11 08:30:00",
+              "end": "2025-08-11 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-11 10:00:00",
+              "end": "2025-08-11 11:45:00",
+              "duration_minutes": 105,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-08-11 11:45:00",
+              "end": "2025-08-11 12:15:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-11 12:15:00",
+              "end": "2025-08-11 13:00:00",
+              "duration_minutes": 45,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-08-11 13:00:00",
+              "end": "2025-08-11 13:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-08-11 13:15:00",
+              "end": "2025-08-11 13:30:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "EPD Operation Sessions (+ Matt this week on EOY Product Roadmap)",
+              "start": "2025-08-11 13:30:00",
+              "end": "2025-08-11 15:00:00",
+              "duration_minutes": 90,
+              "attendees": 10,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Break/Buffer",
+              "start": "2025-08-11 15:00:00",
+              "end": "2025-08-11 15:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Heads Down]",
+              "start": "2025-08-11 15:15:00",
+              "end": "2025-08-11 16:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Naman <> Ryan - Catch Up",
+              "start": "2025-08-11 16:00:00",
+              "end": "2025-08-11 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-11 16:30:00",
+              "end": "2025-08-11 16:45:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ted Tsang <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-08-11 16:30:00",
+              "end": "2025-08-11 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Ted Tsang",
+              "start": "2025-08-11 16:30:00",
+              "end": "2025-08-11 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-11 17:00:00",
+              "end": "2025-08-11 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-11 17:00:00",
+              "end": "2025-08-11 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-08-11 19:00:00",
+              "end": "2025-08-11 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-11 20:00:00",
+              "end": "2025-08-11 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-11 20:30:00",
+              "end": "2025-08-11 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-11 22:30:00",
+              "end": "2025-08-11 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-12": {
+          "meeting_count": 21,
+          "total_duration_hours": 13.0,
+          "meeting_density": 2.625,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-12 08:30:00",
+              "end": "2025-08-12 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Top Deals Review",
+              "start": "2025-08-12 10:30:00",
+              "end": "2025-08-12 11:00:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Alla Oks <> Ryan Marien (BioRender) - Intro Call",
+              "start": "2025-08-12 11:00:00",
+              "end": "2025-08-12 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Feedback Form: Alla Oks",
+              "start": "2025-08-12 11:00:00",
+              "end": "2025-08-12 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 1,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-12 11:30:00",
+              "end": "2025-08-12 11:45:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan Marien and Melissa Miao + Peter Cimermancic",
+              "start": "2025-08-12 11:30:00",
+              "end": "2025-08-12 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Dave / Ryan ",
+              "start": "2025-08-12 12:00:00",
+              "end": "2025-08-12 12:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-12 12:15:00",
+              "end": "2025-08-12 13:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Team Nuclei - Engagement Survey Session ",
+              "start": "2025-08-12 12:30:00",
+              "end": "2025-08-12 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Melissa Fung <> Ryan Marien (BioRender) - Follow Up",
+              "start": "2025-08-12 13:00:00",
+              "end": "2025-08-12 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[OH] Livia / Ryan - Conferences/Events/Onsites Strategy Update",
+              "start": "2025-08-12 13:30:00",
+              "end": "2025-08-12 13:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-12 13:45:00",
+              "end": "2025-08-12 14:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Khalid / Ryan Catch Up",
+              "start": "2025-08-12 14:00:00",
+              "end": "2025-08-12 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ops Working Session",
+              "start": "2025-08-12 14:30:00",
+              "end": "2025-08-12 15:30:00",
+              "duration_minutes": 60,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Teddy <> Ryan ",
+              "start": "2025-08-12 15:30:00",
+              "end": "2025-08-12 15:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-12 15:45:00",
+              "end": "2025-08-12 16:00:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-12 16:00:00",
+              "end": "2025-08-12 16:15:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-12 17:00:00",
+              "end": "2025-08-12 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-12 20:00:00",
+              "end": "2025-08-12 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-08-12 21:00:00",
+              "end": "2025-08-12 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-12 22:30:00",
+              "end": "2025-08-12 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-13": {
+          "meeting_count": 11,
+          "total_duration_hours": 24.3,
+          "meeting_density": 1.375,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-08-13 08:00:00",
+              "end": "2025-08-13 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Flight - YYZ - SFO",
+              "start": "2025-08-13 10:20:00",
+              "end": "2025-08-13 15:53:00",
+              "duration_minutes": 333,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-08-13 12:00:00",
+              "end": "2025-08-13 12:15:00",
+              "duration_minutes": 15,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-13 12:30:00",
+              "end": "2025-08-13 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-08-13 13:00:00",
+              "end": "2025-08-13 14:00:00",
+              "duration_minutes": 60,
+              "attendees": 9,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Anthropic/BioRender",
+              "start": "2025-08-13 15:00:00",
+              "end": "2025-08-13 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Drive to SF impromptu meet (audio recording)",
+              "start": "2025-08-13 16:15:00",
+              "end": "2025-08-13 17:30:00",
+              "duration_minutes": 75,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-13 17:00:00",
+              "end": "2025-08-13 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-13 17:15:00",
+              "end": "2025-08-13 17:30:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-08-13 20:00:00",
+              "end": "2025-08-13 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-13 22:30:00",
+              "end": "2025-08-13 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-14": {
+          "meeting_count": 8,
+          "total_duration_hours": 7.0,
+          "meeting_density": 1.0,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-14 08:30:00",
+              "end": "2025-08-14 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "GTM Enablement Session (Placeholder) - New AI Features",
+              "start": "2025-08-14 11:00:00",
+              "end": "2025-08-14 12:00:00",
+              "duration_minutes": 60,
+              "attendees": 12,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-14 12:00:00",
+              "end": "2025-08-14 12:45:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-14 17:00:00",
+              "end": "2025-08-14 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-14 17:30:00",
+              "end": "2025-08-14 17:45:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-14 20:00:00",
+              "end": "2025-08-14 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-14 20:30:00",
+              "end": "2025-08-14 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-14 22:30:00",
+              "end": "2025-08-14 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-15": {
+          "meeting_count": 5,
+          "total_duration_hours": 5.0,
+          "meeting_density": 0.625,
+          "meetings": [
+            {
+              "summary": "Lunch",
+              "start": "2025-08-15 12:30:00",
+              "end": "2025-08-15 13:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-15 17:00:00",
+              "end": "2025-08-15 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-08-15 19:30:00",
+              "end": "2025-08-15 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-08-15 20:15:00",
+              "end": "2025-08-15 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-08-15 20:45:00",
+              "end": "2025-08-15 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-16": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-16 17:00:00",
+              "end": "2025-08-16 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-17": {
+          "meeting_count": 2,
+          "total_duration_hours": 2.75,
+          "meeting_density": 0.25,
+          "meetings": [
+            {
+              "summary": "Change furnace filter",
+              "start": "2025-08-17 14:00:00",
+              "end": "2025-08-17 14:15:00",
+              "duration_minutes": 15,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-17 17:00:00",
+              "end": "2025-08-17 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-18": {
+          "meeting_count": 19,
+          "total_duration_hours": 14.75,
+          "meeting_density": 2.375,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-18 08:30:00",
+              "end": "2025-08-18 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "St josephs scan 1",
+              "start": "2025-08-18 08:30:00",
+              "end": "2025-08-18 09:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-08-18 10:00:00",
+              "end": "2025-08-18 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Mon Morning heads down]",
+              "start": "2025-08-18 10:30:00",
+              "end": "2025-08-18 12:00:00",
+              "duration_minutes": 90,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Travel Time",
+              "start": "2025-08-18 11:45:00",
+              "end": "2025-08-18 12:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Orchard Montessori Tour",
+              "start": "2025-08-18 12:00:00",
+              "end": "2025-08-18 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-18 12:00:00",
+              "end": "2025-08-18 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Travel Time",
+              "start": "2025-08-18 13:00:00",
+              "end": "2025-08-18 13:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Teddy Tsang <> Ryan Marien (BioRender) - Practical Prep",
+              "start": "2025-08-18 13:30:00",
+              "end": "2025-08-18 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Coaching: Michael/Ryan",
+              "start": "2025-08-18 14:00:00",
+              "end": "2025-08-18 15:00:00",
+              "duration_minutes": 60,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] Maroki Planning",
+              "start": "2025-08-18 15:00:00",
+              "end": "2025-08-18 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ops Working Session (+ Charlie for onsite prep)",
+              "start": "2025-08-18 15:30:00",
+              "end": "2025-08-18 16:45:00",
+              "duration_minutes": 75,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-18 16:45:00",
+              "end": "2025-08-18 17:00:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Naman <> Ryan",
+              "start": "2025-08-18 17:00:00",
+              "end": "2025-08-18 17:45:00",
+              "duration_minutes": 45,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-18 17:00:00",
+              "end": "2025-08-18 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-08-18 19:00:00",
+              "end": "2025-08-18 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-18 20:00:00",
+              "end": "2025-08-18 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-18 20:30:00",
+              "end": "2025-08-18 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-18 22:30:00",
+              "end": "2025-08-18 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-19": {
+          "meeting_count": 14,
+          "total_duration_hours": 20.5,
+          "meeting_density": 1.75,
+          "meetings": [
+            {
+              "summary": "St josephs scan 2",
+              "start": "2025-08-19 07:15:00",
+              "end": "2025-08-19 08:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-19 08:30:00",
+              "end": "2025-08-19 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Ursula Hofer (Elsevier/The Lancet) <> Ryan Marien (BioRender)",
+              "start": "2025-08-19 10:00:00",
+              "end": "2025-08-19 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-19 10:30:00",
+              "end": "2025-08-19 10:45:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] CMO Practical in person? Teddy",
+              "start": "2025-08-19 11:30:00",
+              "end": "2025-08-19 17:00:00",
+              "duration_minutes": 330,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[BioRender Office] Teddy Tsang <> BioRender",
+              "start": "2025-08-19 11:30:00",
+              "end": "2025-08-19 17:00:00",
+              "duration_minutes": 330,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-19 12:00:00",
+              "end": "2025-08-19 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Dave / Ryan ",
+              "start": "2025-08-19 12:00:00",
+              "end": "2025-08-19 12:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-19 17:00:00",
+              "end": "2025-08-19 17:15:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-19 17:00:00",
+              "end": "2025-08-19 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout",
+              "start": "2025-08-19 18:30:00",
+              "end": "2025-08-19 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-19 20:00:00",
+              "end": "2025-08-19 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-08-19 21:00:00",
+              "end": "2025-08-19 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-19 22:30:00",
+              "end": "2025-08-19 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-20": {
+          "meeting_count": 13,
+          "total_duration_hours": 20.25,
+          "meeting_density": 1.625,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-08-20 08:00:00",
+              "end": "2025-08-20 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - Working Session",
+              "start": "2025-08-20 10:00:00",
+              "end": "2025-08-20 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-08-20 11:45:00",
+              "end": "2025-08-20 12:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-08-20 12:00:00",
+              "end": "2025-08-20 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-20 12:30:00",
+              "end": "2025-08-20 13:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-08-20 13:00:00",
+              "end": "2025-08-20 14:30:00",
+              "duration_minutes": 90,
+              "attendees": 8,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Untitled",
+              "start": "2025-08-20 15:45:00",
+              "end": "2025-08-20 16:00:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] Ryan / Kiran / Meghana - Cofounder Roles / Priorities Session",
+              "start": "2025-08-20 16:00:00",
+              "end": "2025-08-20 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "David / Ryan",
+              "start": "2025-08-20 16:30:00",
+              "end": "2025-08-20 17:30:00",
+              "duration_minutes": 60,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-20 17:00:00",
+              "end": "2025-08-20 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Daily Secondary Sync",
+              "start": "2025-08-20 17:30:00",
+              "end": "2025-08-20 17:45:00",
+              "duration_minutes": 15,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-08-20 20:00:00",
+              "end": "2025-08-20 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-20 22:30:00",
+              "end": "2025-08-20 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-21": {
+          "meeting_count": 16,
+          "total_duration_hours": 11.166666666666666,
+          "meeting_density": 2.0,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-21 08:30:00",
+              "end": "2025-08-21 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-21 10:00:00",
+              "end": "2025-08-21 10:15:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "All Hands Final Prep",
+              "start": "2025-08-21 11:00:00",
+              "end": "2025-08-21 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 8,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "All Hands \ud83d\udc4b \ud83d\ude80",
+              "start": "2025-08-21 11:30:00",
+              "end": "2025-08-21 12:10:00",
+              "duration_minutes": 40,
+              "attendees": 1,
+              "event_type": "company_wide"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-21 12:15:00",
+              "end": "2025-08-21 13:00:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Leadership / Critical Role Hiring Sync",
+              "start": "2025-08-21 13:00:00",
+              "end": "2025-08-21 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Aperture <> BioRender - Weekly Sync",
+              "start": "2025-08-21 13:30:00",
+              "end": "2025-08-21 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "[Hold] Angela Rouse revenue enablement practical",
+              "start": "2025-08-21 14:00:00",
+              "end": "2025-08-21 15:00:00",
+              "duration_minutes": 60,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Michael / Ryan (+ Kiran) - 1:1",
+              "start": "2025-08-21 14:30:00",
+              "end": "2025-08-21 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Meghana / Ryan 1:1 - biweekly",
+              "start": "2025-08-21 15:00:00",
+              "end": "2025-08-21 15:45:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": " NIH Biweekly Sales/Revenue Stand Up",
+              "start": "2025-08-21 16:15:00",
+              "end": "2025-08-21 16:30:00",
+              "duration_minutes": 15,
+              "attendees": 11,
+              "event_type": "sync"
+            },
+            {
+              "summary": "August Comp Cycle Finalization",
+              "start": "2025-08-21 16:30:00",
+              "end": "2025-08-21 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 4,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-21 17:00:00",
+              "end": "2025-08-21 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-21 20:00:00",
+              "end": "2025-08-21 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-21 20:30:00",
+              "end": "2025-08-21 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-21 22:30:00",
+              "end": "2025-08-21 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-22": {
+          "meeting_count": 16,
+          "total_duration_hours": 14.0,
+          "meeting_density": 2.0,
+          "meetings": [
+            {
+              "summary": "Yoav said no founders forum in Aug",
+              "start": "2025-08-22 08:00:00",
+              "end": "2025-08-22 08:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "2024 Founders Forum Meeting Hold",
+              "start": "2025-08-22 08:00:00",
+              "end": "2025-08-22 12:00:00",
+              "duration_minutes": 240,
+              "attendees": 11,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Top Deals Review",
+              "start": "2025-08-22 11:00:00",
+              "end": "2025-08-22 11:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan Fri Office Hours - Ping Nat to book in",
+              "start": "2025-08-22 11:30:00",
+              "end": "2025-08-22 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 11,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Charlie / Ryan (+ David when possible) 1:1",
+              "start": "2025-08-22 12:00:00",
+              "end": "2025-08-22 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-22 12:30:00",
+              "end": "2025-08-22 13:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Kiran / Ryan 1:1 ",
+              "start": "2025-08-22 13:15:00",
+              "end": "2025-08-22 14:00:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Angela / Ryan / Kiran 1:1 (Weekly)",
+              "start": "2025-08-22 14:00:00",
+              "end": "2025-08-22 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Ryan<>Natalie - EOW Synthesis / Next Week Prep",
+              "start": "2025-08-22 14:30:00",
+              "end": "2025-08-22 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Robin <> Ryan 1:1",
+              "start": "2025-08-22 16:00:00",
+              "end": "2025-08-22 16:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Ryan / Nat - Urgent Tactical Item Wrap Up",
+              "start": "2025-08-22 16:30:00",
+              "end": "2025-08-22 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-22 17:00:00",
+              "end": "2025-08-22 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Nanny payroll - Reconfirm hrs to process payroll for next Fri",
+              "start": "2025-08-22 18:30:00",
+              "end": "2025-08-22 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-08-22 19:30:00",
+              "end": "2025-08-22 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-08-22 20:15:00",
+              "end": "2025-08-22 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-08-22 20:45:00",
+              "end": "2025-08-22 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-23": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-23 17:00:00",
+              "end": "2025-08-23 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-24": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-24 17:00:00",
+              "end": "2025-08-24 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        },
+        "2025-08-25": {
+          "meeting_count": 15,
+          "total_duration_hours": 12.25,
+          "meeting_density": 1.875,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-25 08:30:00",
+              "end": "2025-08-25 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nat / Ryan - Week Priority Alignment",
+              "start": "2025-08-25 09:30:00",
+              "end": "2025-08-25 10:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Mon Morning heads down]",
+              "start": "2025-08-25 10:00:00",
+              "end": "2025-08-25 11:30:00",
+              "duration_minutes": 90,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-25 12:00:00",
+              "end": "2025-08-25 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 1,
+              "event_type": "social"
+            },
+            {
+              "summary": "Cofounder Monday Sync",
+              "start": "2025-08-25 13:00:00",
+              "end": "2025-08-25 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "sync"
+            },
+            {
+              "summary": "[Hold] EPD Operation Sessions (+ Matt this week on EOY Product Roadmap)",
+              "start": "2025-08-25 13:30:00",
+              "end": "2025-08-25 15:00:00",
+              "duration_minutes": 90,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-08-25 13:30:00",
+              "end": "2025-08-25 13:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-08-25 13:45:00",
+              "end": "2025-08-25 14:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Pipeline Council (Bi-Weekly)",
+              "start": "2025-08-25 15:00:00",
+              "end": "2025-08-25 16:00:00",
+              "duration_minutes": 60,
+              "attendees": 15,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Ryan Monday Office Hours - Ping Nat to book in",
+              "start": "2025-08-25 17:00:00",
+              "end": "2025-08-25 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 32,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-25 17:00:00",
+              "end": "2025-08-25 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Take out garbage",
+              "start": "2025-08-25 19:00:00",
+              "end": "2025-08-25 19:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-25 20:00:00",
+              "end": "2025-08-25 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-25 20:30:00",
+              "end": "2025-08-25 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-25 22:30:00",
+              "end": "2025-08-25 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-26": {
+          "meeting_count": 17,
+          "total_duration_hours": 15.083333333333334,
+          "meeting_density": 2.125,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-26 08:30:00",
+              "end": "2025-08-26 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Dr nwankwo",
+              "start": "2025-08-26 09:20:00",
+              "end": "2025-08-26 10:05:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-26 10:00:00",
+              "end": "2025-08-26 10:15:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Jason Prep",
+              "start": "2025-08-26 11:30:00",
+              "end": "2025-08-26 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-26 12:00:00",
+              "end": "2025-08-26 13:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Dave / Ryan ",
+              "start": "2025-08-26 12:00:00",
+              "end": "2025-08-26 12:15:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Louis / Ryan - Donut \ud83c\udf69!",
+              "start": "2025-08-26 13:00:00",
+              "end": "2025-08-26 13:20:00",
+              "duration_minutes": 20,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] Ops Working Session",
+              "start": "2025-08-26 14:00:00",
+              "end": "2025-08-26 15:30:00",
+              "duration_minutes": 90,
+              "attendees": 7,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan Tuesday Office Hours - Ping Nat to book in",
+              "start": "2025-08-26 15:00:00",
+              "end": "2025-08-26 15:30:00",
+              "duration_minutes": 30,
+              "attendees": 8,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Jason Pate <> BioRender - Weekly Sync",
+              "start": "2025-08-26 16:00:00",
+              "end": "2025-08-26 17:00:00",
+              "duration_minutes": 60,
+              "attendees": 4,
+              "event_type": "sync"
+            },
+            {
+              "summary": "[Hold] Cofounder Dinner?",
+              "start": "2025-08-26 17:00:00",
+              "end": "2025-08-26 19:00:00",
+              "duration_minutes": 120,
+              "attendees": 3,
+              "event_type": "social"
+            },
+            {
+              "summary": "Ryan<>Natalie - Tactical Working Session + Prep for tmrw heads down",
+              "start": "2025-08-26 17:00:00",
+              "end": "2025-08-26 17:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-26 17:00:00",
+              "end": "2025-08-26 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout",
+              "start": "2025-08-26 18:30:00",
+              "end": "2025-08-26 19:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-26 20:00:00",
+              "end": "2025-08-26 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium level Work",
+              "start": "2025-08-26 21:00:00",
+              "end": "2025-08-26 22:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-26 22:30:00",
+              "end": "2025-08-26 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-27": {
+          "meeting_count": 13,
+          "total_duration_hours": 22.0,
+          "meeting_density": 1.625,
+          "meetings": [
+            {
+              "summary": "No Meetings Day",
+              "start": "2025-08-27 08:00:00",
+              "end": "2025-08-27 19:00:00",
+              "duration_minutes": 660,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Ryan<>Natalie - Working Session",
+              "start": "2025-08-27 10:00:00",
+              "end": "2025-08-27 10:30:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Marketing Hiring - CMO/PMM/etc.",
+              "start": "2025-08-27 12:00:00",
+              "end": "2025-08-27 12:30:00",
+              "duration_minutes": 30,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-27 12:30:00",
+              "end": "2025-08-27 13:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Exec Weekly",
+              "start": "2025-08-27 13:00:00",
+              "end": "2025-08-27 14:30:00",
+              "duration_minutes": 90,
+              "attendees": 8,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Chris / Ryan - Onboarding Check In",
+              "start": "2025-08-27 13:30:00",
+              "end": "2025-08-27 13:45:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Kiran / Ryan - Onboarding Check In",
+              "start": "2025-08-27 13:45:00",
+              "end": "2025-08-27 14:00:00",
+              "duration_minutes": 15,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Coaching: Michael/Ryan",
+              "start": "2025-08-27 15:00:00",
+              "end": "2025-08-27 16:00:00",
+              "duration_minutes": 60,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "[Hold] GTM Working Session",
+              "start": "2025-08-27 16:15:00",
+              "end": "2025-08-27 17:15:00",
+              "duration_minutes": 60,
+              "attendees": 6,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "David / Ryan",
+              "start": "2025-08-27 16:30:00",
+              "end": "2025-08-27 17:30:00",
+              "duration_minutes": 60,
+              "attendees": 3,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-27 17:00:00",
+              "end": "2025-08-27 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Workout - Chores",
+              "start": "2025-08-27 20:00:00",
+              "end": "2025-08-27 21:00:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-27 22:30:00",
+              "end": "2025-08-27 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-28": {
+          "meeting_count": 11,
+          "total_duration_hours": 7.75,
+          "meeting_density": 1.375,
+          "meetings": [
+            {
+              "summary": "Hard Work Hour",
+              "start": "2025-08-28 08:30:00",
+              "end": "2025-08-28 09:30:00",
+              "duration_minutes": 60,
+              "attendees": 0,
+              "event_type": "deep_work"
+            },
+            {
+              "summary": "SS Stand Up",
+              "start": "2025-08-28 10:00:00",
+              "end": "2025-08-28 10:15:00",
+              "duration_minutes": 15,
+              "attendees": 5,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-28 12:00:00",
+              "end": "2025-08-28 12:45:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Leadership / Critical Role Hiring Sync",
+              "start": "2025-08-28 13:00:00",
+              "end": "2025-08-28 13:30:00",
+              "duration_minutes": 30,
+              "attendees": 6,
+              "event_type": "sync"
+            },
+            {
+              "summary": "Aperture <> BioRender - Weekly Sync",
+              "start": "2025-08-28 13:30:00",
+              "end": "2025-08-28 14:00:00",
+              "duration_minutes": 30,
+              "attendees": 7,
+              "event_type": "sync"
+            },
+            {
+              "summary": "1:1 Prep",
+              "start": "2025-08-28 14:00:00",
+              "end": "2025-08-28 14:15:00",
+              "duration_minutes": 15,
+              "attendees": 0,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Michael / Ryan (+ Kiran) - 1:1",
+              "start": "2025-08-28 14:30:00",
+              "end": "2025-08-28 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-28 17:00:00",
+              "end": "2025-08-28 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Email / Slack",
+              "start": "2025-08-28 20:00:00",
+              "end": "2025-08-28 20:30:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Medium Work",
+              "start": "2025-08-28 20:30:00",
+              "end": "2025-08-28 21:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Plan for Tomorrow",
+              "start": "2025-08-28 22:30:00",
+              "end": "2025-08-28 23:00:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-29": {
+          "meeting_count": 11,
+          "total_duration_hours": 8.5,
+          "meeting_density": 1.375,
+          "meetings": [
+            {
+              "summary": "Ryan Fri Office Hours - Ping Nat to book in",
+              "start": "2025-08-29 11:30:00",
+              "end": "2025-08-29 12:00:00",
+              "duration_minutes": 30,
+              "attendees": 11,
+              "event_type": "office_hours"
+            },
+            {
+              "summary": "Lunch",
+              "start": "2025-08-29 12:30:00",
+              "end": "2025-08-29 13:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "social"
+            },
+            {
+              "summary": "Kiran / Ryan 1:1 ",
+              "start": "2025-08-29 13:15:00",
+              "end": "2025-08-29 14:00:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Angela / Ryan / Kiran 1:1 (Weekly)",
+              "start": "2025-08-29 14:00:00",
+              "end": "2025-08-29 14:30:00",
+              "duration_minutes": 30,
+              "attendees": 3,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Ryan<>Natalie - EOW Synthesis / Next Week Prep",
+              "start": "2025-08-29 14:30:00",
+              "end": "2025-08-29 15:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Chris / Ryan 1:1",
+              "start": "2025-08-29 15:15:00",
+              "end": "2025-08-29 16:00:00",
+              "duration_minutes": 45,
+              "attendees": 2,
+              "event_type": "one_on_one"
+            },
+            {
+              "summary": "Ryan / Nat - Urgent Tactical Item Wrap Up",
+              "start": "2025-08-29 16:30:00",
+              "end": "2025-08-29 17:00:00",
+              "duration_minutes": 30,
+              "attendees": 2,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-29 17:00:00",
+              "end": "2025-08-29 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            },
+            {
+              "summary": "Review Monday Meeting Agendas",
+              "start": "2025-08-29 19:30:00",
+              "end": "2025-08-29 20:15:00",
+              "duration_minutes": 45,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Quick To Do Items",
+              "start": "2025-08-29 20:15:00",
+              "end": "2025-08-29 20:45:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            },
+            {
+              "summary": "Email / Slack ",
+              "start": "2025-08-29 20:45:00",
+              "end": "2025-08-29 21:15:00",
+              "duration_minutes": 30,
+              "attendees": 0,
+              "event_type": "general_meeting"
+            }
+          ]
+        },
+        "2025-08-30": {
+          "meeting_count": 1,
+          "total_duration_hours": 2.5,
+          "meeting_density": 0.125,
+          "meetings": [
+            {
+              "summary": "Nomi/Kiwi dinner, park, bath time",
+              "start": "2025-08-30 17:00:00",
+              "end": "2025-08-30 19:30:00",
+              "duration_minutes": 150,
+              "attendees": 2,
+              "event_type": "social"
+            }
+          ]
+        }
+      },
+      "average_meetings_per_day": 12.095238095238095,
+      "average_hours_per_day": 11.332539682539682,
+      "total_days_analyzed": 42
+    },
+    "context_switching_score": 66.4
+  },
+  "insights": [
+    "\ud83d\udd00 Schedule is highly fragmented (score: 76.3/100) - consider consolidating meetings",
+    "\u26a1 Longest back-to-back meeting chain: 17 meetings - schedule recovery breaks",
+    "\ud83d\udcc5 High meeting load: 12.1 meetings per day on average",
+    "\u26a0\ufe0f  Warning: Fragmentation score is 66.4/100 - optimization recommended"
+  ],
+  "recommendations": [
+    "Consider consolidating 15-minute check-ins into longer, more substantive meetings",
+    "Block 60+ minute periods for deep work without interruptions",
+    "Add 15-minute buffers between meetings to allow for context switching",
+    "Batch similar meeting types together (e.g., all 1:1s on same day)",
+    "Delegate routine meetings that don't require executive input"
+  ]
+}

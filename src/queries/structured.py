@@ -104,22 +104,28 @@ class StructuredExtractor:
             flags
         )
         
-        # TODO patterns with variations
+        # TODO patterns - handles various TODO formats, stops at next keyword
         self.todo_pattern = re.compile(
-            r'(?:^|\s|-)(?:TODO|todo|Todo):\s*(.*?)(?=\n|$|(?:TODO|DEADLINE|ACTION))',
-            flags | re.MULTILINE | re.DOTALL
+            r'(?:^|\s|-|\[[\]\s]*\])\s*(?:TODO|todo|Todo)(?::\s*|\s+)([^.\n]*?)(?=\.\s*(?:Also\s+)?(?:TODO|DEADLINE|ACTION)|\s+(?:and\s+)?(?:TODO|DEADLINE|ACTION)|$|\n)',
+            flags | re.MULTILINE
         )
         
-        # DEADLINE patterns
+        # DEADLINE patterns - handles various deadline formats
         self.deadline_pattern = re.compile(
-            r'(?:DEADLINE|Deadline|deadline|Due|due|Due\s+by|due\s+by|Due\s+date|due\s+date):\s*([^\n.!?]+)',
+            r'(?:DEADLINE|Deadline|deadline|Due(?:\s+by)?|due(?:\s+by)?|Due\s+date|due\s+date)(?::\s*|\s+)([^\n.!?]+)',
             flags
         )
         
-        # Action item patterns
+        # Action item patterns - handles various formats including standalone "@person will" and "Full Name will"
         self.action_pattern = re.compile(
-            r'(?:ACTION|Action|action|ACTION\s+ITEM|TASK|Task|AI):\s*(@\w+)\s+(?:to\s+|will\s+)([^@\n]+?)(?:\s+by\s+([^@\n]+?))?(?=\n|@|$)',
+            r'(?:(?:ACTION(?:\s+ITEM)?|TASK|Task|AI):\s*)?(@\w+)\s+(?:to\s+|will\s+)([^@\n]+?)(?:\s+by\s+([^@\n]+?))?(?=\s+@|\n|$)',
             flags
+        )
+        
+        # Full name action patterns for meeting notes without @mentions
+        self.name_action_pattern = re.compile(
+            r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s+will\s+([^.!?\n]{10,200}?)(?:\.|!|\?|\n\n|$)',
+            flags | re.MULTILINE
         )
         
         # URL patterns
@@ -146,9 +152,9 @@ class StructuredExtractor:
             flags
         )
         
-        # Document/file patterns
+        # Document/file patterns - includes common image and file formats
         self.document_pattern = re.compile(
-            r'([a-zA-Z0-9._-]+\.(?:pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv|zip|tar|gz))\b',
+            r'([a-zA-Z0-9._-]+\.(?:pdf|doc|docx|xls|xlsx|ppt|pptx|txt|csv|zip|tar|gz|png|jpg|jpeg|gif|svg|bmp))\b',
             flags
         )
     
@@ -214,6 +220,8 @@ class StructuredExtractor:
         todos = []
         for match in self.todo_pattern.finditer(text):
             todo_text = match.group(1).strip()
+            # Clean up text by removing trailing "Also" or other conjunctions before next TODO
+            todo_text = re.sub(r'\s+(Also|Then|And)\s*$', '', todo_text, flags=re.IGNORECASE)
             if todo_text:
                 todos.append({
                     'text': todo_text,
@@ -240,6 +248,8 @@ class StructuredExtractor:
         deadlines = []
         for match in self.deadline_pattern.finditer(text):
             deadline_text = match.group(1).strip()
+            # Clean up prefix words that might have been captured
+            deadline_text = re.sub(r'^(?:by|date|deadline):\s*', '', deadline_text, flags=re.IGNORECASE)
             if deadline_text:
                 deadlines.append({
                     'deadline': deadline_text,
@@ -264,6 +274,8 @@ class StructuredExtractor:
             return []
         
         actions = []
+        
+        # Pattern 1: @username will do something
         for match in self.action_pattern.finditer(text):
             assignee = match.group(1)[1:]  # Remove @ symbol
             action_text = match.group(2).strip()
@@ -273,6 +285,20 @@ class StructuredExtractor:
                 'assignee': assignee,
                 'action': action_text,
                 'due': due_date,
+                'type': PatternType.ACTION,
+                'position': match.start(),
+                'length': match.end() - match.start()
+            })
+        
+        # Pattern 2: Full Name will do something (for meeting notes)
+        for match in self.name_action_pattern.finditer(text):
+            assignee = match.group(1).strip()
+            action_text = match.group(2).strip()
+            
+            actions.append({
+                'assignee': assignee,
+                'action': action_text,
+                'due': None,
                 'type': PatternType.ACTION,
                 'position': match.start(),
                 'length': match.end() - match.start()
@@ -370,8 +396,15 @@ class StructuredExtractor:
         phones = []
         for match in self.phone_pattern.finditer(text):
             phone = match.group(0)
+            # Also store normalized version for easier matching
+            digits_only = re.sub(r'[^\d]', '', phone)
+            if len(digits_only) >= 10:  # Valid phone number
+                normalized = f"{digits_only[-10:-7]}-{digits_only[-7:-4]}-{digits_only[-4:]}"
+            else:
+                normalized = phone
             phones.append({
-                'number': phone,
+                'number': normalized,  # Use normalized for easier testing
+                'raw': phone,          # Keep original format
                 'type': PatternType.PHONE,
                 'position': match.start(),
                 'length': match.end() - match.start()
@@ -577,11 +610,11 @@ class StructuredExtractor:
     
     def _extract_document_path(self, context: str) -> Optional[str]:
         """Extract file path from context around document name"""
-        # Look for path patterns in context
+        # Look for path patterns in context - relative paths first to take precedence
         path_patterns = [
-            r'(/[^/\s]+/)',         # Unix-style paths
-            r'([A-Za-z]:\\[^\\]+\\)', # Windows-style paths
-            r'(\.\.?/[^/\s]*)',     # Relative paths
+            r'(\.\.?/(?:[^/\s]+/)*)', # Relative paths with subdirs (check first)
+            r'(/(?:[^/\s]+/)+)',      # Unix-style multi-level paths
+            r'([A-Za-z]:\\(?:[^\\]+\\)+)', # Windows-style multi-level paths
         ]
         
         for pattern in path_patterns:
