@@ -61,78 +61,41 @@ def run_collector(collector_name: str, collector_class, employees=None, lookback
         
         start_time = datetime.now()
         
-        # Special handling for calendar collector with parameters
-        if collector_name == 'calendar' and (employees or lookback_weeks != 26 or lookahead_weeks != 4):
-            print(f"📅 Calendar collection - Employees: {employees or 'all'}, Lookback: {lookback_weeks}w, Lookahead: {lookahead_weeks}w")
-            
+        # Unified interface - all collectors use collect(**kwargs)
+        kwargs = {}
+        
+        # Add collector-specific parameters as kwargs
+        if collector_name == 'calendar':
             if employees:
-                # Parse employee list and create email->calendar_id mapping
                 employee_list = [e.strip() for e in employees.split(',')]
-                employee_dict = {email: email for email in employee_list}
-                
-                print(f"🎯 Targeting specific employees: {employee_list}")
-                result = collector.collect_from_employee_list(
-                    employee_emails=employee_dict,
-                    days_back=lookback_weeks * 7
-                )
-            else:
-                print(f"📊 Collecting all employee calendars")
-                result = collector.collect_all_employee_calendars(
-                    weeks_backward=lookback_weeks,
-                    weeks_forward=lookahead_weeks
-                )
-        else:
-            # Handle different collector types with their specific methods
-            if collector_name == 'slack':
-                # SlackCollector uses collect_all_slack_data for comprehensive collection
-                result = collector.collect_all_slack_data()
-            elif collector_name == 'drive':
-                # DriveCollector returns DriveCollectionResult object
-                drive_result = collector.collect()
-                # Convert to dictionary format expected by the rest of the code
-                result = {
-                    'data': {
-                        'files': [],  # Files are saved to JSONL, not returned in memory
-                        'metadata': {}  # Drive metadata stored in JSONL files
-                    },
-                    'success': len(drive_result.errors) == 0,
-                    'message': 'Drive collection completed' if len(drive_result.errors) == 0 else f'Drive collection completed with {len(drive_result.errors)} errors',
-                    'stats': {
-                        'files_collected': drive_result.files_collected,
-                        'changes_tracked': drive_result.changes_tracked,
-                        'api_requests': drive_result.api_requests_made,
-                        'duration': drive_result.collection_duration,
-                        'rate_limit_hits': drive_result.rate_limit_hits
-                    }
-                }
-            else:
-                # Default behavior for other collectors (employee, calendar)
-                result = collector.collect()
+                kwargs['employees'] = employee_list
+            kwargs['lookback_weeks'] = lookback_weeks
+            kwargs['lookahead_weeks'] = lookahead_weeks
+            print(f"📅 Calendar collection - Employees: {employees or 'all'}, Lookback: {lookback_weeks}w, Lookahead: {lookahead_weeks}w")
+        
+        # All collectors use the same collect() interface
+        result = collector.collect(**kwargs)
         
         end_time = datetime.now()
         
         duration = (end_time - start_time).total_seconds()
         
-        # Extract basic stats
-        if collector_name == 'drive':
-            # Drive collector has custom stats format already processed
-            drive_stats = result.get('stats', {})
-            stats = {
-                'files': drive_stats.get('files_collected', 0),
-                'api_requests': drive_stats.get('api_requests', 0),
-                'duration_mins': round(drive_stats.get('duration', 0) / 60, 1)
-            }
-        else:
-            # Standard stats extraction for other collectors
-            data = result.get('data', {})
-            stats = {
-                'messages': len(data.get('messages', [])),
-                'channels': len(data.get('channels', [])),
-                'users': len(data.get('users', [])),
-                'files': len(data.get('files', [])),
-                'changes': len(data.get('changes', [])),
-                'employees': len(data.get('employees', [])),
-            }
+        # Extract stats from standardized result format
+        # All collectors should return similar structure with data and stats
+        data = result.get('data', {})
+        result_stats = result.get('stats', {})
+        
+        # Build stats from both data counts and collector-specific stats
+        stats = {
+            'messages': len(data.get('messages', [])),
+            'channels': len(data.get('channels', [])),
+            'users': len(data.get('users', [])),
+            'files': len(data.get('files', [])) or result_stats.get('files_collected', 0),
+            'changes': len(data.get('changes', [])) or result_stats.get('changes_tracked', 0),
+            'employees': len(data.get('employees', [])),
+            'api_requests': result_stats.get('api_requests', 0) or result_stats.get('api_requests_made', 0),
+            'duration_mins': round(duration / 60, 1)
+        }
         
         # Remove zero counts for cleaner output
         stats = {k: v for k, v in stats.items() if v > 0}

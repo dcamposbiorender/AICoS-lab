@@ -241,101 +241,13 @@ For all code you write put references to the documentation that justify the meth
 7. ** When something fails, identify the failure immediately and do not fake data*
    - Never take a failure as an opportunity to write tons of code and invent a new test
    - Never think about how to circument the restrictions and reach the goal, always flag a failure and ask for direction
-## Overview
 
-The AI Chief of Staff is a deterministic personal assistant that maintains organizational context, tracks informal commitments, and coordinates action for remote leadership teams. The system collects Slack, Calendar, and Drive activity into transparent JSON, extracts goals and commitments, generates briefings, and assists with scheduling—delivering persistent memory and gentle accountability for executives.
+## Project Context
 
-**Core Philosophy**: "Single source of truth for goals, commitments, and context across all communication channels"
+AI Chief of Staff is a deterministic personal assistant for remote leadership teams.
 
-## Key Concepts
+**For complete system overview and architecture**: See [README.md](README.md) and [plan.md](plan.md)
 
-### The Problem Being Solved
-- Executives spend 30-60 minutes daily "hunting for context" across scattered communication
-- 80% of meeting commitments are lost or forgotten due to lack of tracking
-- Remote leadership teams struggle with informal commitment tracking
-- Context switching between Slack, Calendar, and Drive creates cognitive overhead
-- No persistent memory of who promised what, when, and where
-
-### The Solution
-- Comprehensive data collection from Slack, Calendar, and Drive into structured JSON
-- AI-powered commitment extraction and goal tracking with human oversight
-- Proactive briefings that surface changes, deadlines, and required actions
-- Lightweight scheduling coordination via Slack with approval workflows
-- Complete transparency with audit trails linking every insight to its source
-
-## Architecture Overview
-
-### Technology Stack
-- **Backend**: Python 3.10+, FastAPI for APIs, JSON/JSONL for data storage
-- **AI/ML**: Anthropic Claude, OpenAI GPT for text understanding and summarization
-- **Integrations**: Slack API, Google Calendar API, Google Drive API
-- **Interface**: Slack bot, CLI, simple HTML dashboard
-- **Storage**: Local-first with gitignored data directories
-- **Orchestration**: Claude Code as orchestrator calling deterministic tools
-
-### Four-Layer Architecture
-
-1. **Layer 1: Collection (Deterministic)**
-   - SlackCollector: All channels, DMs, threads with metadata
-   - CalendarCollector: Internal calendars with attendees and events
-   - DriveCollector: Document activity and changes (metadata-only in MVP)
-   - EmployeeCollector: Roster mapping Slack IDs, emails, calendar IDs
-
-2. **Layer 2: Processing (Deterministic)**
-   - Deduplication and change detection
-   - Relevance scoring for goals/commitments
-   - Anomaly detection and data validation
-   - State persistence and cursor management
-
-3. **Layer 3: Intelligence (LLM)**
-   - Commitment extraction from conversations
-   - Goal summarization and status inference
-   - Context generation for briefings
-   - Scheduling intent detection
-
-4. **Layer 4: Interface**
-   - Slack bot with slash commands and interactive blocks
-   - Daily/weekly briefings via Slack
-   - CLI for admin operations
-   - Simple HTML dashboard for transparency
-
-## Data Architecture
-
-### Data Collection Philosophy
-- **Comprehensive**: Collect all relevant Slack, Calendar, and Drive data
-- **Immutable**: Never overwrite; use append-only logs for auditability
-- **Local-First**: Store and process locally; no cloud by default
-- **Structured**: Use JSONL for raw logs, JSON for processed state
-- **Explainable**: Every insight links back to source with file path and index
-
-### Directory Structure
-```
-data/ (gitignored)
-├── raw/
-│   ├── slack/YYYY-MM-DD/
-│   │   ├── channels.json
-│   │   ├── messages_*.jsonl
-│   │   └── users.json
-│   ├── calendar/YYYY-MM-DD/
-│   │   └── events_*.json
-│   ├── drive/YYYY-MM-DD/
-│   │   └── changes_*.json
-│   └── employees/
-│       └── roster.json
-├── processed/
-│   ├── goals.json
-│   ├── commitments.jsonl
-│   ├── digests/
-│   └── coverage_stats.json
-├── state/
-│   ├── cursors.json
-│   ├── last_run.json
-│   └── ids.json
-└── logs/
-    ├── collector_runs.jsonl
-    ├── orchestrator.jsonl
-    └── errors.jsonl
-```
-
+## Environment Setup
 
 - remind me to activate the virtual environment when appropriate and to activate it with source venv/bin/activate

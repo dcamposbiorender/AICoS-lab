@@ -1,0 +1,70 @@
+#!/bin/bash
+# AI Chief of Staff Dashboard Testing Script
+# Complete testing procedure for GUI fixes
+
+echo "🧪 Testing AI Chief of Staff Dashboard Fixes"
+echo "=============================================="
+echo ""
+
+echo "✅ FIXES IMPLEMENTED:"
+echo "  1. Added data-action attributes to HTML buttons"
+echo "  2. Fixed JavaScript button selectors"
+echo "  3. Updated API endpoint URLs"
+echo "  4. Added collection type handling and debugging"
+echo "  5. Created proper startup scripts"
+echo ""
+
+echo "🚀 TESTING PROCEDURE:"
+echo ""
+echo "Step 1: Start the backend server"
+echo "  Run: ./start_backend.sh"
+echo "  Expected: Server starts on http://127.0.0.1:8000"
+echo "  Wait for: 'Application startup complete' message"
+echo ""
+
+echo "Step 2: Start the dashboard (in a new terminal)"  
+echo "  Run: ./start_static_dashboard.sh"
+echo "  Expected: Dashboard serves on http://127.0.0.1:3000"
+echo "  Open: http://127.0.0.1:3000 in your browser"
+echo ""
+
+echo "Step 3: Open browser developer console"
+echo "  Press F12 to open DevTools"
+echo "  Go to Console tab"
+echo "  Expected messages:"
+echo "    - 'Setting up QUICK button event handler'"
+echo "    - 'Setting up FULL button event handler'"
+echo "    - 'Setting up REFRESH button event handler'"
+echo ""
+
+echo "Step 4: Test the buttons"
+echo "  Click QUICK button:"
+echo "    Console should show: 'QUICK button clicked'"
+echo "    Console should show: 'Triggering quick collection...'"
+echo "    Status should change from IDLE to COLLECTING"
+echo "    Progress bar should show activity"
+echo ""
+echo "  Click FULL button:"
+echo "    Console should show: 'FULL button clicked'"  
+echo "    Console should show: 'Triggering full collection...'"
+echo ""
+echo "  Click REFRESH button:"
+echo "    Console should show: 'REFRESH button clicked'"
+echo "    WebSocket should reconnect"
+echo ""
+
+echo "Step 5: Check for errors"
+echo "  Console should NOT show:"
+echo "    - 'button not found' warnings"
+echo "    - 'Failed to fetch' errors (if backend is running)"
+echo "    - JavaScript errors"
+echo ""
+
+echo "🔧 TROUBLESHOOTING:"
+echo "  - If buttons don't respond: Check console for selector errors"
+echo "  - If API calls fail: Verify backend is running on port 8000"
+echo "  - If CORS errors: Use ./start_static_dashboard.sh (not file://)"
+echo ""
+
+echo "Press Enter to start testing..."
+read

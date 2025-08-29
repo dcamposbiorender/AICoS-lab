@@ -21,16 +21,21 @@ python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Configure APIs using encrypted key manager (see INSTALLATION.md for details)
-python tools/setup_google_oauth.py  # Set up Google authentication
-# Note: API tokens are stored encrypted, not in .env files
+# Run the comprehensive setup wizard (new!)
+python tools/setup.py
 
-# Run first collection
-python tools/collect_data.py --source=slack
-python tools/collect_data.py --source=calendar
+# The setup wizard will guide you through:
+# 1. Environment and directory configuration
+# 2. Slack API setup and validation
+# 3. Google Calendar and Drive configuration  
+# 4. User identity setup (PRIMARY_USER)
+# 5. System validation and testing
+# 6. Initial data collection and search indexing
 
-# Generate briefing
-python tools/generate_digest.py
+# After setup, use your AI Chief of Staff:
+python tools/daily_summary.py      # Generate daily brief
+python tools/search_cli.py "query" # Search your data
+python app.py                      # Launch dashboard
 ```
 
 ## Testing
@@ -128,6 +133,74 @@ open htmlcov/index.html  # macOS
 - **Complete Audit Trails**: Every insight links to source with timestamps
 - **Encrypted Credentials**: AES-256 encryption for API tokens in secure database
 - **Privacy Controls**: Configurable retention and data deletion
+
+## 🎯 Setup Wizard
+
+The AI Chief of Staff includes a comprehensive setup wizard that gets you from zero to fully working system in under 5 minutes.
+
+### Features
+- **Interactive Guidance**: Step-by-step prompts with clear instructions
+- **Comprehensive Configuration**: Handles all system components in one flow
+- **API Validation**: Tests all connections during setup
+- **User-Centric**: Configures PRIMARY_USER for personalized experience
+- **Resume Capability**: Can continue from interruption points
+- **Clear Error Messages**: Helpful recovery guidance when things go wrong
+
+### What the Setup Wizard Configures
+1. **Environment Setup**
+   - Creates directory structure (data/, logs/, archives/)
+   - Initializes SQLite database with proper schema
+   - Validates disk space and permissions
+   - Creates .env configuration file
+
+2. **Slack Integration**
+   - Bot token configuration and validation
+   - OAuth scope verification
+   - User list retrieval for identity mapping
+   - Workspace information collection
+
+3. **Google Services**
+   - OAuth 2.0 client credentials setup
+   - Calendar API authentication and testing
+   - Drive API authentication and testing
+   - Credential storage and validation
+
+4. **User Identity (PRIMARY_USER)**
+   - Email address configuration and validation
+   - Cross-system identity mapping (Slack ↔ Calendar ↔ Email)
+   - User existence verification across all systems
+   - Personalization settings
+
+5. **System Validation**
+   - End-to-end API connection testing
+   - Database operations validation
+   - File system permissions checking
+   - Initial data collection (7 days)
+   - Search index building and testing
+
+### Usage
+
+```bash
+# Interactive setup (recommended)
+python tools/setup.py
+
+# Non-interactive setup (for automation)
+python tools/setup.py --non-interactive
+
+# Test mode (for development)
+python tools/setup.py --test
+```
+
+### Environment Variables for Non-Interactive Mode
+
+```bash
+export AICOS_BASE_DIR="/path/to/data/directory"
+export SLACK_BOT_TOKEN="xoxb-your-bot-token"
+export GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+export GOOGLE_CLIENT_SECRET="your-client-secret"
+export AICOS_PRIMARY_USER_EMAIL="your-email@company.com"
+export AICOS_PRIMARY_USER_NAME="Your Full Name"
+```
 
 ### 🔐 Authentication System
 

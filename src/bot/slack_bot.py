@@ -12,6 +12,9 @@ Simple Slack bot that creates deterministic calls to existing CLI systems.
 import os
 import logging
 import sys
+import asyncio
+import aiohttp
+import json
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
@@ -46,20 +49,51 @@ class SimpleSlackBot:
     - Basic error handling
     """
     
-    def __init__(self):
-        """Initialize Slack bot with direct CLI integration"""
+    def __init__(self, api_base_url: str = 'http://localhost:8000'):
+        """Initialize Slack bot with direct CLI integration and API integration"""
         # Get bot token from existing auth system
         self.bot_token = credential_vault.get_slack_bot_token()
         if not self.bot_token:
             raise ValueError("Slack bot token not available - check authentication setup")
         
+        # Agent H integration - API backend connection
+        self.api_base_url = api_base_url
+        self.session = None
+        
         # Initialize direct integrations
         self.permission_checker = get_permission_checker()
         self.rate_limiter = SlackRateLimiter(base_delay=1.0)
         
-        # Direct tool integrations
-        self.search_db = None  # Will be created on demand
-        self.activity_analyzer = None  # Will be created on demand
+        # Direct tool integrations - initialize immediately to avoid None errors
+        try:
+            from ..search.database import SearchDatabase
+            from ..cli.interfaces import get_activity_analyzer
+            
+            self.search_db = SearchDatabase('data/search.db')
+            self.activity_analyzer = get_activity_analyzer()
+            
+            if not self.search_db:
+                raise ValueError("Failed to initialize SearchDatabase")
+            if not self.activity_analyzer:
+                raise ValueError("Failed to initialize ActivityAnalyzer")
+                
+        except Exception as e:
+            logger.error(f"Failed to initialize bot dependencies: {e}")
+            raise ValueError(f"Bot initialization failed: {e}")
+        
+        # Create command registry for extensible command handling
+        # Agent H integration - unified command handling
+        self.commands = {
+            'search': self._handle_search,
+            'brief': self._handle_brief,  
+            'help': self._handle_help,
+            'approve': self._handle_api_command,
+            'complete': self._handle_api_command,
+            'refresh': self._handle_api_command,
+            'quick': self._handle_api_command,
+            'full': self._handle_api_command,
+            'status': self._handle_api_command
+        }
         
         # Create Bolt app
         self.app = App(token=self.bot_token)
@@ -96,19 +130,14 @@ class SimpleSlackBot:
                 self._handle_help(respond)
                 return
             
-            # Parse sub-command
+            # Parse sub-command and dispatch via command registry
             parts = text.split()
-            sub_command = parts[0].lower() if parts else ''
+            sub_command = parts[0].lower() if parts else 'help'
             remaining_text = ' '.join(parts[1:]) if len(parts) > 1 else ''
             
-            if sub_command == 'search':
-                self._handle_search(respond, remaining_text)
-            elif sub_command == 'brief':
-                self._handle_brief(respond, remaining_text)
-            elif sub_command == 'help':
-                self._handle_help(respond)
-            else:
-                respond(f"Unknown command: `{sub_command}`\nUse `/cos help` to see available commands.")
+            # Look up command handler in registry
+            handler = self.commands.get(sub_command, self._handle_unknown)
+            handler(respond, remaining_text)
             
         except Exception as e:
             logger.error(f"Command error: {e}")
@@ -175,10 +204,240 @@ class SimpleSlackBot:
 This bot creates deterministic calls to existing CLI systems."""
             respond(help_text)
     
+    def _handle_unknown(self, respond, query):
+        """Handle unknown command with helpful message"""
+        respond(f"❓ Unknown command. Available commands: {', '.join(self.commands.keys())}\nUse `/cos help` for details.")
+    
+    # Agent H Integration - API Command Handling
+    
+    def _handle_api_command(self, respond, command_text):
+        """Handle commands that should go through the unified API"""
+        try:
+            # Run async API command in sync context
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                result = loop.run_until_complete(self.execute_api_command(command_text))
+                response = self.format_api_response(result)
+                respond(response)
+            finally:
+                loop.close()
+                
+        except Exception as e:
+            logger.error(f"API command error: {e}")
+            respond(f"❌ Command failed: {str(e)}")
+    
+    async def connect_to_api(self):
+        """Initialize HTTP session for API calls"""
+        if not self.session:
+            self.session = aiohttp.ClientSession()
+    
+    async def disconnect_from_api(self):
+        """Clean up HTTP session"""
+        if self.session:
+            await self.session.close()
+            self.session = None
+    
+    async def execute_api_command(self, command_text: str) -> Dict[str, Any]:
+        """
+        Execute command via backend API
+        
+        Args:
+            command_text: Command to execute (e.g., "approve P7", "brief C3")
+            
+        Returns:
+            Dict with API response
+        """
+        await self.connect_to_api()
+        
+        url = f"{self.api_base_url}/api/command"
+        
+        try:
+            async with self.session.post(url, json={'command': command_text}) as response:
+                if response.status == 200:
+                    return await response.json()
+                else:
+                    error_text = await response.text()
+                    return {
+                        'success': False,
+                        'error': f"API error ({response.status}): {error_text}"
+                    }
+        except aiohttp.ClientError as e:
+            return {
+                'success': False,
+                'error': f"Connection error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                'success': False,
+                'error': f"API call failed: {str(e)}"
+            }
+    
+    def format_api_response(self, result: Dict[str, Any]) -> Dict[str, str]:
+        """Format API command result for Slack"""
+        if result['success']:
+            return self.format_success_response(result)
+        else:
+            return self.format_error_response(result)
+    
+    def format_success_response(self, result: Dict[str, Any]) -> Dict[str, str]:
+        """Format successful command result for Slack"""
+        action = result.get('action', 'unknown')
+        message = result.get('message', 'Command executed successfully')
+        
+        if action == 'approve' or action == 'complete':
+            return {
+                "text": f"✅ {message}",
+                "response_type": "ephemeral"
+            }
+        elif action == 'brief':
+            # Show brief content using Slack blocks
+            brief_content = result.get('brief_content', {})
+            return {
+                "text": f"📋 Brief for {result.get('code', 'Unknown')}",
+                "blocks": self.format_brief_blocks(brief_content),
+                "response_type": "ephemeral"
+            }
+        elif action in ['refresh', 'quick_collection', 'full_collection']:
+            return {
+                "text": f"🔄 {message}",
+                "response_type": "ephemeral"
+            }
+        elif action == 'status':
+            status_info = result.get('status_info', {})
+            return {
+                "text": f"📊 {message}",
+                "blocks": self.format_status_blocks(status_info),
+                "response_type": "ephemeral"
+            }
+        else:
+            return {
+                "text": f"✅ {message}",
+                "response_type": "ephemeral"
+            }
+    
+    def format_error_response(self, result: Dict[str, Any]) -> Dict[str, str]:
+        """Format error result for Slack"""
+        error = result.get('error', 'Unknown error')
+        suggestions = result.get('suggestions', [])
+        
+        message = f"❌ {error}"
+        
+        if suggestions:
+            message += f"\n\n💡 Suggestions: {', '.join(suggestions)}"
+        
+        return {
+            "text": message,
+            "response_type": "ephemeral"
+        }
+    
+    def format_brief_blocks(self, brief_content: Dict[str, Any]) -> List[Dict]:
+        """Format brief content as Slack blocks"""
+        if not brief_content:
+            return []
+        
+        blocks = []
+        
+        # Meeting title and info
+        if brief_content.get('meeting_title'):
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*{brief_content['meeting_title']}*"
+                }
+            })
+        
+        # Meeting details
+        details = []
+        if brief_content.get('meeting_time'):
+            details.append(f"⏰ {brief_content['meeting_time']}")
+        if brief_content.get('attendee_count'):
+            details.append(f"👥 {brief_content['attendee_count']} attendees")
+        
+        if details:
+            blocks.append({
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": " • ".join(details)}]
+            })
+        
+        # Summary
+        if brief_content.get('summary'):
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": brief_content['summary']
+                }
+            })
+        
+        # Related content
+        if brief_content.get('related_content'):
+            content_items = brief_content['related_content'][:3]  # Limit to 3 items
+            content_text = "\n".join([
+                f"• {item.get('text', item.get('title', 'Unknown'))[:60]}{'...' if len(str(item.get('text', item.get('title', '')))) > 60 else ''}"
+                for item in content_items
+            ])
+            
+            if content_text:
+                blocks.append({
+                    "type": "section", 
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*Related Content:*\n{content_text}"
+                    }
+                })
+        
+        return blocks
+    
+    def format_status_blocks(self, status_info: Dict[str, Any]) -> List[Dict]:
+        """Format system status as Slack blocks"""
+        blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*System Status:* {status_info.get('system_status', 'Unknown')}"
+                }
+            }
+        ]
+        
+        # Metrics
+        if status_info.get('calendar_items') is not None:
+            metrics_text = f"📅 {status_info['calendar_items']} meetings"
+            if status_info.get('priority_items') is not None:
+                metrics_text += f" • ⭐ {status_info['priority_items']} priorities"
+            
+            blocks.append({
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": metrics_text}]
+            })
+        
+        # Last sync
+        if status_info.get('last_sync'):
+            blocks.append({
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": f"Last sync: {status_info['last_sync']}"}]
+            })
+        
+        return blocks
+    
     def start_server(self, port: int = 3000, host: str = "0.0.0.0"):
         """Start the simple Slack bot server"""
         logger.info(f"🚀 Starting simple Slack bot on {host}:{port}")
         self.app.start(port=port, host=host)
+    
+    def __del__(self):
+        """Cleanup on bot destruction"""
+        if self.session:
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop.create_task(self.disconnect_from_api())
+                else:
+                    loop.run_until_complete(self.disconnect_from_api())
+            except Exception:
+                pass  # Ignore cleanup errors
     
     def get_app(self):
         """Get the underlying Slack Bolt app"""

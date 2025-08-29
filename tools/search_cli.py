@@ -314,13 +314,37 @@ def perform_search(db: SearchDatabase, query: str, source: Optional[str],
     # Enhanced query processing for better FTS5 matching
     processed_query = enhance_query(query)
     
-    # Execute search
-    results = db.search(
-        query=processed_query,
-        source=source,
-        date_range=date_range,
-        limit=limit
-    )
+    # Execute search with personalization if PRIMARY_USER configured
+    try:
+        # Check if personalized search is available
+        if hasattr(db, 'search_personalized'):
+            results = db.search_personalized(
+                query=processed_query,
+                source=source,
+                date_range=date_range,
+                limit=limit
+            )
+            
+            # Check if any results were boosted
+            boosted_count = sum(1 for r in results if r.get('boosted', False))
+            if boosted_count > 0:
+                print(f"🎯 {boosted_count} user-relevant results boosted")
+        else:
+            results = db.search(
+                query=processed_query,
+                source=source,
+                date_range=date_range,
+                limit=limit
+            )
+            
+    except Exception as e:
+        print(f"⚠️ Personalized search failed, falling back to regular search: {e}")
+        results = db.search(
+            query=processed_query,
+            source=source,
+            date_range=date_range,
+            limit=limit
+        )
     
     return results
 

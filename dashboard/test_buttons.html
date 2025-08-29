@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test - AI Chief of Staff</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #fafaf8; }
+        .btn { 
+            padding: 8px 16px; 
+            margin: 5px; 
+            background: #f0f0f0; 
+            border: 1px solid #ccc; 
+            cursor: pointer; 
+        }
+        .btn:hover { background: #e0e0e0; }
+        .console { 
+            background: #000; 
+            color: #00ff00; 
+            padding: 20px; 
+            margin: 20px 0; 
+            height: 300px; 
+            overflow-y: scroll; 
+            font-family: 'Courier New', monospace; 
+            font-size: 12px;
+        }
+        .status { font-weight: bold; margin: 10px 0; }
+        .progress { 
+            width: 200px; 
+            height: 20px; 
+            background: #ddd; 
+            position: relative; 
+            margin: 10px 0;
+        }
+        .progress-bar { 
+            height: 100%; 
+            background: #005f87; 
+            width: 0%; 
+            transition: width 0.3s ease;
+        }
+        .progress-text { 
+            position: absolute; 
+            top: 2px; 
+            left: 8px; 
+            font-size: 12px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Chief of Staff - Button Test</h1>
+    
+    <p>This is a minimal test page to verify button functionality works without the full dashboard complexity.</p>
+    
+    <div>
+        <button class="btn" data-action="quick" onclick="handleButtonClick('quick')">QUICK</button>
+        <button class="btn" data-action="full" onclick="handleButtonClick('full')">FULL</button>
+        <button class="btn" data-action="refresh" onclick="handleButtonClick('refresh')">REFRESH</button>
+    </div>
+    
+    <div class="status" data-system-status>Status: IDLE</div>
+    
+    <div class="progress">
+        <div class="progress-bar"></div>
+        <div class="progress-text">0%</div>
+    </div>
+    
+    <div class="console" id="console-output"></div>
+    
+    <script>
+        // Simple console redirect for visual feedback
+        let originalConsole = console.log;
+        let consoleOutput = document.getElementById('console-output');
+        
+        console.log = function(...args) {
+            originalConsole.apply(console, args);
+            consoleOutput.innerHTML += args.join(' ') + '<br>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        console.log('🧪 Button Test Page Loaded');
+        console.log('✅ Ready to test button functionality');
+        console.log('');
+        
+        /**
+         * Handle button clicks - Simplified version
+         */
+        function handleButtonClick(action) {
+            console.log(`🔘 Button clicked: ${action.toUpperCase()}`);
+            
+            // Visual feedback
+            const button = document.querySelector(`button[data-action="${action}"]`);
+            if (button) {
+                button.style.backgroundColor = '#005f87';
+                button.style.color = 'white';
+                setTimeout(() => {
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 200);
+            }
+            
+            // Handle different actions
+            switch(action) {
+                case 'quick':
+                    console.log('⚡ Triggering quick collection...');
+                    triggerSimpleCollection('quick');
+                    break;
+                case 'full':
+                    console.log('🔄 Triggering full collection...');  
+                    triggerSimpleCollection('full');
+                    break;
+                case 'refresh':
+                    console.log('🔃 Triggering refresh...');
+                    triggerSimpleRefresh();
+                    break;
+                default:
+                    console.log('❌ Unknown action:', action);
+            }
+        }
+        
+        /**
+         * Simple collection trigger - Test version
+         */
+        async function triggerSimpleCollection(type) {
+            try {
+                updateSystemStatus('COLLECTING');
+                updateProgress(10);
+                console.log(`📡 Making API call for ${type} collection...`);
+                
+                // Simulate API call
+                const response = await fetch(`http://localhost:8000/api/trigger_collection?type=${type}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }).catch(error => {
+                    console.log(`⚠️  API call failed (backend not running): ${error.message}`);
+                    console.log('📝 This is expected if backend server is not started');
+                    return null;
+                });
+                
+                if (response && response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Collection triggered:', result);
+                    updateProgress(100);
+                } else if (response) {
+                    console.log('❌ Collection failed:', response.status);
+                    updateSystemStatus('ERROR');
+                    return;
+                } else {
+                    console.log('⚠️  No backend response - simulating success');
+                    updateProgress(100);
+                }
+                
+                // Reset after delay
+                setTimeout(() => {
+                    updateSystemStatus('IDLE');
+                    updateProgress(0);
+                    console.log('🏁 Collection simulation completed');
+                }, 2000);
+                
+            } catch (error) {
+                console.log('❌ Collection error:', error.message);
+                updateSystemStatus('ERROR');
+            }
+        }
+        
+        /**
+         * Simple refresh trigger  
+         */
+        function triggerSimpleRefresh() {
+            updateSystemStatus('REFRESHING');
+            console.log('🔃 Simulating refresh...');
+            
+            setTimeout(() => {
+                updateSystemStatus('IDLE');
+                console.log('✅ Refresh completed');
+            }, 1000);
+        }
+        
+        /**
+         * Update system status display
+         */
+        function updateSystemStatus(status) {
+            const statusEl = document.querySelector('[data-system-status]');
+            if (statusEl) {
+                statusEl.textContent = `Status: ${status}`;
+                console.log(`📊 Status updated to: ${status}`);
+            }
+        }
+        
+        /**
+         * Update progress bar
+         */
+        function updateProgress(percent) {
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.querySelector('.progress-text');
+            
+            if (progressBar) {
+                progressBar.style.width = `${percent}%`;
+            }
+            if (progressText) {
+                progressText.textContent = `${percent}%`;
+            }
+            console.log(`📈 Progress updated to: ${percent}%`);
+        }
+        
+        console.log('🎯 Test instructions:');
+        console.log('1. Click each button (QUICK, FULL, REFRESH)');
+        console.log('2. Watch for button click messages');
+        console.log('3. Observe status and progress changes');
+        console.log('4. Check for any JavaScript errors');
+        console.log('');
+    </script>
+</body>
+</html>

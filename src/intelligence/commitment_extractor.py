@@ -28,6 +28,7 @@ from enum import Enum
 
 from ..search.database import SearchDatabase
 from ..core.config import get_config
+from .bot_filter import BotFilter
 
 logger = logging.getLogger(__name__)
 
@@ -81,10 +82,14 @@ class CommitmentExtractor:
         self.base_path = Path(base_path or get_config().base_dir)
         self.search_db = SearchDatabase(str(self.base_path / "data" / "search.db"))
         
+        # Initialize bot filter for clean extraction
+        users_file = self.base_path / "data" / "raw" / "slack" / "2025-08-25" / "users.json"
+        self.bot_filter = BotFilter(str(users_file) if users_file.exists() else None)
+        
         # Compile extraction patterns for performance
         self._compile_patterns()
         
-        logger.info(f"Commitment Extractor initialized - Phase 2 Lite")
+        logger.info(f"Commitment Extractor initialized - Phase 2 Lite with bot filtering")
         logger.info(f"Base path: {self.base_path}")
     
     def _compile_patterns(self):
@@ -191,11 +196,30 @@ class CommitmentExtractor:
                 
                 # Extract commitments from each result
                 for result in search_results:
+                    # Check if this is from a bot user
+                    metadata = result.get('metadata', {})
+                    user_id = None
+                    
+                    # Try to extract user ID from metadata
+                    if isinstance(metadata, dict):
+                        user_id = metadata.get('user') or metadata.get('user_id')
+                    elif isinstance(metadata, str):
+                        try:
+                            meta_dict = json.loads(metadata)
+                            user_id = meta_dict.get('user') or meta_dict.get('user_id')
+                        except:
+                            pass
+                    
+                    # Skip bot messages
+                    if user_id and self.bot_filter.is_bot(user_id, result.get('content')):
+                        logger.debug(f"Skipping bot message from {user_id}")
+                        continue
+                    
                     commitments = self._extract_from_content(
                         content=result['content'],
                         source=source,
                         source_date=result['date'],
-                        metadata=result.get('metadata', {})
+                        metadata=metadata
                     )
                     
                     extracted_commitments.extend(commitments)
@@ -463,6 +487,51 @@ class CommitmentExtractor:
         ]
         
         return summary
+    
+    def extract_commitments(self, content: str) -> List[Dict[str, Any]]:
+        """
+        Extract commitments from a single piece of content
+        
+        This method is used by the CRM system for direct content processing.
+        Returns a simplified list of commitment dictionaries.
+        
+        Args:
+            content: Text content to analyze
+            
+        Returns:
+            List of commitment dictionaries
+        """
+        if not content or not content.strip():
+            return []
+        
+        # Use existing internal method to extract commitments
+        extracted_commitments = self._extract_from_content(
+            content=content,
+            source="direct",
+            source_date=datetime.now().isoformat(),
+            metadata={}
+        )
+        
+        # Convert to simplified dictionary format expected by CRM
+        simplified_commitments = []
+        for commitment in extracted_commitments:
+            simplified_commitments.append({
+                'id': commitment.commitment_id,
+                'text': commitment.content,
+                'description': commitment.content,
+                'confidence_score': commitment.confidence_score,
+                'type': commitment.commitment_type.value,
+                'priority': commitment.priority,
+                'person_mentioned': commitment.person_mentioned,
+                'due_date': commitment.due_date,
+                'metadata': {
+                    'source': commitment.source,
+                    'extraction_method': 'pattern_match',
+                    'context': commitment.context
+                }
+            })
+        
+        return simplified_commitments
 
 
 def create_commitment_extractor(base_path: Path = None) -> CommitmentExtractor:

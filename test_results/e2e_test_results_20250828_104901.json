@@ -1,0 +1,75 @@
+{
+  "suite_name": "AI Chief of Staff E2E Test Suite",
+  "start_time": "2025-08-28T10:49:01.300125",
+  "end_time": "2025-08-28T10:49:01.371075",
+  "total_duration": 0,
+  "tests_run": 5,
+  "tests_passed": 0,
+  "tests_failed": 3,
+  "tests_skipped": 2,
+  "overall_success_rate": 0.0,
+  "test_results": [
+    {
+      "test_name": "Executive Daily Workflow",
+      "status": "failed",
+      "duration": 0.04787611961364746,
+      "error_message": "Executive workflow broken: unknown special query: ",
+      "metrics": null,
+      "details": "Traceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_executive_daily_workflow.py\", line 131, in test_complete_executive_day_workflow\n    self._test_overnight_data_collection(today_scenario)\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_executive_daily_workflow.py\", line 265, in _test_overnight_data_collection\n    total_search_results = self.search_db.search(query=\"*\", limit=1000)\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/src/search/database.py\", line 585, in search\n    cursor = conn.execute(sql, params)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: unknown special query: \n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/run_full_e2e_suite.py\", line 292, in _execute_single_test\n    result = test_instance.test_complete_executive_day_workflow()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_executive_daily_workflow.py\", line 161, in test_complete_executive_day_workflow\n    raise AssertionError(f\"Executive workflow broken: {e}\")\nAssertionError: Executive workflow broken: unknown special query: \n"
+    },
+    {
+      "test_name": "Meeting Coordination",
+      "status": "failed",
+      "duration": 0.006590843200683594,
+      "error_message": "Meeting coordination workflow broken: Conflict detection mismatch: expected ~3, got 0",
+      "metrics": null,
+      "details": "Traceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_meeting_coordination.py\", line 123, in test_complete_meeting_coordination_workflow\n    self._validate_coordination_results(scenario, result)\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_meeting_coordination.py\", line 595, in _validate_coordination_results\n    assert abs(actual_conflicts - expected_conflicts) <= 2, \\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Conflict detection mismatch: expected ~3, got 0\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/run_full_e2e_suite.py\", line 294, in _execute_single_test\n    result = test_instance.test_complete_meeting_coordination_workflow()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_meeting_coordination.py\", line 136, in test_complete_meeting_coordination_workflow\n    raise AssertionError(f\"Meeting coordination workflow broken: {e}\")\nAssertionError: Meeting coordination workflow broken: Conflict detection mismatch: expected ~3, got 0\n"
+    },
+    {
+      "test_name": "Commitment Lifecycle",
+      "status": "failed",
+      "duration": 0.006438255310058594,
+      "error_message": "Commitment lifecycle workflow broken: fts5: syntax error near \"'\"",
+      "metrics": null,
+      "details": "Traceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_commitment_lifecycle.py\", line 123, in test_complete_commitment_lifecycle_workflow\n    extracted_commitments = self._test_commitment_extraction_phase()\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_commitment_lifecycle.py\", line 360, in _test_commitment_extraction_phase\n    results = self.search_db.search(\n              ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/src/search/database.py\", line 585, in search\n    cursor = conn.execute(sql, params)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: fts5: syntax error near \"'\"\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/run_full_e2e_suite.py\", line 296, in _execute_single_test\n    result = test_instance.test_complete_commitment_lifecycle_workflow()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/david.campos/VibeCode/AICoS-Lab/tests/e2e/test_e2e_commitment_lifecycle.py\", line 155, in test_complete_commitment_lifecycle_workflow\n    raise AssertionError(f\"Commitment lifecycle workflow broken: {e}\")\nAssertionError: Commitment lifecycle workflow broken: fts5: syntax error near \"'\"\n"
+    },
+    {
+      "test_name": "Context Search",
+      "status": "skipped",
+      "duration": 0.0,
+      "error_message": null,
+      "metrics": null,
+      "details": "Skipped due to execution mode"
+    },
+    {
+      "test_name": "Failure Recovery",
+      "status": "skipped",
+      "duration": 0.0,
+      "error_message": null,
+      "metrics": null,
+      "details": "Skipped due to execution mode"
+    }
+  ],
+  "performance_summary": {
+    "total_search_operations": 0,
+    "average_search_time": 0,
+    "max_search_time": 0,
+    "min_search_time": 0,
+    "total_recovery_operations": 0,
+    "average_recovery_time": 0,
+    "max_recovery_time": 0
+  },
+  "production_readiness": {
+    "overall_ready": false,
+    "critical_tests_passed": false,
+    "performance_acceptable": true,
+    "reliability_validated": false,
+    "blocking_issues": [
+      "Critical test failed: Executive Daily Workflow",
+      "Critical test failed: Meeting Coordination",
+      "Critical test failed: Commitment Lifecycle",
+      "Too many failed tests: 3"
+    ],
+    "warnings": []
+  }
+}

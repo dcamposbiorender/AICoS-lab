@@ -22,7 +22,7 @@ def validate_python_version():
     Validate Python version meets project requirements
     Fails fast with helpful error message if version is insufficient
     """
-    required_version = "3.9.0"  # Lowered for compatibility
+    required_version = "3.10.0"  # Matches README.md requirement
     
     # Handle both real sys.version_info and mocked tuples
     version_info = sys.version_info
@@ -85,14 +85,23 @@ class Config:
         self._setup_configuration()
     
     def _load_base_directory(self) -> Path:
-        """Load and validate AICOS_BASE_DIR from environment with fallback to project root"""
+        """Load and validate AICOS_BASE_DIR - no dangerous fallback to project root"""
         base_dir_str = os.getenv('AICOS_BASE_DIR')
+        
         if not base_dir_str:
-            # Fallback to project root for automatic operation
-            project_root = Path(__file__).parent.parent.parent
-            base_dir_str = str(project_root)
-            print(f"⚠️ AICOS_BASE_DIR not set, using project root: {base_dir_str}")
-            print("   For production, set: export AICOS_BASE_DIR=/path/to/data")
+            if self.test_mode:
+                # Test mode: use temporary directory
+                import tempfile
+                base_dir = Path(tempfile.mkdtemp(prefix='aicos_test_'))
+                print(f"🧪 Test mode: using temporary directory {base_dir}")
+                return base_dir
+            else:
+                # Production MUST set AICOS_BASE_DIR - no fallback
+                raise ConfigurationError(
+                    "AICOS_BASE_DIR must be set for production use.\n"
+                    "This prevents accidental data writes to the source tree.\n"
+                    "Please set: export AICOS_BASE_DIR=/path/to/data/directory"
+                )
         
         base_dir = Path(base_dir_str).resolve()
         
@@ -236,6 +245,55 @@ class Config:
         # Operational settings
         self.briefing_time = os.getenv('BRIEFING_TIME', '06:00')
         self.timezone = os.getenv('TIMEZONE', 'UTC')
+        
+        # PRIMARY_USER Configuration (Phase 6: User Identity)
+        self._setup_primary_user_config()
+    
+    def _setup_primary_user_config(self):
+        """Set up PRIMARY_USER configuration for user-centric architecture"""
+        import re
+        
+        # Load PRIMARY_USER environment variables
+        self.primary_user_email = os.getenv('AICOS_PRIMARY_USER_EMAIL')
+        self.primary_user_slack_id = os.getenv('AICOS_PRIMARY_USER_SLACK_ID')
+        self.primary_user_calendar_id = os.getenv('AICOS_PRIMARY_USER_CALENDAR_ID')
+        self.primary_user_name = os.getenv('AICOS_PRIMARY_USER_NAME')
+        
+        # Validate email format if provided
+        if self.primary_user_email:
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, self.primary_user_email.strip()):
+                if not self.test_mode:  # Only warn in production, don't fail
+                    print(f"⚠️ Invalid PRIMARY_USER email format: {self.primary_user_email}")
+                self.primary_user_email = None
+            
+            # Set default calendar_id to email if not provided
+            if not self.primary_user_calendar_id:
+                self.primary_user_calendar_id = self.primary_user_email
+    
+    def get_primary_user_config(self) -> Optional[Dict[str, Any]]:
+        """Get PRIMARY_USER configuration dictionary
+        
+        Returns:
+            Dictionary with primary user configuration or None if not configured
+        """
+        if not hasattr(self, 'primary_user_email') or not self.primary_user_email:
+            return None
+            
+        return {
+            "email": self.primary_user_email,
+            "slack_id": self.primary_user_slack_id,
+            "calendar_id": self.primary_user_calendar_id,
+            "name": self.primary_user_name
+        }
+    
+    def has_primary_user(self) -> bool:
+        """Check if PRIMARY_USER is configured
+        
+        Returns:
+            True if PRIMARY_USER email is configured
+        """
+        return hasattr(self, 'primary_user_email') and bool(self.primary_user_email)
     
     def __repr__(self) -> str:
         """String representation (without sensitive data)"""

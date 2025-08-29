@@ -1,0 +1,17 @@
+# Frontend deployment requirements
+# Core web framework and server
+fastapi>=0.68.0
+uvicorn[standard]>=0.15.0
+pydantic>=1.8.0
+
+# WebSocket support
+websockets>=10.0
+
+# Optional: Enhanced development and monitoring
+# requests>=2.25.0  # For health check HTTP requests
+# psutil>=5.8.0     # For system monitoring
+# PyYAML>=5.4.0     # For YAML configuration files
+
+# Testing dependencies (optional)
+# pytest>=6.2.0
+# pytest-asyncio>=0.15.0

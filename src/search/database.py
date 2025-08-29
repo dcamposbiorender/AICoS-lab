@@ -603,6 +603,77 @@ class SearchDatabase:
             self._stats['queries_executed'] += 1
             return results
     
+    def search_personalized(self, query: str, source: str = None, date_range: tuple = None, 
+                          limit: int = 100, boost_factor: float = 1.5) -> List[Dict[str, Any]]:
+        """
+        Search with personalization for PRIMARY_USER
+        
+        Args:
+            query: Search query string
+            source: Filter by source type
+            date_range: Tuple of (start_date, end_date)
+            limit: Maximum results to return
+            boost_factor: Boost factor for user-relevant results
+            
+        Returns:
+            List of matching records with personalized relevance boosting
+        """
+        # Get extra results to account for boosting reordering
+        raw_limit = min(limit * 2, 500)  # Cap at 500 to prevent excessive queries
+        
+        # Perform base search
+        results = self.search(query, source, date_range, raw_limit)
+        
+        if not results:
+            return results
+            
+        # Apply personalization boosting
+        try:
+            from src.personalization.relevance_boost import RelevanceBooster
+            
+            booster = RelevanceBooster()
+            
+            if booster.filter.primary_user:
+                # Convert to compatible format for boosting
+                class SearchResult:
+                    def __init__(self, data):
+                        self.content = data['content']
+                        self.metadata = data['metadata']
+                        self.score = data['relevance_score']
+                        self.source = data['source']
+                        self.date = data['date']
+                        self.boosted = False
+                        
+                # Convert results
+                result_objects = [SearchResult(result) for result in results]
+                
+                # Apply boosting
+                boosted_objects = booster.boost_search_results(result_objects, boost_factor)
+                
+                # Convert back to dictionaries
+                boosted_results = []
+                for obj in boosted_objects:
+                    boosted_results.append({
+                        'content': obj.content,
+                        'source': obj.source,
+                        'date': obj.date,
+                        'metadata': obj.metadata,
+                        'relevance_score': obj.score,
+                        'boosted': getattr(obj, 'boosted', False)
+                    })
+                
+                # Log boosting info
+                boosting_info = booster.get_boosted_results_info(boosted_objects)
+                logger.info(f"🎯 Search personalization: {boosting_info['boosted_results']}/{boosting_info['total_results']} results boosted")
+                
+                return boosted_results[:limit]
+                
+        except Exception as e:
+            logger.warning(f"⚠️ Search personalization failed: {e}")
+            # Fall back to regular results
+            
+        return results[:limit]
+    
     def get_stats(self) -> Dict[str, Any]:
         """Get database statistics"""
         stats = dict(self._stats)

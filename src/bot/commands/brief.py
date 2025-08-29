@@ -62,6 +62,21 @@ def execute_brief(period: str = "day", person: Optional[str] = None) -> Dict[str
                 exclude_weekends=False
             )
         
+        # Apply personalization if PRIMARY_USER configured
+        try:
+            from src.personalization.brief_personalizer import BriefPersonalizer
+            personalizer = BriefPersonalizer()
+            
+            if personalizer.filter.primary_user:
+                logger.info(f"🎯 Applying personalization for {personalizer.filter.primary_user['email']}")
+                summary_data = personalizer.personalize_brief_data(summary_data)
+            else:
+                logger.debug("ℹ️ No PRIMARY_USER configured - generating generic brief")
+                
+        except Exception as e:
+            logger.warning(f"⚠️ Brief personalization failed: {e}")
+            # Continue with unpersonalized brief
+        
         # Add metadata
         summary_data['generation_metadata'] = {
             'generated_at': datetime.now().isoformat(),
@@ -101,36 +116,77 @@ def format_brief_response(brief_result: Dict[str, Any]) -> str:
     period = brief_result.get("period", "daily")
     data = brief_result.get("data", {})
     
-    # Build response
-    response = f"📋 **{period.title()} Brief**\n\n"
+    # Build response with personalization awareness
+    is_personalized = data.get('personalization_applied', False)
+    primary_user_email = data.get('primary_user', '')
     
-    # Extract key activity metrics
+    if is_personalized:
+        response = f"📋 **{period.title()} Brief** (Personalized)\n\n"
+        
+        # Show user highlights first if available
+        if 'user_highlights' in data and data['user_highlights']:
+            user_highlights = data['user_highlights'][:5]  # Top 5 user highlights
+            response += f"🎯 **Your Key Activities:**\n"
+            for i, highlight in enumerate(user_highlights, 1):
+                response += f"{i}. {highlight}\n"
+            response += "\n"
+    else:
+        response = f"📋 **{period.title()} Brief**\n\n"
+    
+    # Extract key activity metrics with personalization context
     if 'slack_activity' in data:
         slack = data['slack_activity']
         msg_count = slack.get('message_count', 0)
         channel_count = slack.get('active_channels', 0)
-        response += f"💬 **Slack**: {msg_count} messages"
-        if channel_count:
-            response += f" across {channel_count} channels"
-        response += "\n"
+        
+        if is_personalized:
+            user_messages = slack.get('user_message_count', 0)
+            mentions = slack.get('mentions_of_user', 0)
+            response += f"💬 **Your Slack Activity**: {user_messages} messages sent"
+            if mentions > 0:
+                response += f", {mentions} mentions of you"
+            response += f"\n   📊 Team total: {msg_count} messages across {channel_count} channels\n"
+        else:
+            response += f"💬 **Slack**: {msg_count} messages"
+            if channel_count:
+                response += f" across {channel_count} channels"
+            response += "\n"
     
     if 'calendar_activity' in data:
         calendar = data['calendar_activity']
         meeting_count = calendar.get('meeting_count', 0)
         meeting_hours = calendar.get('meeting_hours', 0)
-        response += f"📅 **Calendar**: {meeting_count} meetings"
-        if meeting_hours:
-            response += f" ({meeting_hours:.1f} hours)"
-        response += "\n"
+        
+        if is_personalized:
+            organized = calendar.get('meetings_organized', 0)
+            attended = calendar.get('meetings_attended', 0)
+            user_hours = calendar.get('user_meeting_hours', 0)
+            response += f"📅 **Your Calendar**: {organized} organized, {attended} attended"
+            if user_hours > 0:
+                response += f" ({user_hours:.1f}h total)"
+            response += f"\n   📊 Team total: {meeting_count} meetings\n"
+        else:
+            response += f"📅 **Calendar**: {meeting_count} meetings"
+            if meeting_hours:
+                response += f" ({meeting_hours:.1f} hours)"
+            response += "\n"
     
     if 'drive_activity' in data:
         drive = data['drive_activity']
         file_count = drive.get('files_modified', 0)
-        if file_count > 0:
-            response += f"📁 **Drive**: {file_count} files modified\n"
+        
+        if is_personalized:
+            user_created = drive.get('files_created_by_user', 0)
+            user_modified = drive.get('files_modified_by_user', 0)
+            if user_created > 0 or user_modified > 0:
+                response += f"📁 **Your Drive Activity**: {user_created} created, {user_modified} modified\n"
+                response += f"   📊 Team total: {file_count} files modified\n"
+        else:
+            if file_count > 0:
+                response += f"📁 **Drive**: {file_count} files modified\n"
     
-    # Add highlights if available
-    if 'highlights' in data and data['highlights']:
+    # Add general highlights if available and not personalized
+    if not is_personalized and 'highlights' in data and data['highlights']:
         highlights = data['highlights'][:3]  # Top 3 highlights
         response += f"\n**Key Highlights:**\n"
         for i, highlight in enumerate(highlights, 1):

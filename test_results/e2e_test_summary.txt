@@ -1,0 +1,33 @@
+
+AI Chief of Staff - E2E Test Suite Summary
+==========================================
+
+Execution Date: 2025-08-28 10:49:01
+Suite Duration: 0.00 seconds
+
+Test Results:
+  Total Tests: 5
+  Passed: 0
+  Failed: 3  
+  Skipped: 2
+  Success Rate: 0.0%
+
+Performance Metrics:
+  Average Search Time: 0.000s
+  Max Search Time: 0.000s
+  Total Search Operations: 0
+
+Production Readiness: NOT READY
+
+Individual Test Results:
+  ❌ Executive Daily Workflow (0.05s)
+  ❌ Meeting Coordination (0.01s)
+  ❌ Commitment Lifecycle (0.01s)
+  ⏭️ Context Search (0.00s)
+  ⏭️ Failure Recovery (0.00s)
+
+Blocking Issues:
+  • Critical test failed: Executive Daily Workflow
+  • Critical test failed: Meeting Coordination
+  • Critical test failed: Commitment Lifecycle
+  • Too many failed tests: 3

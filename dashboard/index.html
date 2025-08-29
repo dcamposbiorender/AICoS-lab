@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chief of Staff - Dashboard</title>
+    <meta name="description" content="Real-time dashboard for AI Chief of Staff system with live updates, command interface, and executive intelligence briefings">
+    <meta name="author" content="Agent F - Frontend Team">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="css/paper-dense.css">
+    <link rel="stylesheet" href="css/enhancements.css">
+    
+    <!-- Performance optimization -->
+    <link rel="preconnect" href="ws://localhost:8000">
+    <link rel="dns-prefetch" href="//localhost:8000">
+    
+    <!-- SEO and Open Graph -->
+    <meta property="og:title" content="AI Chief of Staff Dashboard">
+    <meta property="og:description" content="Executive intelligence dashboard with real-time updates">
+    <meta property="og:type" content="website">
+    
+    <!-- Accessibility -->
+    <meta name="theme-color" content="#005f87">
+    
+    <style>
+        /* Critical CSS for above-the-fold content */
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: #fafaf8;
+            color: #2c2c2c;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            font-size: 12px;
+            line-height: 1.3;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .loading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: #005f87;
+            z-index: 9999;
+        }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="loading-indicator">
+        Loading Dashboard...
+        <div style="margin-top: 10px; font-size: 10px;">
+            Connecting to backend...
+        </div>
+    </div>
+    
+    <!-- Connection status indicator -->
+    <div class="connection-status" aria-live="polite">
+        Connecting...
+    </div>
+    
+    <!-- Main Dashboard -->
+    <div id="dashboard-container" class="hidden">
+        <!-- Sidebar - Left Panel -->
+        <div class="sidebar" role="navigation" aria-label="Dashboard Controls">
+            <!-- System Status Section -->
+            <div class="section" role="region" aria-labelledby="system-header">
+                <div id="system-header" class="section-header">
+                    SYSTEM <span class="code">[S]</span>
+                </div>
+                <div class="status-line">
+                    <span>Status:</span>
+                    <span data-system-status class="status idle" aria-live="polite">IDLE</span>
+                </div>
+                <div class="status-line">
+                    <span>Last sync:</span>
+                    <span data-last-sync aria-live="polite">Never</span>
+                </div>
+                <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                    <div class="progress-text" aria-hidden="true">0%</div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn" data-action="quick" type="button" aria-label="Quick collection" onclick="handleButtonClick('quick')">QUICK</button>
+                    <button class="btn" data-action="full" type="button" aria-label="Full collection" onclick="handleButtonClick('full')">FULL</button>
+                    <button class="btn" data-action="refresh" type="button" aria-label="Refresh dashboard" onclick="handleButtonClick('refresh')">REFRESH</button>
+                </div>
+            </div>
+            
+            <!-- Calendar Section -->
+            <div class="section" role="region" aria-labelledby="calendar-header">
+                <div id="calendar-header" class="section-header">
+                    CALENDAR <span class="code">[C]</span> - TODAY
+                </div>
+                <div class="calendar-items" role="list" aria-label="Today's calendar events">
+                    <!-- Calendar items will be populated by JavaScript -->
+                    <div class="item" role="listitem">
+                        <span class="item-code">--:</span>
+                        <span class="time">--:--</span>
+                        <span style="color: #666; font-style: italic;">Loading calendar...</span>
+                    </div>
+                </div>
+                <div style="font-weight: bold; margin: 6px 0 4px 0;">TOMORROW</div>
+                <div class="calendar-items-tomorrow" role="list" aria-label="Tomorrow's calendar events">
+                    <!-- Tomorrow's items will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Priorities Section -->
+            <div class="section" role="region" aria-labelledby="priorities-header">
+                <div id="priorities-header" class="section-header">
+                    PRIORITIES <span class="code">[P]</span>
+                </div>
+                <div style="font-weight: bold; margin: 4px 0;">THIS WEEK</div>
+                <div class="priorities-items" role="list" aria-label="This week's priorities">
+                    <!-- Priority items will be populated by JavaScript -->
+                    <div class="item" role="listitem">
+                        <span class="item-code">--:</span>
+                        <span class="checkbox">[ ]</span>
+                        <span style="color: #666; font-style: italic;">Loading priorities...</span>
+                    </div>
+                </div>
+                <div style="font-weight: bold; margin: 6px 0 4px 0;">TODAY'S FOCUS</div>
+                <div class="priorities-focus" role="list" aria-label="Today's focus items">
+                    <!-- Today's focus items will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Commitments Section -->
+            <div class="section" role="region" aria-labelledby="commitments-header">
+                <div id="commitments-header" class="section-header">
+                    COMMITMENTS <span class="code">[M]</span>
+                </div>
+                <div style="font-weight: bold; margin: 4px 0;">I OWE</div>
+                <div class="commitments-owe" role="list" aria-label="Commitments I owe">
+                    <!-- I OWE items will be populated by JavaScript -->
+                    <div class="item" role="listitem">
+                        <span class="item-code">--:</span>
+                        <span style="color: #666; font-style: italic;">Loading commitments...</span>
+                    </div>
+                </div>
+                <div style="font-weight: bold; margin: 6px 0 4px 0;">OWED TO ME</div>
+                <div class="commitments-owed" role="list" aria-label="Commitments owed to me">
+                    <!-- OWED TO ME items will be populated by JavaScript -->
+                </div>
+                <div class="commit-grid">
+                    <div class="commit-box">
+                        <div class="commit-num urgent" aria-label="Due today count">0</div>
+                        <div class="commit-label">DUE TODAY</div>
+                    </div>
+                    <div class="commit-box">
+                        <div class="commit-num" aria-label="Total owed count">0</div>
+                        <div class="commit-label">TOTAL OWED</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Command Interface -->
+            <div class="command" role="region" aria-labelledby="command-header">
+                <div id="command-header" class="sr-only">Command Interface</div>
+                <input 
+                    type="text" 
+                    class="command-input" 
+                    placeholder="> approve P7 | refresh | brief C3"
+                    aria-label="Command input"
+                    aria-describedby="command-help"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <div id="command-help" class="sr-only">
+                    Type commands and press Enter. Use arrow keys for history, Tab for completion.
+                </div>
+                <!-- Command result will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main" role="main">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="header-title">AI CHIEF OF STAFF DASHBOARD</h1>
+                <div class="header-time" data-current-time aria-live="polite">
+                    Loading time...
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="content" role="article" aria-live="polite">
+                <div class="brief-title">Daily Intelligence Brief</div>
+                <div class="brief-date" id="brief-date">Loading...</div>
+                
+                <div class="brief-section">
+                    <h2>EXECUTIVE SUMMARY</h2>
+                    <p class="brief-text">
+                        Dashboard loading... Please wait for real-time data connection.
+                    </p>
+                    <div class="metric-row" role="group" aria-label="Key metrics">
+                        <div class="metric">
+                            <div class="metric-value" aria-label="Decisions pending">--</div>
+                            <div class="metric-label">DECISIONS</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" aria-label="Team velocity">--%</div>
+                            <div class="metric-label">VELOCITY</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" aria-label="Active blockers">--</div>
+                            <div class="metric-label">BLOCKERS</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" aria-label="Average response time">--</div>
+                            <div class="metric-label">AVG TIME</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="brief-section">
+                    <h3>REAL-TIME STATUS</h3>
+                    <ul>
+                        <li><strong>System Status:</strong> <span data-system-status-detailed>Initializing dashboard components...</span></li>
+                        <li><strong>WebSocket Connection:</strong> <span id="ws-status">Connecting to backend...</span></li>
+                        <li><strong>Last Data Update:</strong> <span data-last-update>Never</span></li>
+                    </ul>
+                </div>
+                
+                <div class="brief-section">
+                    <h3>GETTING STARTED</h3>
+                    <ul>
+                        <li>Use the command interface at the bottom left to interact with the system</li>
+                        <li>Try commands like: <code>refresh</code>, <code>approve P1</code>, <code>brief daily</code></li>
+                        <li>Use arrow keys to navigate command history</li>
+                        <li>Press Tab for command auto-completion</li>
+                        <li>All data updates in real-time via WebSocket connection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Error Banner (Hidden by default) -->
+    <div id="error-banner" class="error-banner hidden" role="alert" aria-live="assertive">
+        <!-- Error messages will be inserted here -->
+    </div>
+    
+    <!-- Screen reader announcements -->
+    <div id="announcements" class="sr-only" aria-live="polite" aria-atomic="true">
+        <!-- Screen reader announcements will be inserted here -->
+    </div>
+    
+    <!-- JavaScript Dependencies -->
+    <script src="js/websocket.js?v=2"></script>
+    <script src="js/app.js?v=2"></script>
+    <script src="js/commands.js?v=2"></script>
+    
+    <!-- Main Application Script -->
+    <script>
+        // Check script loading before initialization
+        console.log('🔍 Checking script loading...');
+        console.log('WebSocket functions available:', {
+            WebSocketManager: typeof WebSocketManager,
+            initializeWebSocket: typeof initializeWebSocket,
+            getWebSocketManager: typeof getWebSocketManager
+        });
+        console.log('Dashboard functions available:', {
+            DashboardApp: typeof DashboardApp,
+            initializeDashboard: typeof initializeDashboard,
+            getDashboardApp: typeof getDashboardApp
+        });
+        console.log('Command functions available:', {
+            CommandManager: typeof CommandManager,
+            initializeCommandManager: typeof initializeCommandManager
+        });
+        console.log('✅ Script loading check complete');
+        
+        // Application initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing AI Chief of Staff Dashboard...');
+            
+            // Track initialization performance
+            const startTime = performance.now();
+            
+            try {
+                // Hide loading indicator
+                const loadingIndicator = document.getElementById('loading-indicator');
+                const dashboardContainer = document.getElementById('dashboard-container');
+                
+                // Initialize application components
+                initializeApplication();
+                
+                // Show dashboard after initialization
+                setTimeout(() => {
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('hidden');
+                    }
+                    if (dashboardContainer) {
+                        dashboardContainer.classList.remove('hidden');
+                    }
+                    
+                    const initTime = performance.now() - startTime;
+                    console.log(`Dashboard initialized in ${initTime.toFixed(2)}ms`);
+                    
+                    // Announce to screen readers
+                    announceToScreenReader('Dashboard loaded and ready');
+                    
+                }, 100);
+                
+            } catch (error) {
+                console.error('Failed to initialize dashboard:', error);
+                showError('Failed to initialize dashboard. Please refresh the page.');
+            }
+        });
+        
+        /**
+         * Initialize all application components
+         */
+        function initializeApplication() {
+            console.log('Starting component initialization...');
+            
+            // Initialize WebSocket connection
+            console.log('Initializing WebSocket...');
+            let wsManager = null;
+            try {
+                if (typeof initializeWebSocket === 'function') {
+                    wsManager = initializeWebSocket('ws://localhost:8000/ws');
+                    console.log('WebSocket manager created:', wsManager ? 'success' : 'failed');
+                } else {
+                    console.warn('initializeWebSocket function not available - WebSocket disabled');
+                }
+            } catch (error) {
+                console.error('WebSocket initialization failed:', error);
+            }
+            
+            // Initialize dashboard application
+            console.log('Initializing Dashboard...');
+            let dashboardApp = null;
+            try {
+                if (typeof initializeDashboard === 'function') {
+                    dashboardApp = initializeDashboard();
+                    console.log('Dashboard app created:', dashboardApp ? 'success' : 'failed');
+                } else {
+                    console.warn('initializeDashboard function not available - advanced features disabled');
+                }
+            } catch (error) {
+                console.error('Dashboard app initialization failed:', error);
+            }
+            
+            // Initialize command manager
+            console.log('Initializing Command Manager...');
+            let commandManager = null;
+            try {
+                if (typeof initializeCommandManager === 'function') {
+                    commandManager = initializeCommandManager('http://localhost:8000');
+                    console.log('Command manager created:', commandManager ? 'success' : 'failed');
+                } else {
+                    console.warn('initializeCommandManager function not available - command system disabled');
+                }
+            } catch (error) {
+                console.error('Command manager initialization failed:', error);
+            }
+            
+            // Set up WebSocket event handlers for UI updates
+            if (wsManager && wsManager.on) {
+                wsManager.on('open', function() {
+                    updateConnectionUI('connected');
+                    updateSystemStatus('WebSocket connected successfully');
+                    announceToScreenReader('Connected to server');
+                });
+                
+                wsManager.on('close', function() {
+                    updateConnectionUI('disconnected');
+                    updateSystemStatus('WebSocket connection closed');
+                });
+                
+                wsManager.on('error', function() {
+                    updateConnectionUI('error');
+                    updateSystemStatus('WebSocket connection error');
+                    announceToScreenReader('Connection error occurred');
+                });
+                
+                wsManager.on('message', function(data) {
+                    // Update last data timestamp
+                    const now = new Date();
+                    const lastUpdateEl = document.querySelector('[data-last-update]');
+                    if (lastUpdateEl) {
+                        lastUpdateEl.textContent = now.toLocaleTimeString();
+                    }
+                });
+            } else {
+                console.warn('WebSocket not available - using fallback mode');
+            }
+            
+            // Initialize time display
+            console.log('Initializing time display...');
+            try {
+                updateCurrentTime();
+                setInterval(updateCurrentTime, 60000); // Update every minute
+                console.log('Time display initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize time display:', error);
+            }
+            
+            // Initialize date display
+            console.log('Initializing date display...');
+            try {
+                updateCurrentDate();
+                console.log('Date display initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize date display:', error);
+            }
+            
+            // Set up keyboard shortcuts
+            console.log('Setting up keyboard shortcuts...');
+            try {
+                initializeKeyboardShortcuts();
+                console.log('Keyboard shortcuts initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize keyboard shortcuts:', error);
+            }
+            
+            // Set up error handling
+            console.log('Setting up error handling...');
+            try {
+                setupErrorHandling();
+                console.log('Error handling initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize error handling:', error);
+            }
+            
+            console.log('All dashboard components initialized successfully');
+        }
+        
+        /**
+         * Handle button clicks - Simple onclick handler for immediate response
+         */
+        function handleButtonClick(action) {
+            console.log(`Button clicked: ${action.toUpperCase()}`);
+            
+            // Visual feedback
+            const button = document.querySelector(`button[data-action="${action}"]`);
+            if (button) {
+                button.style.backgroundColor = '#005f87';
+                button.style.color = '#white';
+                setTimeout(() => {
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 200);
+            }
+            
+            // Handle different actions
+            switch(action) {
+                case 'quick':
+                    console.log('Triggering quick collection...');
+                    triggerSimpleCollection('quick');
+                    break;
+                case 'full':
+                    console.log('Triggering full collection...');  
+                    triggerSimpleCollection('full');
+                    break;
+                case 'refresh':
+                    console.log('Triggering refresh...');
+                    triggerSimpleRefresh();
+                    break;
+                default:
+                    console.warn('Unknown action:', action);
+            }
+        }
+        
+        /**
+         * Simple collection trigger using direct fetch
+         */
+        async function triggerSimpleCollection(type) {
+            try {
+                updateSystemStatus('COLLECTING');
+                updateProgress(10);
+                
+                const response = await fetch(`http://localhost:8000/api/trigger_collection?type=${type}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Collection triggered:', result);
+                    updateProgress(100);
+                    setTimeout(() => {
+                        updateSystemStatus('IDLE');
+                        updateProgress(0);
+                    }, 2000);
+                } else {
+                    console.error('Collection failed:', response.status);
+                    updateSystemStatus('ERROR');
+                }
+            } catch (error) {
+                console.error('Collection error:', error);
+                updateSystemStatus('ERROR');
+            }
+        }
+        
+        /**
+         * Simple refresh trigger  
+         */
+        function triggerSimpleRefresh() {
+            updateSystemStatus('REFRESHING');
+            setTimeout(() => {
+                updateSystemStatus('IDLE');
+                console.log('Refresh completed');
+            }, 1000);
+        }
+        
+        /**
+         * Update system status display
+         */
+        function updateSystemStatus(status) {
+            const statusEl = document.querySelector('[data-system-status]');
+            if (statusEl) {
+                statusEl.textContent = status;
+                statusEl.className = `status ${status.toLowerCase()}`;
+            }
+        }
+        
+        /**
+         * Update progress bar
+         */
+        function updateProgress(percent) {
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.querySelector('.progress-text');
+            
+            if (progressBar) {
+                progressBar.style.width = `${percent}%`;
+            }
+            if (progressText) {
+                progressText.textContent = `${percent}%`;
+            }
+        }
+        
+        /**
+         * Update connection status UI
+         */
+        function updateConnectionUI(status) {
+            const wsStatusEl = document.getElementById('ws-status');
+            const systemStatusEl = document.querySelector('[data-system-status-detailed]');
+            
+            let statusText, statusClass;
+            
+            switch (status) {
+                case 'connected':
+                    statusText = 'Connected and receiving updates';
+                    statusClass = 'connected';
+                    break;
+                case 'disconnected':
+                    statusText = 'Disconnected - attempting reconnection';
+                    statusClass = 'disconnected';
+                    break;
+                case 'error':
+                    statusText = 'Connection error - check server status';
+                    statusClass = 'error';
+                    break;
+                default:
+                    statusText = 'Unknown status';
+                    statusClass = '';
+            }
+            
+            if (wsStatusEl) {
+                wsStatusEl.textContent = statusText;
+                wsStatusEl.className = statusClass;
+            }
+            
+            if (systemStatusEl && status === 'connected') {
+                systemStatusEl.textContent = 'All systems operational';
+            }
+        }
+        
+        /**
+         * Update system status display
+         */
+        function updateSystemStatus(message) {
+            const systemStatusEl = document.querySelector('[data-system-status-detailed]');
+            if (systemStatusEl) {
+                systemStatusEl.textContent = message;
+            }
+        }
+        
+        /**
+         * Update current time display
+         */
+        function updateCurrentTime() {
+            const timeEl = document.querySelector('[data-current-time]');
+            if (timeEl) {
+                const now = new Date();
+                const timeStr = now.toLocaleString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                    timeZoneName: 'short'
+                }).toUpperCase();
+                
+                timeEl.textContent = timeStr;
+            }
+        }
+        
+        /**
+         * Update current date display
+         */
+        function updateCurrentDate() {
+            const dateEl = document.getElementById('brief-date');
+            if (dateEl) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                dateEl.textContent = dateStr;
+            }
+        }
+        
+        /**
+         * Initialize keyboard shortcuts
+         */
+        function initializeKeyboardShortcuts() {
+            document.addEventListener('keydown', function(event) {
+                // Global shortcuts (Ctrl/Cmd + key)
+                if (event.ctrlKey || event.metaKey) {
+                    switch (event.key) {
+                        case 'k': // Ctrl+K to focus command input
+                            event.preventDefault();
+                            const commandInput = document.querySelector('.command-input');
+                            if (commandInput) {
+                                commandInput.focus();
+                                announceToScreenReader('Command input focused');
+                            }
+                            break;
+                        case 'r': // Ctrl+R to refresh (override default)
+                            event.preventDefault();
+                            triggerRefresh();
+                            break;
+                    }
+                }
+                
+                // Escape key to focus command input from anywhere
+                if (event.key === 'Escape') {
+                    const commandInput = document.querySelector('.command-input');
+                    if (commandInput && document.activeElement !== commandInput) {
+                        commandInput.focus();
+                        commandInput.select();
+                    }
+                }
+            });
+        }
+        
+        /**
+         * Trigger dashboard refresh
+         */
+        function triggerRefresh() {
+            const app = getDashboardApp();
+            if (app && app.triggerRefresh) {
+                app.triggerRefresh();
+            }
+        }
+        
+        /**
+         * Set up global error handling
+         */
+        function setupErrorHandling() {
+            window.addEventListener('error', function(event) {
+                console.error('Global error:', event.error);
+                showError('An unexpected error occurred. Dashboard functionality may be limited.');
+            });
+            
+            window.addEventListener('unhandledrejection', function(event) {
+                console.error('Unhandled promise rejection:', event.reason);
+                showError('Network or processing error occurred.');
+                event.preventDefault();
+            });
+        }
+        
+        /**
+         * Show error message
+         */
+        function showError(message) {
+            const errorBanner = document.getElementById('error-banner');
+            if (errorBanner) {
+                errorBanner.textContent = message;
+                errorBanner.classList.remove('hidden');
+                
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    errorBanner.classList.add('hidden');
+                }, 10000);
+                
+                // Announce to screen readers
+                announceToScreenReader(`Error: ${message}`);
+            }
+        }
+        
+        /**
+         * Announce message to screen readers
+         */
+        function announceToScreenReader(message) {
+            const announcements = document.getElementById('announcements');
+            if (announcements) {
+                announcements.textContent = message;
+                
+                // Clear after a short delay
+                setTimeout(() => {
+                    announcements.textContent = '';
+                }, 1000);
+            }
+        }
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                console.log('Dashboard hidden - pausing non-critical updates');
+            } else {
+                console.log('Dashboard visible - resuming updates');
+                updateCurrentTime();
+                
+                // Reconnect WebSocket if needed
+                const wsManager = getWebSocketManager();
+                if (wsManager && !wsManager.isConnected()) {
+                    wsManager.connect();
+                }
+            }
+        });
+        
+        // Handle beforeunload for cleanup
+        window.addEventListener('beforeunload', function() {
+            const wsManager = getWebSocketManager();
+            if (wsManager) {
+                wsManager.close();
+            }
+        });
+        
+        // Development helpers
+        if (typeof console !== 'undefined') {
+            console.log('%c🤖 AI Chief of Staff Dashboard', 'color: #005f87; font-size: 16px; font-weight: bold;');
+            console.log('%cDeveloped by Agent F - Frontend Team', 'color: #666; font-style: italic;');
+            console.log('%cWebSocket: ws://localhost:8000/ws', 'color: #d75f00;');
+            console.log('%cAPI: http://localhost:8000/api/', 'color: #d75f00;');
+            console.log('%cType `getDashboardApp().getPerformanceStats()` for performance metrics', 'color: #666;');
+        }
+    </script>
+    
+    <!-- Service Worker for offline capability (optional) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            // Uncomment to enable service worker
+            // navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>

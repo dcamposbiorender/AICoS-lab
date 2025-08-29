@@ -45,32 +45,29 @@ class BaseArchiveCollector:
     - Config integration for paths and settings
     """
     
-    def __init__(self, collector_type: str, config: Optional[Dict[str, Any]] = None, 
-                 system_config=None, state_manager=None, archive_writer=None):
+    def __init__(self, collector_type: str, config=None, 
+                 state_manager=None, archive_writer=None):
         """
-        Initialize base collector with Stage 1a component integration.
+        Initialize base collector with single configuration source.
         
         Args:
             collector_type: Type identifier (slack, calendar, drive, employee)
-            config: Configuration dictionary with retry/circuit breaker settings
-            system_config: Override system config (for testing)
+            config: Config object (for testing) or None to load default
             state_manager: Override state manager (for testing)
             archive_writer: Override archive writer (for testing)
         """
         self.collector_type = collector_type
-        self.config = config or {}
         
-        # Validate configuration
-        self._validate_config()
+        # Single configuration source - no dual config
+        if config is None:
+            # Lazy import to avoid AICOS_BASE_DIR requirement
+            from src.core.config import get_config
+            self.config = get_config()
+        else:
+            self.config = config
         
         # Initialize Stage 1a components (allow injection for testing)
         try:
-            if system_config is None:
-                # Lazy import to avoid AICOS_BASE_DIR requirement
-                from src.core.config import get_config
-                self.system_config = get_config()
-            else:
-                self.system_config = system_config
                 
             if state_manager is None:
                 self.state_manager = StateManager()
@@ -86,15 +83,30 @@ class BaseArchiveCollector:
             logger.error(f"Failed to initialize Stage 1a components: {e}")
             raise
         
-        # Initialize retry and circuit breaker settings
-        self.max_retries = self.config.get('max_retries', 3)
-        self.backoff_factor = self.config.get('backoff_factor', 2.0)
-        self.circuit_breaker_threshold = self.config.get('circuit_breaker_threshold', 5)
+        # Initialize retry and circuit breaker settings from config
+        # Handle both Config objects and dict configs
+        if hasattr(self.config, 'collector_settings'):
+            # Config object with collector_settings attribute
+            settings = getattr(self.config, 'collector_settings', {})
+            self.max_retries = settings.get('max_retries', 3)
+            self.backoff_factor = settings.get('backoff_factor', 2.0)
+            self.circuit_breaker_threshold = settings.get('circuit_breaker_threshold', 5)
+        else:
+            # Fallback to treating as dict
+            self.max_retries = getattr(self.config, 'max_retries', 3)
+            self.backoff_factor = getattr(self.config, 'backoff_factor', 2.0)
+            self.circuit_breaker_threshold = getattr(self.config, 'circuit_breaker_threshold', 5)
         
-        # Initialize circuit breaker
+        # Initialize circuit breaker  
+        timeout = 60  # default
+        if hasattr(self.config, 'collector_settings'):
+            timeout = getattr(self.config, 'collector_settings', {}).get('circuit_breaker_timeout', 60)
+        else:
+            timeout = getattr(self.config, 'circuit_breaker_timeout', 60)
+            
         self.circuit_breaker = CircuitBreaker(
             failure_threshold=self.circuit_breaker_threshold,
-            timeout=self.config.get('circuit_breaker_timeout', 60)
+            timeout=timeout
         )
         
         # Initialize state and thread safety

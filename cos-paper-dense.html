@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chief of Staff - Paper Dense</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: #fafaf8;
+            color: #2c2c2c;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            font-size: 12px;
+            line-height: 1.3;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Sidebar - flexible width with grid layout */
+        .sidebar {
+            width: 35%;
+            min-width: 40%;
+            max-width: 50%;
+            background: #ffffff;
+            border-right: 1px solid #d0d0d0;
+            display: grid;
+            grid-template-rows: auto 25vh 30vh 30vh auto;
+            overflow: hidden;
+            padding: 8px;
+            height: 100vh;
+        }
+        
+        /* Section containers with independent scroll */
+        .scrollable-section {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .section-content {
+            overflow-y: auto;
+            flex: 1;
+            padding: 2px;
+        }
+        
+        .section-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .section-content::-webkit-scrollbar-thumb {
+            background: #d0d0d0;
+        }
+        
+        .section {
+            border: 1px solid #d0d0d0;
+            margin-bottom: 8px;
+            padding: 8px;
+        }
+        
+        .section-header {
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            font-size: 11px;
+            color: #005f87;
+        }
+        
+        .section-header .code {
+            color: #d75f00;
+        }
+        
+        /* Dense lists */
+        .item {
+            margin: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-code {
+            color: #d75f00;
+            font-weight: bold;
+            display: inline-block;
+            width: 30px;
+        }
+        
+        .time {
+            color: #666;
+            display: inline-block;
+            width: 45px;
+        }
+        
+        .checkbox {
+            display: inline-block;
+            width: 14px;
+            text-align: center;
+        }
+        
+        .checkbox.done {
+            color: #2e7d32;
+        }
+        
+        .checkbox.partial {
+            color: #d75f00;
+        }
+        
+        .alert {
+            color: #c62828;
+            font-weight: bold;
+        }
+        
+        .new {
+            color: #005f87;
+            font-style: italic;
+            font-size: 10px;
+        }
+        
+        /* System status */
+        .status-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            margin: 4px 0;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #005f87;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 9px;
+            line-height: 10px;
+        }
+        
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 2px 4px;
+            border: 1px solid #d0d0d0;
+            background: #fafaf8;
+            font-size: 10px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: #e0e0e0;
+        }
+        
+        /* Commitments compact grid */
+        .commit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        
+        .commit-box {
+            border: 1px solid #d0d0d0;
+            padding: 4px;
+            text-align: center;
+        }
+        
+        .commit-num {
+            font-size: 18px;
+            font-weight: bold;
+            color: #005f87;
+        }
+        
+        .commit-num.urgent {
+            color: #c62828;
+        }
+        
+        .commit-label {
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+        
+        /* Command */
+        .command {
+            margin-top: auto;
+            padding: 8px;
+            border-top: 1px solid #d0d0d0;
+        }
+        
+        .command-input {
+            width: 100%;
+            padding: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            border: 1px solid #d0d0d0;
+        }
+        
+        /* Main content */
+        .main {
+            flex: 1;
+            min-width: 50%;
+            display: flex;
+            flex-direction: column;
+            background: #f0f0f0;
+            color: #1a1a1a;
+            height: 100vh;
+        }
+        
+        .header {
+            padding: 4px 8px;
+            border-bottom: 1px solid #d0d0d0;
+            background: #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-weight: bold;
+            color: #005f87;
+            font-size: 14px;
+        }
+        
+        .header-time {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        /* Content area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 13px;
+            line-height: 1.3;
+            width: 100%;
+            background: #f5f5f5;
+        }
+        
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .content::-webkit-scrollbar-thumb {
+            background: #d0d0d0;
+        }
+        
+        .brief-title {
+            font-size: 16px;
+            font-weight: 300;
+            color: #005f87;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        
+        .brief-date {
+            text-align: center;
+            color: #666;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        
+        .brief-section {
+            margin-bottom: 8px;
+        }
+        
+        .brief-section h3 {
+            font-size: 13px;
+            color: #005f87;
+            margin-bottom: 3px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .brief-text {
+            margin-bottom: 3px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 1px 3px;
+        }
+        
+        .metric-row {
+            display: flex;
+            gap: 6px;
+            margin: 4px 0;
+            font-family: 'SF Mono', monospace;
+        }
+        
+        .metric {
+            flex: 1;
+            text-align: center;
+            padding: 6px 4px;
+            border: 1px solid #d0d0d0;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #005f87;
+        }
+        
+        .metric-label {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        li {
+            margin: 2px 0;
+            padding-left: 12px;
+            position: relative;
+        }
+        
+        li:before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #005f87;
+        }
+        
+        /* Responsive grid adjustments for smaller screens */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 40%;
+                min-width: 45%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 45%;
+                min-width: 50%;
+            }
+        }
+        
+        /* Fixed layout - proportional to viewport height always */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <!-- System -->
+        <div class="section">
+            <div class="section-header">SYSTEM <span class="code">[S]</span></div>
+            <div class="status-line">
+                <span>Status:</span>
+                <span style="color: #d75f00;">COLLECTING</span>
+            </div>
+            <div class="status-line">
+                <span>Last sync:</span>
+                <span id="last-sync">—</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" style="width: 67%;"></div>
+                <div class="progress-text">67%</div>
+            </div>
+            <div class="btn-row">
+                <button class="btn" onclick="handleButtonClick('quick')">QUICK</button>
+                <button class="btn" onclick="handleButtonClick('full')">FULL</button>
+                <button class="btn" onclick="handleButtonClick('refresh')">REFRESH</button>
+            </div>
+        </div>
+        
+        <!-- Calendar (containers for dynamic data) -->
+        <div class="section scrollable-section">
+            <div class="section-header">CALENDAR <span class="code">[C]</span> - TODAY</div>
+            <div class="section-content">
+                <div id="cal-items"></div>
+                <div style="margin-top: 6px; font-weight: bold;">TOMORROW</div>
+                <div id="cal-items-tomorrow"></div>
+            </div>
+        </div>
+        
+        <!-- Priorities (container for dynamic data) -->
+        <div class="section scrollable-section">
+            <div class="section-header">PRIORITIES <span class="code">[P]</span></div>
+            <div class="section-content">
+                <div style="font-weight: bold; margin: 4px 0;">THIS WEEK</div>
+                <div id="prio-items"></div>
+                <div style="font-weight: bold; margin: 6px 0 4px 0;">TODAY'S FOCUS</div>
+                <div id="prio-focus"></div>
+            </div>
+        </div>
+        
+        <!-- Commitments (containers for dynamic data) -->
+        <div class="section scrollable-section">
+            <div class="section-header">COMMITMENTS <span class="code">[M]</span></div>
+            <div class="section-content">
+                <div style="font-weight: bold; margin: 4px 0;">I OWE</div>
+                <div id="comm-owe"></div>
+                <div style="font-weight: bold; margin: 6px 0 4px 0;">OWED TO ME</div>
+                <div id="comm-owed"></div>
+                <div class="commit-grid">
+                    <div class="commit-box">
+                        <div class="commit-num urgent" id="due-today">0</div>
+                        <div class="commit-label">DUE TODAY</div>
+                    </div>
+                    <div class="commit-box">
+                        <div class="commit-num" id="total-owed">0</div>
+                        <div class="commit-label">TOTAL OWED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Command -->
+        <div class="command">
+            <input type="text" class="command-input" placeholder="> approve P7 | refresh | brief C3" onkeypress="handleCommand(event)">
+        </div>
+    </div>
+    
+    <div class="main">
+        <div class="header">
+            <div class="header-title">MORNING INTELLIGENCE BRIEF</div>
+            <div class="header-time" id="current-time">WED AUG 27 2025 • 8:34 AM PST</div>
+        </div>
+        
+        <div class="content">
+            <div id="brief-content">
+                <!-- Dynamic brief content will be loaded here -->
+                <p style="color: #666; text-align: center; margin: 40px 0;">
+                    Brief content will be generated based on your real data.<br>
+                    Click QUICK or FULL to collect data and generate briefings.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            }).toUpperCase();
+            document.getElementById('current-time').textContent = timeStr + ' PST';
+        }
+        setInterval(updateTime, 60000);
+        updateTime();
+        
+        function handleCommand(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                console.log('Command:', input.value);
+                input.value = '';
+            }
+        }
+        
+        /**
+         * Handle button clicks for QUICK, FULL, REFRESH
+         */
+        function handleButtonClick(action) {
+            console.log(`Button clicked: ${action.toUpperCase()}`);
+            
+            // Visual feedback
+            const button = event.target;
+            if (button) {
+                const originalBg = button.style.backgroundColor;
+                button.style.backgroundColor = '#005f87';
+                button.style.color = 'white';
+                setTimeout(() => {
+                    button.style.backgroundColor = originalBg;
+                    button.style.color = '';
+                }, 200);
+            }
+            
+            // Handle different actions
+            switch(action) {
+                case 'quick':
+                    console.log('Triggering quick collection...');
+                    triggerCollection('quick');
+                    break;
+                case 'full':
+                    console.log('Triggering full collection...');
+                    triggerCollection('full');
+                    break;
+                case 'refresh':
+                    console.log('Triggering refresh...');
+                    triggerRefresh();
+                    break;
+                default:
+                    console.warn('Unknown action:', action);
+            }
+        }
+        
+        /**
+         * Trigger data collection - now uses real backend
+         */
+        async function triggerCollection(type) {
+            try {
+                console.log(`Starting real ${type} collection...`);
+                
+                // Call backend API for real collection
+                const response = await fetch(`http://127.0.0.1:8000/api/trigger_collection?type=${type}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Real collection triggered:', result);
+                    console.log('Collection results:', result.results);
+                    
+                    // Status and progress will be updated via WebSocket from backend
+                    
+                    // Show brief content if available
+                    if (result.results) {
+                        updateBriefContent(`
+                            <h3>Collection Results</h3>
+                            <p><strong>Type:</strong> ${result.type}</p>
+                            <p><strong>Started:</strong> ${new Date(result.started_at).toLocaleString()}</p>
+                            <div class="collection-results">
+                                ${Object.entries(result.results).map(([source, data]) => 
+                                    `<div><strong>${source}:</strong> ${data.success ? `${data.records} records` : `Error: ${data.error}`}</div>`
+                                ).join('')}
+                            </div>
+                        `);
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Collection failed:', response.status, errorText);
+                    
+                    // For real failures, still provide feedback
+                    updateBriefContent(`
+                        <h3>Collection Failed</h3>
+                        <p>Status: ${response.status}</p>
+                        <p>Error: ${errorText}</p>
+                        <p>Check backend server and API credentials.</p>
+                    `);
+                }
+            } catch (error) {
+                console.error('Collection error:', error);
+                
+                // Network/connection error - provide helpful feedback
+                updateBriefContent(`
+                    <h3>Connection Error</h3>
+                    <p>Could not connect to backend server.</p>
+                    <p>Make sure the backend is running on port 8000:</p>
+                    <pre>./start_backend.sh</pre>
+                `);
+            }
+        }
+        
+        /**
+         * Update brief content in main panel
+         */
+        function updateBriefContent(html) {
+            const briefContent = document.getElementById('brief-content');
+            if (briefContent) {
+                briefContent.innerHTML = html;
+            }
+        }
+        
+        /**
+         * Trigger dashboard refresh
+         */
+        function triggerRefresh() {
+            updateSystemStatus('REFRESHING');
+            setTimeout(() => {
+                updateSystemStatus('IDLE');
+                console.log('Refresh completed');
+                // Trigger Streamlit to reload data
+                if (window.parent && window.parent.streamlit) {
+                    window.parent.streamlit.setComponentReady();
+                }
+            }, 1500);
+        }
+        
+        /**
+         * Update system status display
+         */
+        function updateSystemStatus(status) {
+            const statusEl = document.querySelector('.status');
+            if (statusEl) {
+                // Find the status text element
+                const statusTextEl = statusEl.querySelector('span:last-child') || statusEl;
+                if (statusTextEl.tagName === 'SPAN') {
+                    statusTextEl.textContent = status;
+                } else {
+                    // Update the last text node
+                    const textNodes = Array.from(statusEl.childNodes).filter(n => n.nodeType === 3);
+                    if (textNodes.length > 0) {
+                        textNodes[textNodes.length - 1].textContent = status;
+                    }
+                }
+                console.log(`Status updated to: ${status}`);
+            }
+        }
+        
+        /**
+         * Update progress bar
+         */
+        function updateProgress(percent) {
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.querySelector('.progress-text');
+            
+            if (progressBar) {
+                progressBar.style.width = `${percent}%`;
+            }
+            if (progressText) {
+                progressText.textContent = `${percent}%`;
+            }
+            console.log(`Progress updated to: ${percent}%`);
+        }
+        
+        /**
+         * WebSocket Connection for Real-time Updates
+         */
+        let websocket = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        
+        function connectWebSocket() {
+            try {
+                const wsUrl = 'ws://127.0.0.1:8000/ws';
+                console.log('Connecting to WebSocket:', wsUrl);
+                
+                websocket = new WebSocket(wsUrl);
+                
+                websocket.onopen = function(event) {
+                    console.log('WebSocket connected successfully');
+                    reconnectAttempts = 0;
+                    
+                    // Show connection status
+                    const statusElement = document.querySelector('.system-status');
+                    if (statusElement) {
+                        statusElement.style.color = '#008f11';
+                    }
+                };
+                
+                websocket.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log('WebSocket update received:', data);
+                        
+                        // Update system status if provided
+                        if (data.system) {
+                            const status = data.system.status;
+                            const progress = data.system.progress;
+                            
+                            if (status) {
+                                updateSystemStatus(status);
+                            }
+                            if (progress !== undefined) {
+                                updateProgress(progress);
+                            }
+                        }
+                        
+                        // Update dashboard data if provided
+                        if (data.calendar || data.priorities || data.commitments) {
+                            console.log('Updating dashboard data from WebSocket...');
+                            // Update window.DATA with new data
+                            if (data.calendar) window.DATA.events = data.calendar;
+                            if (data.priorities) window.DATA.priorities = data.priorities;
+                            if (data.commitments) window.DATA.commitments = data.commitments;
+                            
+                            // Re-render dashboard sections
+                            if (typeof renderCalendar === 'function') renderCalendar();
+                            if (typeof renderPriorities === 'function') renderPriorities();
+                            if (typeof renderCommitments === 'function') renderCommitments();
+                        }
+                        
+                    } catch (e) {
+                        console.error('Error processing WebSocket message:', e, event.data);
+                    }
+                };
+                
+                websocket.onclose = function(event) {
+                    console.log('WebSocket connection closed:', event.code, event.reason);
+                    
+                    // Show disconnected status
+                    const statusElement = document.querySelector('.system-status');
+                    if (statusElement) {
+                        statusElement.style.color = '#666';
+                    }
+                    
+                    // Attempt to reconnect
+                    if (reconnectAttempts < maxReconnectAttempts) {
+                        reconnectAttempts++;
+                        console.log(`Attempting to reconnect WebSocket (${reconnectAttempts}/${maxReconnectAttempts})...`);
+                        setTimeout(connectWebSocket, 2000 * reconnectAttempts);
+                    } else {
+                        console.warn('Max WebSocket reconnection attempts reached');
+                    }
+                };
+                
+                websocket.onerror = function(error) {
+                    console.error('WebSocket error:', error);
+                };
+                
+            } catch (error) {
+                console.error('Failed to create WebSocket connection:', error);
+            }
+        }
+        
+        // Initialize WebSocket connection on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing WebSocket connection...');
+            connectWebSocket();
+        });
+        
+        // Also connect immediately if DOM already loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', connectWebSocket);
+        } else {
+            connectWebSocket();
+        }
+    </script>
+</body>
+</html>

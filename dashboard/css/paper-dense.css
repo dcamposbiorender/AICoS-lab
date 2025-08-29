@@ -1,0 +1,358 @@
+/* 
+ * Paper Dense CSS - Extracted from cos-paper-dense.html mockup
+ * Preserves exact styling and aesthetics for dynamic dashboard
+ * 
+ * Key Design Principles:
+ * - Monospace typography for data density
+ * - Minimal padding and margins for space efficiency  
+ * - Muted color palette with selective highlights
+ * - Responsive sidebar with fixed ratios
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+    background: #fafaf8;
+    color: #2c2c2c;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+/* Sidebar - 30% width */
+.sidebar {
+    width: 30%;
+    min-width: 380px;
+    background: #ffffff;
+    border-right: 1px solid #d0d0d0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #d0d0d0;
+}
+
+.section {
+    border: 1px solid #d0d0d0;
+    margin-bottom: 8px;
+    padding: 8px;
+}
+
+.section-header {
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #005f87;
+}
+
+.section-header .code {
+    color: #d75f00;
+}
+
+/* Dense lists */
+.item {
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-code {
+    color: #d75f00;
+    font-weight: bold;
+    display: inline-block;
+    width: 30px;
+}
+
+.time {
+    color: #666;
+    display: inline-block;
+    width: 45px;
+}
+
+.checkbox {
+    display: inline-block;
+    width: 14px;
+    text-align: center;
+}
+
+.checkbox.done {
+    color: #2e7d32;
+}
+
+.checkbox.partial {
+    color: #d75f00;
+}
+
+.alert {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.new {
+    color: #005f87;
+    font-style: italic;
+    font-size: 10px;
+}
+
+/* System status */
+.status-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 2px 0;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    margin: 4px 0;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #005f87;
+    transition: width 0.3s;
+}
+
+.progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 9px;
+    line-height: 10px;
+}
+
+/* Buttons */
+.btn-row {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.btn {
+    flex: 1;
+    padding: 2px 4px;
+    border: 1px solid #d0d0d0;
+    background: #fafaf8;
+    font-size: 10px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn:hover {
+    background: #e0e0e0;
+}
+
+/* Commitments compact grid */
+.commit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.commit-box {
+    border: 1px solid #d0d0d0;
+    padding: 4px;
+    text-align: center;
+}
+
+.commit-num {
+    font-size: 18px;
+    font-weight: bold;
+    color: #005f87;
+}
+
+.commit-num.urgent {
+    color: #c62828;
+}
+
+.commit-label {
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+/* Command */
+.command {
+    margin-top: auto;
+    padding: 8px;
+    border-top: 1px solid #d0d0d0;
+    position: relative;
+}
+
+.command-input {
+    width: 100%;
+    padding: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    border: 1px solid #d0d0d0;
+}
+
+/* Main content */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    padding: 8px 16px;
+    border-bottom: 1px solid #d0d0d0;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    font-weight: bold;
+    color: #005f87;
+    font-size: 14px;
+}
+
+.header-time {
+    font-size: 11px;
+    color: #666;
+}
+
+/* Content area */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #d0d0d0;
+}
+
+.brief-title {
+    font-size: 20px;
+    font-weight: 300;
+    color: #005f87;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.brief-date {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.brief-section {
+    margin-bottom: 24px;
+}
+
+.brief-section h3 {
+    font-size: 14px;
+    color: #005f87;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.brief-text {
+    margin-bottom: 12px;
+}
+
+.highlight {
+    background: #fff3cd;
+    padding: 1px 3px;
+}
+
+.metric-row {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0;
+    font-family: 'SF Mono', monospace;
+}
+
+.metric {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #d0d0d0;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #005f87;
+}
+
+.metric-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    margin: 8px 0;
+    padding-left: 12px;
+    position: relative;
+}
+
+li:before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #005f87;
+}
+
+/* Status color coding for system states */
+.status.idle { color: #666; }
+.status.collecting { color: #d75f00; }
+.status.processing { color: #005f87; }
+.status.error { color: #c62828; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 35%;
+        min-width: 340px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 11px;
+    }
+    .sidebar {
+        width: 40%;
+        min-width: 300px;
+    }
+}

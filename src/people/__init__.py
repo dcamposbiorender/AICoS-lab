@@ -1,0 +1,1 @@
+# People module for CRM functionality
